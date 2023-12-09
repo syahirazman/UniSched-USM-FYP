@@ -1,0 +1,13 @@
+#wrapper #content-wrapper{
+    background-color: #EAECF9;
+}
+
+#sidebarToggle {
+    background-color: #EAECF9;
+    color: #5272E9;
+    transition: 0.3s ease-in-out;
+}
+
+#sidebarToggle:hover {
+    filter: brightness(95%);
+}

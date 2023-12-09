@@ -1,56 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- styles -->
-        <link href="css/fontawesome.min.css" rel="stylesheet" type="text/css">
-        <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-        <link href="css/adminstyle.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/adminstyle.min.css" rel="stylesheet">
+        <link href="../css/adminstyle.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
 
         <title>UniSched USM: Admin Dashboard</title>
     </head>
     <body id="page-top">
         <div id="wrapper">
             <!-- side bar -->
-            <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+            <ul class="navbar-nav bg-white sidebar" id="accordionSidebar">
                 <a class="sidebar-brand d-flex align-items-center justify-content-center" href="admin_dashboard.html">
-                    <div class="text-center">
-                        <img src="./images/login_textlogo.png" class="img-fluid w-75">
+                    <div class="mt-3 mb-4">
+                        <img src="../images/login_textlogo.png" class="img-fluid">
                     </div>
-                    <hr class="sidebar-divider my-0">
-                    <!-- nav 1 -->
-                    <li class="nav-item active">
-                        <a class="nav-link" href="">
-                            <i class="fas fa-fw fa-tachometer-alt"></i>
-                            <span>Dashboard</span></a>
-                    </li>
-                    <hr class="sidebar-divider">
-                    <!-- nav 2 -->
-                    <li class="nav-item active">
-                        <a class="nav-link" href="">
-                            <i class="fas fa-fw fa-calendar"></i>
-                            <span>Class slots</span></a>
-                    </li>
-                    <hr class="sidebar-divider">
-                    <!-- nav 3 -->
-                    <li class="nav-item active">
-                        <a class="nav-link" href="">
-                            <i class="fas fa-fw fa-book-open"></i>
-                            <span>Courses</span></a>
-                    </li>
-                    <hr class="sidebar-divider">
-                    <!-- nav 4 -->
-                    <li class="nav-item active">
-                        <a class="nav-link" href="">
-                            <i class="fas fa-fw fa-person-chalkboard"></i>
-                            <span>Lecturers</span></a>
-                    </li>
-                    <hr class="sidebar-divider">
                 </a>
+                <!-- nav 1 -->
+                <li class="nav-item active">
+                    <a class="nav-link ml-1" href="">
+                        <i class="fa fa-fw fa-tachometer-alt"></i>
+                        <span>Dashboard</span></a>
+                </li>
+                <hr class="sidebar-divider">
+                <!-- nav 2 -->
+                <li class="nav-item">
+                    <a class="nav-link ml-1" href="">
+                        <i class="fa fa-fw fa-calendar"></i>
+                        <span>Class slots</span></a>
+                </li>
+                <hr class="sidebar-divider">
+                <!-- nav 3 -->
+                <li class="nav-item">
+                    <a class="nav-link ml-1" href="">
+                        <i class="fa fa-fw fa-book-open"></i>
+                        <span>Courses</span></a>
+                </li>
+                <hr class="sidebar-divider">
+                <!-- nav 4 -->
+                <li class="nav-item">
+                    <a class="nav-link ml-1" href="">
+                        <i class="fa fa-fw fa-person-chalkboard"></i>
+                        <span>Lecturers</span></a>
+                </li>
+                <hr class="sidebar-divider">
+                <!-- Sidebar Toggler (Sidebar) -->
+                <div class="text-center d-none d-md-inline">
+                    <button class="rounded-circle border-0" id="sidebarToggle"></button>
+                </div>
             </ul>
+            <!-- end of sidebar-->
+
+            <!-- content wrapper -->
+            <div id="content-wrapper"  class="d-flex flex-column">
+                <!-- main content -->
+                <div id="content">
+                    <!-- top bar -->
+                    <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                        <!-- Sidebar Toggle (Topbar) -->
+                        <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                            <i class="fa fa-bars"></i>
+                        </button>
+
+                        <!-- Topbar Search -->
+                        <form
+                            class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                            <div class="input-group">
+                                <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                                    aria-label="Search" aria-describedby="basic-addon2">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" type="button">
+                                        <i class="fas fa-search fa-sm"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </nav>
+
+                </div>
+
+            </div>
         </div>
+
+
+
+        <script src="https://code.jquery.com/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js" integrity="sha512-0QbL0ph8Tc8g5bLhfVzSqxe9GERORsKhIn1IrpxDAgUsbBGz/V7iSav2zzW325XGd1OMLdL4UiqRJj702IeqnQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="../custom-js/script-all.min.js"></script>
 
     </body>
 
