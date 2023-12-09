@@ -1,0 +1,51 @@
+.login,
+.image {
+  min-height: 100vh;
+}
+
+.bg-image {
+  background-image: url(./images/login_bg.png);
+  background-size: cover;
+  background-position: center center;
+}
+
+.inputEmail.invalid {
+    border-color: #ff654a;
+}
+
+.toast-msg {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    margin-top: 0;
+    opacity: 0;
+    transition: 0.3s ease;
+}
+
+.toast-msg p {
+    font-size: 0.7rem;
+    color: #ff654a;
+    margin-left: 4px;
+}
+
+.toast-msg i {
+    font-size: 0.7rem;
+    color: #ff654a;
+}
+
+.toast-msg.active {
+    margin-top: 0.5rem;
+    opacity: 1;
+}
+
+.btn {
+    background-color: #FF8617 !important;
+    color: white !important;
+    box-shadow: 0 !important;
+    transition: box-shadow 1s !important;
+}
+
+.btn:hover {
+    box-shadow: 0 0 6px #515151 !important;
+}
