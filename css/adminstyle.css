@@ -4,10 +4,69 @@
 
 #sidebarToggle {
     background-color: #EAECF9;
-    color: #5272E9;
+    color: #5272E9 !important;
     transition: 0.3s ease-in-out;
 }
 
 #sidebarToggle:hover {
     filter: brightness(95%);
+}
+
+#accordionSidebar i {
+    font-size: 18px;
+}
+
+table {
+    font-size: 16px;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    box-sizing: border-box;
+    display: inline-block;
+    min-width: 1.5em;
+    padding: 0.5em 1em;
+    margin-left: 2px;
+    text-align: center;
+    text-decoration: none !important;
+    cursor: pointer;
+    color: #666 !important;
+    border: none !important;
+    background: transparent;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover,.dataTables_wrapper .dataTables_paginate .paginate_button.previous:hover, 
+.dataTables_wrapper .dataTables_paginate .paginate_button.previous.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.next.disabled:hover  {
+    cursor: pointer;
+    color: #FFFFFF !important;
+    border: none !important;
+    background: #5272E9 !important;
+}
+
+.dataTables_wrapper .dataTables_paginate a.paginate_button.current, .dataTables_wrapper .dataTables_paginate a.paginate_button.current:hover {
+    box-sizing: border-box;
+    display: inline-block;
+    min-width: 1.5em;
+    padding: 0.5em 1em;
+    margin-left: 2px;
+    text-align: center;
+    text-decoration: none !important;
+    cursor: pointer;
+    color: #FFFFFF !important;
+    border: none !important;
+    background: #5272E9 !important;
+}
+
+thead > tr > th {
+    text-align: center !important;
+}
+
+tbody > tr > td.course_overview, tbody > tr > td.course_name {
+    max-width: 300px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+}
+
+tbody > tr > td {
+    min-width: fit-content;
 }
