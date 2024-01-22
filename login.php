@@ -1,5 +1,8 @@
 <!--php-->
 <?php
+
+    session_start();
+
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         include("connection.php");
@@ -19,7 +22,7 @@
             // User is a student, check password
             $rowStudent = $resultStudent->fetch_assoc();
             if ($rowStudent['student_pw'] == $password) {
-                header('Location:student_dashboard.php?');
+                header('Location:./student/student_dashboard.php?');
             } else {
                 echo '<script>alert:("Login failed. Please check your credentials and login again")</script>';
             }
@@ -27,7 +30,9 @@
             // User is an admin, check password
             $rowAdmin = $resultAdmin->fetch_assoc();
             if ($rowAdmin['admin_pw'] == $password) {
-                header('Location:student_dashboard.php?');
+                // Set session variable for admin email
+                $_SESSION['admin_email'] = $rowAdmin['admin_email'];
+                header('Location:./admin/admin_dashboard.php?');
             } else {
                 echo '<script>alert:("Login failed. Please check your credentials and login again")</script>';
             }
@@ -39,7 +44,7 @@
                 $sql = "INSERT INTO student_login (student_email, student_pw) VALUES ('$email', '$password')";
                 $result = $conn->query($sql);
                 if ($result) {
-                    header('Location:student_dashboard.php?');
+                    header('Location:./student/student_dashboard.php?');
                 } else {
                     echo '<script>alert:("Login failed. Please check your credentials and login again")</script>';
                 }
@@ -47,7 +52,7 @@
                 $sql = "INSERT INTO admin_login (admin_email, admin_pw) VALUES ('$email', '$password')";
                 $result = $conn->query($sql);
                 if ($result) {
-                    header('Location:student_dashboard.php?');
+                    header('Location:./admin/admin_dashboard.php?');
                 } else {
                     echo 'failed';
                 }

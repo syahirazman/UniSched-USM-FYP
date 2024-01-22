@@ -60,7 +60,7 @@ thead > tr > th {
     text-align: center !important;
 }
 
-tbody > tr > td.course_overview, tbody > tr > td.course_name {
+tbody > tr > td.course_overview, tbody > tr > td.course_name, tbody > tr > td.lecturer_overview, tbody > tr > td.lecturer_name {
     max-width: 300px !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;

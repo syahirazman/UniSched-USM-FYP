@@ -1,3 +1,18 @@
+<!-- PHP -->
+<?php
+session_start();
+
+// Check if the session variable is set
+if (isset($_SESSION['admin_email'])) {
+    $admin_email = $_SESSION['admin_email'];
+    // Now you can use $admin_email in your HTML or PHP code
+} else {
+    // Redirect to the login page if the session variable is not set
+    header('Location: login.php');
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -24,7 +39,7 @@
                 </a>
                 <!-- nav 1 -->
                 <li class="nav-item active">
-                    <a class="nav-link ml-1" href="./admin_dashboard.html">
+                    <a class="nav-link ml-1" href="../admin/admin_dashboard.php">
                         <i class="fa fa-fw fa-tachometer-alt"></i>
                         <span>Dashboard</span></a>
                 </li>
@@ -38,14 +53,14 @@
                 <hr class="sidebar-divider">
                 <!-- nav 3 -->
                 <li class="nav-item">
-                    <a class="nav-link ml-1" href="./admin_courses.html">
+                    <a class="nav-link ml-1" href="../admin/admin_courses.php">
                         <i class="fa fa-fw fa-book-open"></i>
                         <span>Courses</span></a>
                 </li>
                 <hr class="sidebar-divider">
                 <!-- nav 4 -->
                 <li class="nav-item">
-                    <a class="nav-link ml-1" href="">
+                    <a class="nav-link ml-1" href="../admin/admin_lecturers.php">
                         <i class="fa fa-fw fa-person-chalkboard"></i>
                         <span>Lecturers</span></a>
                 </li>
@@ -87,9 +102,16 @@
                             <li class="nav-item dropdown no-arrow">
                                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="mr-2 d-none d-lg-inline text-gray-600 medium">Welcome, Admin!</span>
+                                    <span class="mr-2 d-none d-lg-inline text-gray-600 medium">Welcome, <?php echo $admin_email; ?>!</span>
                                     <img class="img-profile rounded-circle" src="../images/profile_icon.png">
                                 </a>
+                                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="userDropdown">
+                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Logout
+                                    </a>
+                                </div>
                             </li>
                         </ul>
                     </nav>
@@ -99,6 +121,25 @@
             </div>
         </div>
 
+        <!-- Logout Modal-->
+        <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Ready to Log Out?</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        <a class="btn btn-primary" href="../logout.php">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- jQuery Core JS -->
         <script src="https://code.jquery.com/jquery.min.js"></script>
