@@ -46,7 +46,7 @@ if (isset($_SESSION['admin_email'])) {
                 <hr class="sidebar-divider">
                 <!-- nav 2 -->
                 <li class="nav-item">
-                    <a class="nav-link ml-1" href="">
+                    <a class="nav-link ml-1" href="../admin/admin_class-slots.php">
                         <i class="fa fa-fw fa-calendar"></i>
                         <span>Class slots</span></a>
                 </li>
@@ -56,13 +56,6 @@ if (isset($_SESSION['admin_email'])) {
                     <a class="nav-link ml-1" href="../admin/admin_courses.php">
                         <i class="fa fa-fw fa-book-open"></i>
                         <span>Courses</span></a>
-                </li>
-                <hr class="sidebar-divider">
-                <!-- nav 4 -->
-                <li class="nav-item">
-                    <a class="nav-link ml-1" href="../admin/admin_lecturers.php">
-                        <i class="fa fa-fw fa-person-chalkboard"></i>
-                        <span>Lecturers</span></a>
                 </li>
                 <hr class="sidebar-divider">
                 <!-- Sidebar Toggler (Sidebar) -->

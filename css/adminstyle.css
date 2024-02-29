@@ -16,6 +16,7 @@
     font-size: 18px;
 }
 
+
 table {
     font-size: 16px;
 }
@@ -62,11 +63,9 @@ thead > tr > th {
 
 tbody > tr > td.course_overview, tbody > tr > td.course_name, tbody > tr > td.lecturer_overview, tbody > tr > td.lecturer_name {
     max-width: 300px !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    white-space: nowrap !important;
+    overflow: visible !important;
 }
 
 tbody > tr > td {
-    min-width: fit-content;
+    min-width: fit-content !important;
 }

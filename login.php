@@ -111,8 +111,7 @@
                                         <div class="form-group mb-2">
                                             <label for="inputPassword" class="fw-bold">Password</label>
                                             <input id="inputPassword" name="inputPassword" type="password" placeholder="Password" required="" class="form-control border-dark px-4">
-                                        </div>
-                                        
+                                        </div>   
                                         <button type="submit" onclick="validateEmail()" class="btn btn-block mt-4 mb-2 shadow-sm fw-bolder text-center">Log in</button>
                                     </form>
                                 </div>
@@ -140,7 +139,7 @@
                     this.classList.add("invalid")
                 }
             }
-           
+        </script>
         
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>

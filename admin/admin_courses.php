@@ -2,6 +2,8 @@
 <?php
 session_start();
 
+include '../connection.php';
+
 // Check if the session variable is set
 if (isset($_SESSION['admin_email'])) {
     $admin_email = $_SESSION['admin_email'];
@@ -28,6 +30,8 @@ if (isset($_SESSION['admin_email'])) {
         
         <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
 
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
         <title>UniSched USM: Courses Management</title>
     </head>
     <body id="page-top">
@@ -48,7 +52,7 @@ if (isset($_SESSION['admin_email'])) {
                 <hr class="sidebar-divider">
                 <!-- nav 2 -->
                 <li class="nav-item">
-                    <a class="nav-link ml-1" href="">
+                    <a class="nav-link ml-1" href="../admin/admin_class-slots.php">
                         <i class="fa fa-fw fa-calendar"></i>
                         <span>Class slots</span></a>
                 </li>
@@ -58,13 +62,6 @@ if (isset($_SESSION['admin_email'])) {
                     <a class="nav-link ml-1" href="../admin/admin_courses.php">
                         <i class="fa fa-fw fa-book-open"></i>
                         <span>Courses</span></a>
-                </li>
-                <hr class="sidebar-divider">
-                <!-- nav 4 -->
-                <li class="nav-item">
-                    <a class="nav-link ml-1" href="../admin/admin_lecturers.php">
-                        <i class="fa fa-fw fa-person-chalkboard"></i>
-                        <span>Lecturers</span></a>
                 </li>
                 <hr class="sidebar-divider">
                 <!-- Sidebar Toggler (Sidebar) -->
@@ -103,13 +100,12 @@ if (isset($_SESSION['admin_email'])) {
                         <ul class="navbar-nav ml-auto">
                             <li class="nav-item dropdown no-arrow">
                                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="mr-2 d-none d-lg-inline text-gray-600 medium">Welcome, <?php echo $admin_email; ?>!</span>
                                     <img class="img-profile rounded-circle" src="../images/profile_icon.png">
                                 </a>
-                                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="userDropdown">
-                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                                    <a class="dropdown-item" href="" data-bs-toggle="modal" data-bs-target="#logoutModal">
                                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                         Logout
                                     </a>
@@ -129,7 +125,7 @@ if (isset($_SESSION['admin_email'])) {
 
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
-                                <a href="#addCourseModal" class="btn btn-success float-right" data-toggle="modal">
+                                <a href="#addCourseModal" class="btn btn-success float-right" data-bs-toggle="modal">
                                     <i class="fa-solid fa-plus"></i>
                                     <span>Add New Course</span>
                                 </a>						
@@ -140,145 +136,283 @@ if (isset($_SESSION['admin_email'])) {
                                     <table class="table table-bordered hover text-gray-900 mt-3 mb-3" id="courseTable" width="100%">
                                         <thead>
                                             <tr>
+                                                <th>No.</th>
                                                 <th>Code</th>
                                                 <th>Course Name</th>
                                                 <th>Course Overview</th>
                                                 <th>Semester</th>
                                                 <th>School</th>
+                                                <th>Lecturers</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>CAT402</td>
-                                                <td class="course_name">Professional and Technopreneurship Development</td>
-                                                <td class="course_overview">This course includes two main components: techno-entrepreneurial development and professional development.</td>
-                                                <td>Semester 1</td>
-                                                <td>School of Computer Sciences</td>
-                                                <td class="action d-flex text-center justify-content-sm-around">
-                                                    <a><i class="fa fa-pencil text-primary" aria-hidden="true"></i></a>
-                                                    <a href="#deleteCourseModal" data-toggle="modal"><i class="fa fa-trash text-danger" aria-hidden="true"></i></a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>CST337</td>
-                                                <td class="course_name">Network Configuration and Protocols</td>
-                                                <td class="course_overview">This course provides a deep dive into network configuration, protocols, and essential enterprise networking concepts. Students will gain hands-on experience through practical lab exercises in networking and security.</td>
-                                                <td>Semester 1</td>
-                                                <td>School of Computer Sciences</td>
-                                                <td class="action d-flex text-center justify-content-sm-around">
-                                                    <a><i class="fa fa-pencil text-primary" aria-hidden="true"></i></a>
-                                                    <a href="#deleteCourseModal" data-toggle="modal"><i class="fa fa-trash text-danger" aria-hidden="true"></i></a>
-                                                </td>
-                                            </tr>
-                                            
+                                            <?php
+                                            // check connection
+                                            if ($conn->connect_error) {
+                                                die("Connection failed: " . $conn->connect_error);
+                                            }
+
+                                            // read all row from database table
+                                            $no=1;
+                                            $sql = "SELECT * FROM course_mgmt";
+                                            $result = $conn->query($sql);
+                                            if (!$result) {
+                                                die("Invalid query: " . $conn->connect_error); 
+                                            }
+
+                                            // read data of each row
+                                            while ($row = $result->fetch_assoc()): ?>
+                                                <tr>
+                                                    <td><?= $no++ ?></td>
+                                                    <td><?= $row["course_code"]?></td>
+                                                    <td><?= $row["course_name"] ?></td>
+                                                    <td><?= $row["course_overview"] ?></td>
+                                                    <td><?= $row["semester"] ?></td>
+                                                    <td><?= $row["school"] ?></td>
+                                                    <td><?= $row["lecturername"]?> <br> <?= $row["lectureremail"] ?> <br> <?= $row["lecturerroom"] ?> <br><br>
+                                                    <?= $row["lecturername_1"] ?> <br> <?= $row["lectureremail_1"] ?><br> <?= $row["lecturerroom_1"] ?></td>
+                                                    <td class='action text-center'>
+                                                        <a href='' data-bs-toggle='modal' data-bs-target='#updateCourseModal<?= $no ?>'><i class='fa fa-pencil text-primary' aria-hidden='true'></i></a>
+                                                        <a href='' data-bs-toggle='modal' data-bs-target='#deleteCourseModal<?= $no ?>' class='ml-3'><i class='fa fa-trash text-danger' aria-hidden='true'></i></a>
+                                                    </td>
+                                                </tr>
+
+                                                     <!-- Update Modal -->
+                                                    <div id="updateCourseModal<?= $no ?>" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                                        <div class="modal-dialog modal-lg">
+                                                            <div class="modal-content">
+                                                                <form class="updateCourseForm" action="admin-crud.php" method="POST">
+                                                                    <div class="modal-header">						
+                                                                        <h4 class="modal-title font-weight-bold text-gray-900" id="staticBackdropLabel">Update Course</h4>
+                                                                        <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
+                                                                        
+                                                                    </div>
+                                                                    <div class="modal-body text-gray-900">
+                                                                        <input type="hidden" name="course_id" value="<?= $row["course_id"] ?>">
+                                                                        <div class="form-row">
+                                                                            <div class="form-group col-md-6">
+                                                                                <label for="coursecode">Course Code:</label>
+                                                                                <input type="text" name="coursecode" id="coursecode" class="form-control" value="<?= $row["course_code"] ?>">
+                                                                            </div>
+                                                                            <div class="form-group col-md-6">
+                                                                                <label for="semester">Semester:</label>
+                                                                                <select class="form-control" name="semester" id="semester">
+                                                                                    <option value="<?=$row["semester"] ?>"><?= $row["semester"] ?></option>
+                                                                                    <option value="1">1</option>
+                                                                                    <option value="2">2</option>
+                                                                                    <option value="1 & 2">1 & 2</option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label for="coursename">Course Name:</label>
+                                                                            <input type="text" name="coursename" id="coursename" class="form-control" value="<?= $row["course_name"] ?>">
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label for="courseoverview">Course Overview:</label>
+                                                                            <textarea name="courseoverview" id="courseoverview" class="form-control"><?= $row["course_overview"] ?></textarea>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label for="school">School:</label>
+                                                                            <input type="text" name="school" id="school" class="form-control" placeholder="School of..." value="<?= $row["school"] ?>">
+                                                                        </div>
+                                                                        <div class="form-row align-items-center">
+                                                                            <div class="col-md-7">
+                                                                                <label for="lecturername">Lecturers in charge:</label>
+                                                                                <input type="text" name="lecturername" id="lecturername" class="form-control" value="<?= $row["lecturername"] ?>">
+                                                                            </div>
+                                                                            <div class="col-md-4">
+                                                                                <label for="lectureremail">Email:</label>
+                                                                                <input type="email" name="lectureremail" id="lectureremail" class="form-control" value="<?= $row["lectureremail"] ?>">
+                                                                            </div>
+                                                                            <div class="col-sm-1">
+                                                                                <label for="lecturerroom">Room:</label>
+                                                                                <input type="text" name="lecturerroom" id="lecturerroom" class="form-control" value="<?= $row["lecturerroom"] ?>">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-row align-items-center mt-2">
+                                                                            <div class="col-md-7">
+                                                                                <input type="text" name="lecturername_1" id="lecturername_1" class="form-control" value="<?= $row["lecturername_1"] ?>">
+                                                                            </div>
+                                                                            <div class="col-md-4">
+                                                                                <input type="email" name="lectureremail_1" id="lectureremail_1" class="form-control" value="<?= $row["lectureremail_1"] ?>">
+                                                                            </div>
+                                                                            <div class="col-sm-1">
+                                                                                <input type="text" name="lecturerroom_1" id="lecturerroom_1" class="form-control" value="<?= $row["lecturerroom_1"] ?>">
+                                                                            </div>
+                                                                        </div>					
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <input type="button" class="btn btn-default" data-bs-dismiss="modal" value="Cancel">
+                                                                        <input type="submit" class="btn btn-success" name="edit" value="Update">
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Delete Modal HTML -->
+                                                    <div id="deleteCourseModal<?= $no ?>" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <form action="admin-crud.php" method="POST">
+                                                                    <div class="modal-header">						
+                                                                        <h4 class="modal-title font-weight-bold text-gray-900" id="staticBackdropLabel">Delete Course</h4>
+                                                                        <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
+                                                                    </div>
+                                                                    <div class="modal-body text-gray-900">
+                                                                        <input type="hidden" name="course_id" value="<?= $row["course_id"] ?>">					
+                                                                        <p>Are you sure you want to delete this course? <br>
+                                                                            <span class="text-danger font-weight-bold"><?= $row["course_code"]?> - <?= $row["course_name"]?></span>
+                                                                        </p>
+                                                                        <p><small>This action cannot be undone.</small></p>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <input type="button" class="btn btn-default" data-bs-dismiss="modal" value="Cancel">
+                                                                        <input type="submit" class="btn btn-danger" name="delete" value="Delete">
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                            <?php endwhile; ?>
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                        
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Add Course Modal HTML -->
-        <div id="addCourseModal" class="modal fade">
-            <div class="modal-dialog">
+        <div id="addCourseModal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                    <form>
+                    <form class="addCourseForm" action="admin-crud.php" method="POST">
                         <div class="modal-header">						
-                            <h4 class="modal-title font-weight-bold text-gray-900">Add Course</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title font-weight-bold text-gray-900" id="staticBackdropLabel">Add Course</h4>
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
                         </div>
-                        <div class="modal-body text-gray-900">					
-                            <div class="form-group">
-                                <label>Course Code</label>
-                                <input type="text" class="form-control" required>
+                        <div class="modal-body text-gray-900">
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="coursecode">Course Code:</label>
+                                    <input type="text" name="coursecode" id="coursecode" class="form-control" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="semester">Semester:</label>
+                                    <select class="form-control" name="semester" id="semester" required>
+                                        <option></option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="1 & 2">1 & 2</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="form-group">
-                                <label>Course Name</label>
-                                <input type="text" class="form-control" required>
+                                <label for="coursename">Course Name:</label>
+                                <input type="text" name="coursename" id="coursename" class="form-control" required>
                             </div>
                             <div class="form-group">
-                                <label>Course Overview</label>
-                                <textarea class="form-control" required></textarea>
+                                <label for="courseoverview">Course Overview:</label>
+                                <textarea name="courseoverview" id="courseoverview" class="form-control" required></textarea>
                             </div>
                             <div class="form-group">
-                                <label>Semester</label>
-                                <input type="text" class="form-control" required>
+                                <label for="school">School:</label>
+                                <input type="text" name="school" id="school" class="form-control" placeholder="School of..." required>
                             </div>
-                            <div class="form-group">
-                                <label>School</label>
-                                <input type="text" class="form-control" required>
+                            <div class="form-row align-items-center">
+                                <div class="col-md-7">
+                                    <label for="lecturername">Lecturers in charge:</label>
+                                    <input type="text" name="lecturername" id="lecturername" class="form-control" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="lectureremail">Email:</label>
+                                    <input type="email" name="lectureremail" id="lectureremail" class="form-control" required>
+                                </div>
+                                <div class="col-sm-1">
+                                    <label for="lecturerroom">Room:</label>
+                                    <input type="text" name="lecturerroom" id="lecturerroom" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="form-row align-items-center mt-2">
+                                <div class="col-md-7">
+                                    <input type="text" name="lecturername_1" id="lecturername_1" class="form-control">
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="email" name="lectureremail_1" id="lectureremail_1" class="form-control">
+                                </div>
+                                <div class="col-sm-1">
+                                    <input type="text" name="lecturerroom_1" id="lecturerroom_1" class="form-control">
+                                </div>
                             </div>					
                         </div>
                         <div class="modal-footer">
-                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                            <input type="submit" class="btn btn-success" value="Add">
+                            <input type="button" class="btn btn-default" data-bs-dismiss="modal" value="Cancel">
+                            <input type="submit" class="btn btn-success" name="save" value="Add">
                         </div>
                     </form>
                 </div>
             </div>
         </div>
 
-        <!-- Delete Modal HTML -->
-        <div id="deleteCourseModal" class="modal fade">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <form>
-                        <div class="modal-header">						
-                            <h4 class="modal-title font-weight-bold text-gray-900">Delete Course</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        </div>
-                        <div class="modal-body text-gray-900">					
-                            <p>Are you sure you want to delete this course?</p>
-                            <p class="text-danger"><small>This action cannot be undone.</small></p>
-                        </div>
-                        <div class="modal-footer">
-                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                            <input type="submit" class="btn btn-danger" value="Delete">
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
 
         <!-- Logout Modal-->
-        <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
+        <div class="modal fade" id="logoutModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Ready to Log Out?</h5>
-                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <h5 class="modal-title" id="staticBackdropLabel">Ready to Log Out?</h5>
+                        <button class="close" type="button" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
                     <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                     <div class="modal-footer">
-                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
                         <a class="btn btn-primary" href="../logout.php">Logout</a>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Success alert modal --
+        <div class="modal fade" id="successAlert" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong class="modal-title" id="staticBackdropLabel">Success!</strong> Course information is submitted to the database!
+                            <button class="close" type="button" data-bs-dismiss="modal alert" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+
 
         <!-- jQuery Core JS -->
         <script src="https://code.jquery.com/jquery.min.js"></script>
         <!-- BootStrap JavaScript -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+        
         
         <!-- jQuery Easing JS-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js" integrity="sha512-0QbL0ph8Tc8g5bLhfVzSqxe9GERORsKhIn1IrpxDAgUsbBGz/V7iSav2zzW325XGd1OMLdL4UiqRJj702IeqnQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <!-- Custom Theme JS -->
         <script src="../custom-js/script-all.min.js"></script>
 
+        <!-- Script to generate table using DataTable-->
         <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
         <script>
             new DataTable('#courseTable');
         </script>
-
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     </body>
 </html>
