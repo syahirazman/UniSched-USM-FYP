@@ -20,12 +20,12 @@ if (isset($_POST['save'])) {
     VALUES ('$course_code','$course_name','$course_overview','$semester','$school','$lecturer_name','$lecturer_email', '$lecturer_room', '$lecturer_name1', '$lecturer_email1', '$lecturer_room1')";
 
     if ($conn->query($sql)) {
-        echo '<script>
-            alert("Course information is inserted successfully");
-            document.location="admin_courses.php";
-        </script>';
+        //echo '<script> alert("Course information is inserted successfully");document.location="admin_courses.php";</script>';
+        header("Location: admin_courses.php?msg=Course information is added successfully!");
+
     } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        header("Location: admin_courses.php?msg=Cannot perform your query, please try again.");
+        //echo "Error: " . $sql . "<br>" . $conn->error;
     }
 }
 
@@ -42,11 +42,10 @@ if (isset($_POST['edit'])) {
     $lecturer_name1 = $_POST['lecturername_1'];
     $lecturer_email1 = $_POST['lectureremail_1'];
     $lecturer_room1 = $_POST['lecturerroom_1'];
-    $course_id = $_POST['course_id'];
+    //$course_id = $_POST['course_id'];
 
     // SQL INSERT query to course_mgmt table
-    $sql = "UPDATE course_mgmt SET course_code = '$course_code', 
-                                    course_name = '$course_name', 
+    $sql = "UPDATE course_mgmt SET course_name = '$course_name', 
                                     course_overview = '$course_overview', 
                                     semester = '$semester',
                                     school = '$school',
@@ -56,26 +55,95 @@ if (isset($_POST['edit'])) {
                                     lecturername_1 = '$lecturer_name1',
                                     lectureremail_1 = '$lecturer_email1',
                                     lecturerroom_1 = '$lecturer_room1'
-                                WHERE course_id = '$course_id'";
+                                WHERE course_code = '$course_code'";
 
     if ($conn->query($sql)) {
-        echo "<script>alert('Successfully updated course information!');window.location.href = 'admin_courses.php';</script>";
+        // echo "<script>alert('Successfully updated course information!');window.location.href = 'admin_courses.php';</script>";
+        header("Location: admin_courses.php?msg=Course information is updated successfully!");
     } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        header("Location: admin_courses.php?msg=Cannot perform your query, please try again.");
     }
 }
 
 // delete course information
 if (isset($_POST['delete'])) {
-    $course_id = $_POST['course_id'];
+    //$course_id = $_POST['course_id'];
+    $course_code = $_POST['coursecode'];
 
     // SQL INSERT query to course_mgmt table
-    $sql = "DELETE FROM course_mgmt WHERE course_id = '$course_id'";
+    $sql = "DELETE FROM course_mgmt WHERE course_code = '$course_code'";
 
     if ($conn->query($sql)) {
-        echo "<script>alert('Successfully deleted course information!');window.location.href = 'admin_courses.php';</script>";
+        // echo "<script>alert('Successfully deleted course information!');window.location.href = 'admin_courses.php';</script>";
+        header("Location: admin_courses.php?msg=Course information is deleted successfully!");
     } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        header("Location: admin_courses.php?msg=Cannot perform your query, please try again.");
+    }
+}
+
+
+// add class slot information
+if (isset($_POST['add_class'])) {
+    $course_code = $_POST['coursecode'];
+    $slot_type = $_POST['slottype'];
+    $start_time = $_POST['starttime'];
+    $end_time = $_POST['endtime'];
+    $classday = $_POST['classDay'];
+    $classlocation = $_POST['classLocation'];
+
+    // SQL INSERT query to timetable_mgmt table
+    $sql = "INSERT INTO timetable_mgmt (course_code, slot_type, start_time, end_time, class_day, class_location) 
+    VALUES ('$course_code','$slot_type','$$start_time','$$end_time','$classday','$classlocation')";
+
+    if ($conn->query($sql)) {
+        //echo '<script> alert("Course information is inserted successfully");document.location="admin_courses.php";</script>';
+        header("Location: admin_class-slots.php?msg=Class slot information is added successfully!");
+
+    } else {
+        header("Location: admin_class-slots.php?msg=Cannot perform your query, please try again.");
+        //echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+}
+
+// update class slot information
+if (isset($_POST['update_class'])) {
+    $course_code = $_POST['coursecode'];
+    $slot_type = $_POST['slottype'];
+    $start_time = $_POST['starttime'];
+    $end_time = $_POST['endtime'];
+    $classday = $_POST['classDay'];
+    $classlocation = $_POST['classLocation'];
+    $slot_id = $_POST['slot_id'];
+
+    // SQL INSERT query to timetable_mgmt table
+    $sql = "UPDATE timetable_mgmt SET course_code = '$course_code', 
+                                    slot_type = '$slot_type', 
+                                    start_time = '$start_time',
+                                    end_time = '$end_time',
+                                    class_day = '$classday',
+                                    class_location = '$classlocation'
+                                WHERE slot_id = '$slot_id' ";
+
+    if ($conn->query($sql)) {
+        // echo "<script>alert('Successfully updated course information!');window.location.href = 'admin_courses.php';</script>";
+        header("Location: admin_class-slots.php?msg=Class slot information is updated successfully!");
+    } else {
+        header("Location: admin_class-slots.php?msg=Cannot perform your query, please try again.");
+    }
+}
+
+// delete class slot information
+if (isset($_POST['delete_class'])) {
+    $slot_id = $_POST['slot_id'];
+
+    // SQL INSERT query to course_mgmt table
+    $sql = "DELETE FROM timetable_mgmt WHERE slot_id = '$slot_id'";
+
+    if ($conn->query($sql)) {
+        // echo "<script>alert('Successfully deleted course information!');window.location.href = 'admin_courses.php';</script>";
+        header("Location: admin_class-slots.php?msg=Class slot information is deleted successfully!");
+    } else {
+        header("Location: admin_class-slots.php?msg=Cannot perform your query, please try again.");
     }
 }
 

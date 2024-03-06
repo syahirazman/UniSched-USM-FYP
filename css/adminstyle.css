@@ -63,7 +63,9 @@ thead > tr > th {
 
 tbody > tr > td.course_overview, tbody > tr > td.course_name, tbody > tr > td.lecturer_overview, tbody > tr > td.lecturer_name {
     max-width: 300px !important;
-    overflow: visible !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
 }
 
 tbody > tr > td {

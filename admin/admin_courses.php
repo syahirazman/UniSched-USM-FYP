@@ -13,6 +13,7 @@ if (isset($_SESSION['admin_email'])) {
     header('Location: login.php');
     exit();
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -30,7 +31,6 @@ if (isset($_SESSION['admin_email'])) {
         
         <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
 
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
         <title>UniSched USM: Courses Management</title>
     </head>
@@ -120,9 +120,39 @@ if (isset($_SESSION['admin_email'])) {
                         <div class="d-sm-flex align-items-center justify-content-between mb-4 ml-4">
                             <h1 class="h3 mb-0 text-gray-900">Courses Management</h1>
                         </div>
+
+                        <!-- display alerts -->
+                        <?php
+                        if (isset($_GET['msg'])){
+                            $msg = $_GET['msg'];
+
+                            if ($msg == 'Cannot perform your query, please try again.') {
+                                // display fail alert if GET parameter is not present (fails to add/update/delete course)
+                                echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        '.$msg.'
+                                        <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close" onclick="reloadPage()">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>';
+                            } else {
+                                //display success alert if GET parameter is present (successfully add/update/delete course)
+                                echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        '.$msg.'
+                                        <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close" onclick="reloadPage()">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>';
+                            }
+                        }
+                        ?>
+                        <!-- script to reload page back to URL without GET parameter after closing alert -->
+                        <script>
+                            function reloadPage() {
+                                window.location.href = 'admin_courses.php';
+                            }
+                        </script>
     
                         <!-- Table for CRUD -->
-
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
                                 <a href="#addCourseModal" class="btn btn-success float-right" data-bs-toggle="modal">
@@ -189,7 +219,7 @@ if (isset($_SESSION['admin_email'])) {
                                                                         
                                                                     </div>
                                                                     <div class="modal-body text-gray-900">
-                                                                        <input type="hidden" name="course_id" value="<?= $row["course_id"] ?>">
+                                                                        <!--<input type="hidden" name="course_id" value="">-->
                                                                         <div class="form-row">
                                                                             <div class="form-group col-md-6">
                                                                                 <label for="coursecode">Course Code:</label>
@@ -262,7 +292,7 @@ if (isset($_SESSION['admin_email'])) {
                                                                         <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
                                                                     </div>
                                                                     <div class="modal-body text-gray-900">
-                                                                        <input type="hidden" name="course_id" value="<?= $row["course_id"] ?>">					
+                                                                        <!--<input type="hidden" name="course_id" value="">	-->				
                                                                         <p>Are you sure you want to delete this course? <br>
                                                                             <span class="text-danger font-weight-bold"><?= $row["course_code"]?> - <?= $row["course_name"]?></span>
                                                                         </p>
@@ -379,22 +409,6 @@ if (isset($_SESSION['admin_email'])) {
             </div>
         </div>
 
-        <!-- Success alert modal --
-        <div class="modal fade" id="successAlert" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <strong class="modal-title" id="staticBackdropLabel">Success!</strong> Course information is submitted to the database!
-                            <button class="close" type="button" data-bs-dismiss="modal alert" aria-label="Close">
-                                <span aria-hidden="true">×</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
-
 
         <!-- jQuery Core JS -->
         <script src="https://code.jquery.com/jquery.min.js"></script>
@@ -413,6 +427,6 @@ if (isset($_SESSION['admin_email'])) {
             new DataTable('#courseTable');
         </script>
         
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+       
     </body>
 </html>
