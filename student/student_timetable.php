@@ -26,7 +26,7 @@ if (isset($_SESSION['student_email'])) {
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
 
-        <title>UniSched USM: Student Dashboard</title>
+        <title>UniSched USM: Class Timetable</title>
     </head>
     <body id="page-top">
         <div id="wrapper">
@@ -38,14 +38,14 @@ if (isset($_SESSION['student_email'])) {
                     </div>
                 </a>
                 <!-- nav 1 -->
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a class="nav-link ml-1" href="../student/student_dashboard.php">
                         <i class="fa fa-fw fa-tachometer-alt"></i>
                         <span>Dashboard</span></a>
                 </li>
                 <hr class="sidebar-divider">
                 <!-- nav 2 -->
-                <li class="nav-item">
+                <li class="nav-item active">
                     <a class="nav-link ml-1" href="../student/student_timetable.php">
                         <i class="fa fa-fw fa-calendar"></i>
                         <span>Class Timetable</span></a>
@@ -108,6 +108,12 @@ if (isset($_SESSION['student_email'])) {
                             </li>
                         </ul>
                     </nav>
+
+                    <div class="container-fluid">
+                        <div class="d-sm-flex align-items-center justify-content-between mb-4 ml-4">
+                            <h1 class="h3 mb-0 text-gray-900">Class Timetable</h1>
+                        </div>
+                    </div>
 
                 </div>
 

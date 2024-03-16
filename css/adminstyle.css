@@ -71,3 +71,81 @@ tbody > tr > td.course_overview, tbody > tr > td.course_name, tbody > tr > td.le
 tbody > tr > td {
     min-width: fit-content !important;
 }
+
+.select2-container, .select2-container--default {
+    display: block !important;
+    height: calc(1.5em + 0.75rem + 2px) !important;
+   
+    font-size: 1rem !important;
+    font-weight: 400 !important;
+    line-height: 1.5em !important;
+    color: #6e707e !important;
+    background-color: #fff !important;
+    background-clip: padding-box !important;
+   
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #6e707e !important;
+    line-height: 1.5em !important;
+}
+
+.select2-container .select2-selection--single .select2-selection__rendered {
+    display: block !important;
+    padding: 0.375rem 0.75rem !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.select2-container--default .select2-selection--single {
+    background-color: #fff;
+}
+
+.select2-container .select2-selection--single {
+    cursor: pointer;
+    display: block !important;
+    height: calc(1.5em + 0.75rem + 2px) !important;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.select2-container .select2-container--default .select2-container--open {
+    position: absolute !important;
+    top: 145px !important;
+    left: 16px !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__placeholder {
+    color: #d1d3e2 !important;
+    line-height: 1.5em !important;
+    padding: 0.375rem 0.75rem !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 26px !important;
+    position: absolute !important;
+    top: 7px !important;
+    right: 2px !important;
+    width: 20px !important;
+}
+
+.select2-dropdown {
+    background-color: white;
+    border: 1px solid #d1d3e2 !important;
+    border-radius: 0.35rem !important;
+    display: block;
+    position: absolute;
+    left: -100000px;
+    width: relative;
+    z-index: 1060;
+}
+
+.select2-container--default .select2-search--dropdown .select2-search__field {
+    border: 1px solid #d1d3e2 !important;
+}
+
+.select2-search--dropdown .select2-search__field {
+    padding: 0.375rem 0.75rem !important;
+}

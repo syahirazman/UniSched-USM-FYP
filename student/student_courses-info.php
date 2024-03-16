@@ -26,7 +26,7 @@ if (isset($_SESSION['student_email'])) {
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
 
-        <title>UniSched USM: Student Dashboard</title>
+        <title>UniSched USM: Student Information</title>
     </head>
     <body id="page-top">
         <div id="wrapper">
@@ -38,7 +38,7 @@ if (isset($_SESSION['student_email'])) {
                     </div>
                 </a>
                 <!-- nav 1 -->
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a class="nav-link ml-1" href="../student/student_dashboard.php">
                         <i class="fa fa-fw fa-tachometer-alt"></i>
                         <span>Dashboard</span></a>
@@ -52,7 +52,7 @@ if (isset($_SESSION['student_email'])) {
                 </li>
                 <hr class="sidebar-divider">
                 <!-- nav 3 -->
-                <li class="nav-item">
+                <li class="nav-item active">
                     <a class="nav-link ml-1" href="../student/student_courses-info.php">
                         <i class="fa fa-fw fa-book-open"></i>
                         <span>Courses Information</span></a>
@@ -109,6 +109,91 @@ if (isset($_SESSION['student_email'])) {
                         </ul>
                     </nav>
 
+                    <!-- Begin page content -->
+                    <div class="container-fluid">
+                        <div class="d-sm-flex align-items-center justify-content-between mb-4 ml-4">
+                            <h1 class="h3 mb-0 text-gray-900">Courses Information</h1>
+                        </div>
+                        <div class="d-sm-flex align-items-center justify-content-between mb-4 ml-4">
+                            <form>
+                                <p class="text-gray-900">Filter by:</p>
+                                <div class="form-inline text-gray-700">
+                                    <label for="school">School</label>
+                                    <select class="form-control ml-sm-2 mr-sm-4" name="school" id="school">
+                                        <option></option>
+                                        <option value="CS">School of CS</option>
+                                        <option value="Bio">School of Bio</option>
+                                        <option value="Etc">School of etc</option>
+                                    </select>
+                                    <label for="semester">Semester</label>
+                                    <select class="form-control ml-sm-2" name="semester" id="semester">
+                                        <option></option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="1 & 2">1 & 2</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                        <!--rows of cards-->
+                        <div class="row">
+                            <div class="col-xl-4 col-md-6 mb-4">
+                                <!-- Collapsable Card Example -->
+                                    <div class="card shadow mb-4">
+                                    <!-- Card Header - Accordion -->
+                                    <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse"
+                                        role="button" aria-expanded="true" aria-controls="collapseCardExample">
+                                        <h6 class="m-0 font-weight-bold text-primary">Collapsable Card Example</h6>
+                                    </a>
+                                    <!-- Card Content - Collapse -->
+                                    <div class="collapse show" id="collapseCardExample">
+                                        <div class="card-body">
+                                            This is a collapsable card example using Bootstrap's built in collapse
+                                            functionality. <strong>Click on the card header</strong> to see the card body
+                                            collapse and expand!
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-md-6 mb-4">
+                                <!-- Collapsable Card Example -->
+                                    <div class="card shadow mb-4">
+                                    <!-- Card Header - Accordion -->
+                                    <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse"
+                                        role="button" aria-expanded="true" aria-controls="collapseCardExample">
+                                        <h6 class="m-0 font-weight-bold text-primary">Collapsable Card Example</h6>
+                                    </a>
+                                    <!-- Card Content - Collapse -->
+                                    <div class="collapse show" id="collapseCardExample">
+                                        <div class="card-body">
+                                            This is a collapsable card example using Bootstrap's built in collapse
+                                            functionality. <strong>Click on the card header</strong> to see the card body
+                                            collapse and expand!
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-md-6 mb-4">
+                                <!-- Collapsable Card Example -->
+                                    <div class="card shadow mb-4">
+                                    <!-- Card Header - Accordion -->
+                                    <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse"
+                                        role="button" aria-expanded="true" aria-controls="collapseCardExample">
+                                        <h6 class="m-0 font-weight-bold text-primary">Collapsable Card Example</h6>
+                                    </a>
+                                    <!-- Card Content - Collapse -->
+                                    <div class="collapse show" id="collapseCardExample">
+                                        <div class="card-body">
+                                            This is a collapsable card example using Bootstrap's built in collapse
+                                            functionality. <strong>Click on the card header</strong> to see the card body
+                                            collapse and expand!
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
 
             </div>

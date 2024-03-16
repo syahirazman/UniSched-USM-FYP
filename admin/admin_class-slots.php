@@ -28,9 +28,13 @@ if (isset($_SESSION['admin_email'])) {
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
         
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" >
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css">
+        
         <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        
+
 
         <title>UniSched USM: Classes Management</title>
     </head>
@@ -106,7 +110,7 @@ if (isset($_SESSION['admin_email'])) {
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                    <a class="dropdown-item" href="" data-toggle="modal" data-target="#logoutModal">
                                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                         Logout
                                     </a>
@@ -191,8 +195,10 @@ if (isset($_SESSION['admin_email'])) {
                                             if (!$result) {
                                                 die("Invalid query: " . $conn->connect_error); 
                                             }
-                                            while ($row = $result->fetch_assoc()): ?>
-                                                <tr>
+                                            while ($row = $result->fetch_assoc()): 
+                                                $row_count = $result->num_rows;
+                                                echo "Number of rows fetched: " . $row_count; ?>
+                                                <tr class="text-center">
                                                     <td><?= $no++ ?></td>
                                                     <td><?= $row["course_code"]?></td>
                                                     <td><?= $row["slot_type"]?></td>
@@ -220,11 +226,27 @@ if (isset($_SESSION['admin_email'])) {
                                                                     <div class="form-row">
                                                                         <div class="form-group col-md-6">
                                                                             <label for="coursecode">Course Code:</label>
-                                                                            <input type="text" name="coursecode" id="coursecode" class="form-control" value="<?= $row["course_code"] ?>">
+                                                                            <select name="coursecode" id="coursecode" class="form-control">
+                                                                                <?php
+                                                                                    // Retrieve course codes from the database and populate the dropdown
+                                                                                    // check connection
+                                                                                    if ($conn->connect_error) {
+                                                                                        die("Connection failed: " . $conn->connect_error);
+                                                                                    }
+
+                                                                                    $sql = "SELECT course_code FROM course_mgmt";
+                                                                                    $result = $conn->query($sql);
+                                                                                    if (!$result) {
+                                                                                        die("Invalid query: " . $conn->connect_error); 
+                                                                                    }
+                                                                                    while ($row_course = $result->fetch_assoc()): ?>
+                                                                                         <option <?= ($row_course["course_code"] == $row["course_code"]) ? "selected" : "" ?>><?= $row_course["course_code"] ?></option>
+                                                                                <?php endwhile;?>
+                                                                            </select>
                                                                         </div>
                                                                         <div class="form-group col-md-6">
                                                                             <label for="slottype">Slot type:</label>
-                                                                            <select class="form-control" name="slottype" id="slottype" required>
+                                                                            <select class="form-control" name="slottype" id="slottype">
                                                                                 <option value="<?=$row["slot_type"] ?>"><?=$row["slot_type"] ?></option>
                                                                                 <option value="Lecture class">Lecture class</option>
                                                                                 <option value="Tutorial">Tutorial</option>
@@ -262,7 +284,7 @@ if (isset($_SESSION['admin_email'])) {
                                                                 </div>
                                                                 <div class="modal-footer">
                                                                     <input type="button" class="btn btn-default" data-bs-dismiss="modal" value="Cancel">
-                                                                    <input type="submit" class="btn btn-success" value="Add" name="update_class">
+                                                                    <input type="submit" class="btn btn-success" value="Update" name="update_class">
                                                                 </div>
 
                                                             </form>
@@ -295,6 +317,7 @@ if (isset($_SESSION['admin_email'])) {
                                                             </div>
                                                         </div>
                                                     </div>
+                                                
                                             <?php endwhile; ?>
                                             
                                         </tbody>
@@ -320,11 +343,29 @@ if (isset($_SESSION['admin_email'])) {
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="coursecode">Course Code:</label>
-                                    <input type="text" name="coursecode" id="coursecode" class="form-control" required>
+                                    <select name="coursecode" id="coursecode" class="form-control" data-placeholder="Choose course code" required>
+                                        <option></option>
+                                        <?php
+                                            // Retrieve course codes from the database and populate the dropdown
+                                            // check connection
+                                            if ($conn->connect_error) {
+                                                die("Connection failed: " . $conn->connect_error);
+                                            }
+
+                                            $sql = "SELECT course_code FROM course_mgmt";
+                                            $result = $conn->query($sql);
+                                            if (!$result) {
+                                                die("Invalid query: " . $conn->connect_error); 
+                                            }
+                                            while ($row = $result->fetch_assoc()): ?>
+                                                <option><?= $row["course_code"] ?></option>
+                                        <?php endwhile; ?>
+                                    </select>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="slottype">Slot type:</label>
                                     <select class="form-control" name="slottype" id="slottype" required>
+                                        <option></option>
                                         <option value="Lecture class">Lecture class</option>
                                         <option value="Tutorial">Tutorial</option>
                                         <option value="Lab">Lab</option>
@@ -395,6 +436,8 @@ if (isset($_SESSION['admin_email'])) {
         <!-- BootStrap JavaScript -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
         
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
         <!-- jQuery Easing JS-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js" integrity="sha512-0QbL0ph8Tc8g5bLhfVzSqxe9GERORsKhIn1IrpxDAgUsbBGz/V7iSav2zzW325XGd1OMLdL4UiqRJj702IeqnQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <!-- Custom Theme JS -->
@@ -405,7 +448,22 @@ if (isset($_SESSION['admin_email'])) {
             new DataTable('#classTable');
         </script>
 
-        
+        <script>
+            $('#addClassModal').on('shown.bs.modal', function (e) {
+                $(this).find('#coursecode').select2({
+                    
+                    dropdownParent: $(this).find('.modal-content'),
+                    placeholder: $( this ).data( 'placeholder' ),
+                });
+            });
+
+            $('#updateClassModal').on('shown.bs.modal', function (e) {
+                $(this).find('#coursecode').select2({
+                    dropdownParent: $(this).find('.modal-content')
+                });
+            });
+        </script>
+                
 
     </body>
 </html>

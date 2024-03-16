@@ -241,7 +241,7 @@ if (isset($_SESSION['admin_email'])) {
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <label for="courseoverview">Course Overview:</label>
-                                                                            <textarea name="courseoverview" id="courseoverview" class="form-control"><?= $row["course_overview"] ?></textarea>
+                                                                            <textarea rows="5" name="courseoverview" id="courseoverview" class="form-control"><?= $row["course_overview"] ?></textarea>
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <label for="school">School:</label>
@@ -348,7 +348,7 @@ if (isset($_SESSION['admin_email'])) {
                             </div>
                             <div class="form-group">
                                 <label for="courseoverview">Course Overview:</label>
-                                <textarea name="courseoverview" id="courseoverview" class="form-control" required></textarea>
+                                <textarea rows="5" name="courseoverview" id="courseoverview" class="form-control" required></textarea>
                             </div>
                             <div class="form-group">
                                 <label for="school">School:</label>
@@ -412,6 +412,7 @@ if (isset($_SESSION['admin_email'])) {
 
         <!-- jQuery Core JS -->
         <script src="https://code.jquery.com/jquery.min.js"></script>
+        
         <!-- BootStrap JavaScript -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
         

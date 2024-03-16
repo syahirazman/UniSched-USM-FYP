@@ -11,31 +11,42 @@
         $email = $_POST['inputEmail'];
         $password = $_POST['inputPassword'];
 
-        // Check if it's the first time login
-        $sqlStudent = "SELECT * FROM student_login WHERE student_email = '$email'";
-        $resultStudent = $conn->query($sqlStudent);
+        $domain = explode('@', $email)[1];
 
-        $sqlAdmin = "SELECT * FROM admin_login WHERE admin_email = '$email'";
-        $resultAdmin = $conn->query($sqlAdmin);
+        if ($domain === 'student.usm.my'){
+            // Check if it's the first time login
+            $sqlStudent = "SELECT * FROM student_login WHERE student_email = '$email'";
+            $resultStudent = $conn->query($sqlStudent);
 
-        if ($resultStudent->num_rows > 0) {
-            // User is a student, check password
-            $rowStudent = $resultStudent->fetch_assoc();
-            if ($rowStudent['student_pw'] == $password) {
-                header('Location:./student/student_dashboard.php?');
-            } else {
-                echo '<script>alert:("Login failed. Please check your credentials and login again")</script>';
+            if ($resultStudent->num_rows > 0) {
+                // User is a student, check password
+                $rowStudent = $resultStudent->fetch_assoc();
+                if ($rowStudent['student_pw'] == $password) {
+                    // Set session variable for admin email
+                    $_SESSION['student_email'] = $rowStudent['student_email'];
+                    header('Location:./student/student_dashboard.php');
+                } else {
+                    echo '<script>alert:("Login failed. Please check your credentials and login again")</script>';
+                    header('Location: login.php');
+                }
             }
-        } elseif ($resultAdmin->num_rows > 0) {
-            // User is an admin, check password
-            $rowAdmin = $resultAdmin->fetch_assoc();
-            if ($rowAdmin['admin_pw'] == $password) {
-                // Set session variable for admin email
-                $_SESSION['admin_email'] = $rowAdmin['admin_email'];
-                header('Location:./admin/admin_dashboard.php?');
-            } else {
-                echo '<script>alert:("Login failed. Please check your credentials and login again")</script>';
+        } elseif ($domain === 'usm.my') {
+            $sqlAdmin = "SELECT * FROM admin_login WHERE admin_email = '$email'";
+            $resultAdmin = $conn->query($sqlAdmin);
+
+            if ($resultAdmin->num_rows > 0) {
+                // User is an admin, check password
+                $rowAdmin = $resultAdmin->fetch_assoc();
+                if ($rowAdmin['admin_pw'] == $password) {
+                    // Set session variable for admin email
+                    $_SESSION['admin_email'] = $rowAdmin['admin_email'];
+                    header('Location:./admin/admin_dashboard.php');
+                } else {
+                    echo '<script>alert:("Login failed. Please check your credentials and login again")</script>';
+                    header('Location: login.php');
+                }
             }
+
         } else {
             // First time login, determine if admin or student and save credentials
             $domain = explode('@', $email)[1];
@@ -44,7 +55,7 @@
                 $sql = "INSERT INTO student_login (student_email, student_pw) VALUES ('$email', '$password')";
                 $result = $conn->query($sql);
                 if ($result) {
-                    header('Location:./student/student_dashboard.php?');
+                    header('Location:./student/student_dashboard.php');
                 } else {
                     echo '<script>alert:("Login failed. Please check your credentials and login again")</script>';
                 }
@@ -52,7 +63,7 @@
                 $sql = "INSERT INTO admin_login (admin_email, admin_pw) VALUES ('$email', '$password')";
                 $result = $conn->query($sql);
                 if ($result) {
-                    header('Location:./admin/admin_dashboard.php?');
+                    header('Location:./admin/admin_dashboard.php');
                 } else {
                     echo 'failed';
                 }
