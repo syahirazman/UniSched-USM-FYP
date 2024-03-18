@@ -10,7 +10,7 @@ if (isset($_SESSION['admin_email'])) {
     // Now you can use $admin_email in your HTML or PHP code
 } else {
     // Redirect to the login page if the session variable is not set
-    header('Location: login.php');
+    header('Location: admin-login.php');
     exit();
 }
 ?>
@@ -27,16 +27,15 @@ if (isset($_SESSION['admin_email'])) {
         <link rel="icon" type="image/x-icon" href="../images/UniSched USM text logo.ico">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
-        
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" >
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css">
-        
         <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" >
+        
+        
 
         
 
 
-        <title>UniSched USM: Classes Management</title>
+        <title>UniSched USM: Class Slots Management</title>
     </head>
     <body id="page-top">
         <div id="wrapper">
@@ -108,11 +107,14 @@ if (isset($_SESSION['admin_email'])) {
                                     <span class="mr-2 d-none d-lg-inline text-gray-600 medium">Welcome, <?php echo $admin_email; ?>!</span>
                                     <img class="img-profile rounded-circle" src="../images/profile_icon.png">
                                 </a>
-                                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="userDropdown">
+                                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                                     <a class="dropdown-item" href="" data-toggle="modal" data-target="#logoutModal">
                                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                         Logout
+                                    </a>
+                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#">
+                                        <i class="fas fa-solid fa-plus fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Add new admin
                                     </a>
                                 </div>
                             </li>
@@ -123,7 +125,7 @@ if (isset($_SESSION['admin_email'])) {
                     <!-- Begin page content -->
                     <div class="container-fluid">
                         <div class="d-sm-flex align-items-center justify-content-between mb-4 ml-4">
-                            <h1 class="h3 mb-0 text-gray-900">Classes Management</h1>
+                            <h1 class="h3 mb-0 text-gray-900">Class Slots Management</h1>
                         </div>
                         
                          <!-- display alerts -->
@@ -183,21 +185,21 @@ if (isset($_SESSION['admin_email'])) {
                                         </thead>
                                         <tbody>
                                             <?php
-                                            // check connection
-                                            if ($conn->connect_error) {
-                                                die("Connection failed: " . $conn->connect_error);
-                                            }
+                                                // check connection
+                                                if ($conn->connect_error) {
+                                                    die("Connection failed: " . $conn->connect_error);
+                                                }
 
-                                            // read all row from database table
-                                            $no=1;
-                                            $sql = "SELECT * FROM timetable_mgmt";
-                                            $result = $conn->query($sql);
-                                            if (!$result) {
-                                                die("Invalid query: " . $conn->connect_error); 
-                                            }
-                                            while ($row = $result->fetch_assoc()): 
-                                                $row_count = $result->num_rows;
-                                                echo "Number of rows fetched: " . $row_count; ?>
+                                                // read all row from database table
+                                                $no=1;
+                                                $sql = "SELECT * FROM timetable_mgmt";
+                                                $result = $conn->query($sql);
+                                                if (!$result) {
+                                                    die("Invalid query: " . $conn->connect_error); 
+                                                }
+                                                
+                                                while ($row = $result->fetch_assoc()):  
+                                            ?>
                                                 <tr class="text-center">
                                                     <td><?= $no++ ?></td>
                                                     <td><?= $row["course_code"]?></td>
@@ -234,12 +236,12 @@ if (isset($_SESSION['admin_email'])) {
                                                                                         die("Connection failed: " . $conn->connect_error);
                                                                                     }
 
-                                                                                    $sql = "SELECT course_code FROM course_mgmt";
-                                                                                    $result = $conn->query($sql);
-                                                                                    if (!$result) {
+                                                                                    $sqlquery = "SELECT course_code FROM course_mgmt";
+                                                                                    $result_course = $conn->query($sqlquery);
+                                                                                    if (!$result_course) {
                                                                                         die("Invalid query: " . $conn->connect_error); 
                                                                                     }
-                                                                                    while ($row_course = $result->fetch_assoc()): ?>
+                                                                                    while ($row_course = $result_course->fetch_assoc()): ?>
                                                                                          <option <?= ($row_course["course_code"] == $row["course_code"]) ? "selected" : "" ?>><?= $row_course["course_code"] ?></option>
                                                                                 <?php endwhile;?>
                                                                             </select>
@@ -294,29 +296,29 @@ if (isset($_SESSION['admin_email'])) {
 
                                                 <!-- Delete Modal HTML -->
                                                 <div id="deleteClassModal<?= $no ?>" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                                        <div class="modal-dialog">
-                                                            <div class="modal-content">
-                                                                <form action="admin-crud.php" method="POST">
-                                                                    <div class="modal-header">						
-                                                                        <h4 class="modal-title font-weight-bold text-gray-900" id="staticBackdropLabel">Delete Class Slot</h4>
-                                                                        <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
-                                                                    </div>
-                                                                    <div class="modal-body text-gray-900">
-                                                                        <input type="hidden" name="slot_id" value="<?= $row['slot_id'] ?>">			
-                                                                        <p>Are you sure you want to delete the class slot of this course? <br>
-                                                                            <span class="text-danger font-weight-bold"><?= $row["course_code"]?>:</span>
-                                                                            <span class="text-danger font-weight-bold"><?= $row["class_day"]?>, <?= $row["start_time"]?> - <?= $row["end_time"]?></span>
-                                                                        </p>
-                                                                        <p><small>This action cannot be undone.</small></p>
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <input type="button" class="btn btn-default" data-bs-dismiss="modal" value="Cancel">
-                                                                        <input type="submit" class="btn btn-danger" name="delete_class" value="Delete">
-                                                                    </div>
-                                                                </form>
-                                                            </div>
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <form action="admin-crud.php" method="POST">
+                                                                <div class="modal-header">						
+                                                                    <h4 class="modal-title font-weight-bold text-gray-900" id="staticBackdropLabel">Delete Class Slot</h4>
+                                                                    <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
+                                                                </div>
+                                                                <div class="modal-body text-gray-900">
+                                                                    <input type="hidden" name="slot_id" value="<?= $row['slot_id'] ?>">			
+                                                                    <p>Are you sure you want to delete the class slot of this course? <br>
+                                                                        <span class="text-danger font-weight-bold"><?= $row["course_code"]?>:</span>
+                                                                        <span class="text-danger font-weight-bold"><?= $row["class_day"]?>, <?= $row["start_time"]?> - <?= $row["end_time"]?></span>
+                                                                    </p>
+                                                                    <p><small>This action cannot be undone.</small></p>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <input type="button" class="btn btn-default" data-bs-dismiss="modal" value="Cancel">
+                                                                    <input type="submit" class="btn btn-danger" name="delete_class" value="Delete">
+                                                                </div>
+                                                            </form>
                                                         </div>
                                                     </div>
+                                                </div>
                                                 
                                             <?php endwhile; ?>
                                             
@@ -324,7 +326,7 @@ if (isset($_SESSION['admin_email'])) {
                                     </table>
                                 </div>
                             </div>
-                        
+                        </div>
                     </div>
                 </div>
             </div>
@@ -424,7 +426,7 @@ if (isset($_SESSION['admin_email'])) {
                     <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                        <a class="btn btn-primary" href="../logout.php">Logout</a>
+                        <a class="btn btn-primary" href="../admin-logout.php">Logout</a>
                     </div>
                 </div>
             </div>
@@ -457,11 +459,7 @@ if (isset($_SESSION['admin_email'])) {
                 });
             });
 
-            $('#updateClassModal').on('shown.bs.modal', function (e) {
-                $(this).find('#coursecode').select2({
-                    dropdownParent: $(this).find('.modal-content')
-                });
-            });
+            
         </script>
                 
 

@@ -2,6 +2,8 @@
 <?php
 session_start();
 
+include '../connection.php';
+
 // Check if the session variable is set
 if (isset($_SESSION['student_email'])) {
     $student_email = $_SESSION['student_email'];
@@ -22,6 +24,7 @@ if (isset($_SESSION['student_email'])) {
         <link href="../css/fontawesome.min.css" rel="stylesheet">
         <link href="../css/adminstyle.min.css" rel="stylesheet">
         <link href="../css/adminstyle.css" rel="stylesheet">
+        
         <link rel="icon" type="image/x-icon" href="../images/UniSched USM text logo.ico">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
@@ -135,64 +138,48 @@ if (isset($_SESSION['student_email'])) {
                                 </div>
                             </form>
                         </div>
+
                         <!--rows of cards-->
                         <div class="row">
-                            <div class="col-xl-4 col-md-6 mb-4">
-                                <!-- Collapsable Card Example -->
-                                    <div class="card shadow mb-4">
-                                    <!-- Card Header - Accordion -->
-                                    <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse"
-                                        role="button" aria-expanded="true" aria-controls="collapseCardExample">
-                                        <h6 class="m-0 font-weight-bold text-primary">Collapsable Card Example</h6>
-                                    </a>
-                                    <!-- Card Content - Collapse -->
-                                    <div class="collapse show" id="collapseCardExample">
-                                        <div class="card-body">
-                                            This is a collapsable card example using Bootstrap's built in collapse
-                                            functionality. <strong>Click on the card header</strong> to see the card body
-                                            collapse and expand!
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-4 col-md-6 mb-4">
-                                <!-- Collapsable Card Example -->
-                                    <div class="card shadow mb-4">
-                                    <!-- Card Header - Accordion -->
-                                    <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse"
-                                        role="button" aria-expanded="true" aria-controls="collapseCardExample">
-                                        <h6 class="m-0 font-weight-bold text-primary">Collapsable Card Example</h6>
-                                    </a>
-                                    <!-- Card Content - Collapse -->
-                                    <div class="collapse show" id="collapseCardExample">
-                                        <div class="card-body">
-                                            This is a collapsable card example using Bootstrap's built in collapse
-                                            functionality. <strong>Click on the card header</strong> to see the card body
-                                            collapse and expand!
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-4 col-md-6 mb-4">
-                                <!-- Collapsable Card Example -->
-                                    <div class="card shadow mb-4">
-                                    <!-- Card Header - Accordion -->
-                                    <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse"
-                                        role="button" aria-expanded="true" aria-controls="collapseCardExample">
-                                        <h6 class="m-0 font-weight-bold text-primary">Collapsable Card Example</h6>
-                                    </a>
-                                    <!-- Card Content - Collapse -->
-                                    <div class="collapse show" id="collapseCardExample">
-                                        <div class="card-body">
-                                            This is a collapsable card example using Bootstrap's built in collapse
-                                            functionality. <strong>Click on the card header</strong> to see the card body
-                                            collapse and expand!
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                            <?php
+                                // check connection
+                                if ($conn->connect_error) {
+                                    die("Connection failed: " . $conn->connect_error);
+                                }
 
+                                // read all row from database table
+                                $count = 0;
+                                $sql = "SELECT * FROM course_mgmt";
+                                $result = $conn->query($sql);
+                                if (!$result) {
+                                    die("Invalid query: " . $conn->connect_error); 
+                                }
+                                
+                                while ($row = $result->fetch_assoc()):
+                                    if ($count % 3 == 0 && $count != 0) {
+                                        echo '</div><div class="row">'; // Start a new row every third course
+                                    } 
+                            ?>
+                            <div class="col-xl-4 col-md-6 mb-3">
+                                <div class="card shadow mb-3">
+                                    <a href="#collapseCard<?= $row["course_code"] ?>" class="d-block card-header" data-toggle="collapse"
+                                        role="button" aria-expanded="true" aria-controls="collapseCard<?= $row["course_code"] ?>">
+                                        <h5 class="m-0 font-weight-bold text-primary"><?= $row["course_code"] ?></h5>
+                                        <h6 class="m-0 pt-3 font-weight-bold text-primary"><?= $row["course_name"] ?></h6>
+                                    </a>
+                                    <div class="collapse" id="collapseCard<?= $row["course_code"] ?>">
+                                        <div class="card-body">
+                                            <?= $row["course_overview"] ?><br><br>
+                                            <p>Offered by: <?= $row["school"] ?></p>
+                                            <p>Offered in Semester: <?= $row["semester"] ?></p>
+                                            <p>Lecturers:</p>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php endwhile; ?>
+                        </div>
                     </div>
                 </div>
 

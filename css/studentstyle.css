@@ -1,0 +1,5 @@
+.card-body {
+    position: absolute;
+    z-index: 100;
+    display: block;
+}

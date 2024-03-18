@@ -19,7 +19,7 @@
             $resultStudent = $conn->query($sqlStudent);
 
             if ($resultStudent->num_rows > 0) {
-                // User is a student, check password
+                // User is an existing student, check password
                 $rowStudent = $resultStudent->fetch_assoc();
                 if ($rowStudent['student_pw'] == $password) {
                     // Set session variable for admin email
@@ -29,46 +29,8 @@
                     echo '<script>alert:("Login failed. Please check your credentials and login again")</script>';
                     header('Location: login.php');
                 }
-            }
-        } elseif ($domain === 'usm.my') {
-            $sqlAdmin = "SELECT * FROM admin_login WHERE admin_email = '$email'";
-            $resultAdmin = $conn->query($sqlAdmin);
-
-            if ($resultAdmin->num_rows > 0) {
-                // User is an admin, check password
-                $rowAdmin = $resultAdmin->fetch_assoc();
-                if ($rowAdmin['admin_pw'] == $password) {
-                    // Set session variable for admin email
-                    $_SESSION['admin_email'] = $rowAdmin['admin_email'];
-                    header('Location:./admin/admin_dashboard.php');
-                } else {
-                    echo '<script>alert:("Login failed. Please check your credentials and login again")</script>';
-                    header('Location: login.php');
-                }
-            }
-
-        } else {
-            // First time login, determine if admin or student and save credentials
-            $domain = explode('@', $email)[1];
-            
-            if ($domain === 'student.usm.my') {
-                $sql = "INSERT INTO student_login (student_email, student_pw) VALUES ('$email', '$password')";
-                $result = $conn->query($sql);
-                if ($result) {
-                    header('Location:./student/student_dashboard.php');
-                } else {
-                    echo '<script>alert:("Login failed. Please check your credentials and login again")</script>';
-                }
-            } elseif ($domain === 'usm.my') {
-                $sql = "INSERT INTO admin_login (admin_email, admin_pw) VALUES ('$email', '$password')";
-                $result = $conn->query($sql);
-                if ($result) {
-                    header('Location:./admin/admin_dashboard.php');
-                } else {
-                    echo 'failed';
-                }
-            } else {
-                echo '<script>alert:("Login failed. Please check your credentials and login again")</script>';
+            }else {
+                echo '<script>alert:("No records found. Please register your email."); window.location.href=register.php</script>';
             }
         }
     }
@@ -99,13 +61,13 @@
         
                 <!-- The content half -->
                 <div class="col-md-6 bg-white">
-                    <div class="login d-flex align-items-center py-5">
+                    <div class="login d-flex align-items-center py-4">
         
                         <!-- Demo content-->
                         <div class="container">
                             <div class="row">
                                 <div class="col-lg-10 col-xl-7 mx-auto">
-                                    <div class="text-center mb-5 pb-3">
+                                    <div class="text-center mb-4 pb-3">
                                         <img src="./images/login_usmlogo.png" class="img-fluid w-50" alt="USM Logo">
                                         <img src="./images/login_textlogo.png" class="img-fluid w-75">
                                     </div>
@@ -123,12 +85,12 @@
                                             <label for="inputPassword" class="fw-bold">Password</label>
                                             <input id="inputPassword" name="inputPassword" type="password" placeholder="Password" required="" class="form-control border-dark px-4">
                                         </div>   
-                                        <button type="submit" onclick="validateEmail()" class="btn btn-block mt-4 mb-2 shadow-sm fw-bolder text-center">Log in</button>
+                                        <button type="submit" onclick="validateEmail()" class="btn btn-block mt-4 shadow-sm fw-bolder text-center">Log in</button>
+                                        <p class="pt-4 text-center fs-6">New to UniSched USM? <a href="register.php">Register</a></p>
                                     </form>
                                 </div>
                             </div>
                         </div><!-- End -->
-        
                     </div>
                 </div><!-- End -->
         

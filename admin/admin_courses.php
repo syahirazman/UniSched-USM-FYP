@@ -10,7 +10,7 @@ if (isset($_SESSION['admin_email'])) {
     // Now you can use $admin_email in your HTML or PHP code
 } else {
     // Redirect to the login page if the session variable is not set
-    header('Location: login.php');
+    header('Location: admin-login.php');
     exit();
 }
 
@@ -28,7 +28,6 @@ if (isset($_SESSION['admin_email'])) {
         <link rel="icon" type="image/x-icon" href="../images/UniSched USM text logo.ico">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
-        
         <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
 
 
@@ -108,6 +107,10 @@ if (isset($_SESSION['admin_email'])) {
                                     <a class="dropdown-item" href="" data-bs-toggle="modal" data-bs-target="#logoutModal">
                                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                         Logout
+                                    </a>
+                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#">
+                                        <i class="fas fa-solid fa-plus fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Add new admin
                                     </a>
                                 </div>
                             </li>
@@ -403,7 +406,7 @@ if (isset($_SESSION['admin_email'])) {
                     <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
-                        <a class="btn btn-primary" href="../logout.php">Logout</a>
+                        <a class="btn btn-primary" href="../admin-logout.php">Logout</a>
                     </div>
                 </div>
             </div>

@@ -9,6 +9,18 @@
   background-position: center center;
 }
 
+.bg-image-reg {
+    background-image: url(../images/register_bg.png); 
+    background-size: cover;
+    background-position: center center;
+}
+
+.bg-image-admin {
+    background-image: url(../images/admin-login_bg.png); 
+    background-size: cover;
+    background-position: center center;
+}
+
 .inputEmail.invalid {
     border-color: #ff654a;
 }

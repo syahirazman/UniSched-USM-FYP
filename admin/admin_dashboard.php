@@ -8,7 +8,7 @@ if (isset($_SESSION['admin_email'])) {
     // Now you can use $admin_email in your HTML or PHP code
 } else {
     // Redirect to the login page if the session variable is not set
-    header('Location: login.php');
+    header('Location: admin-login.php');
     exit();
 }
 ?>
@@ -98,12 +98,16 @@ if (isset($_SESSION['admin_email'])) {
                                     <span class="mr-2 d-none d-lg-inline text-gray-600 medium">Welcome, <?php echo $admin_email; ?>!</span>
                                     <img class="img-profile rounded-circle" src="../images/profile_icon.png">
                                 </a>
-                                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="userDropdown">
+                                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                         Logout
                                     </a>
+                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#">
+                                        <i class="fas fa-solid fa-plus fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Add new admin
+                                    </a>
+                                    
                                 </div>
                             </li>
                         </ul>
@@ -128,7 +132,7 @@ if (isset($_SESSION['admin_email'])) {
                     <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                        <a class="btn btn-primary" href="../logout.php">Logout</a>
+                        <a class="btn btn-primary" href="../admin-logout.php">Logout</a>
                     </div>
                 </div>
             </div>
