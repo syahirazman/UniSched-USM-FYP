@@ -2,6 +2,8 @@
 <?php
 session_start();
 
+require_once '../connection.php';
+
 // Check if the session variable is set
 if (isset($_SESSION['student_email'])) {
     $student_email = $_SESSION['student_email'];
@@ -22,10 +24,13 @@ if (isset($_SESSION['student_email'])) {
         <link href="../css/fontawesome.min.css" rel="stylesheet">
         <link href="../css/adminstyle.min.css" rel="stylesheet">
         <link href="../css/adminstyle.css" rel="stylesheet">
+        <link href="../css/studentstyle.css" rel="stylesheet">
+
         <link rel="icon" type="image/x-icon" href="../images/UniSched USM text logo.ico">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
-
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" >
+        
         <title>UniSched USM: Class Timetable</title>
     </head>
     <body id="page-top">
@@ -109,9 +114,57 @@ if (isset($_SESSION['student_email'])) {
                         </ul>
                     </nav>
 
-                    <div class="container-fluid">
+                    <div class="container-fluid" id="timetableCard">
                         <div class="d-sm-flex align-items-center justify-content-between mb-4 ml-4">
                             <h1 class="h3 mb-0 text-gray-900">Class Timetable</h1>
+                        </div>
+
+                        <div class="card shadow mb-4">
+                            <form action="" method="POST">
+                                <div class="card-header py-3">
+                                    <div class="form-row align-items-center d-print-none">
+                                        <div class="form-group col-md-4 mt-1">
+                                            <select name="coursecode[]" id="coursecode" multiple="multiple" class="form-control" data-placeholder="Choose course code" required>
+                                                <option></option>
+                                                <?php
+                                                    // Retrieve course codes from the database and populate the dropdown
+                                                    // check connection
+                                                    if ($conn->connect_error) {
+                                                        die("Connection failed: " . $conn->connect_error);
+                                                    }
+
+                                                    $sql = "SELECT DISTINCT course_code FROM timetable_mgmt";
+                                                    $result = $conn->query($sql);
+                                                    if (!$result) {
+                                                        die("Invalid query: " . $conn->connect_error); 
+                                                    }
+                                                    while ($row = $result->fetch_assoc()): ?>
+                                                    <option value="<?= $row["course_code"] ?>"><?= $row["course_code"] ?></option>
+                                                <?php endwhile; ?>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="submit" class="btn btn-primary form-control" name="addClass" value="Add">
+                                        </div>			
+                                    </div>
+                                </div>
+                            </form>
+                            <form>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table text-gray-900 mt-3 mb-3 text-center table-hover" id="timetable">
+                                            <?php 
+                                                require_once '../student/process_timetable.php';
+                                            ?> 
+                                        </table>
+                                    </div>		
+                                </div>
+                                <div class="card-footer">
+                                    <button type="submit" class="btn btn-success" name="saveTable"><i class="fas fa-save pr-2"></i>Save Timetable</button>
+                                    <button class="btn btn-danger" name="clear"><i class="fa fa-trash fa-sm pr-2"></i>Clear Timetable</button>
+                                    <button class="btn btn-secondary" onClick="printDiv()"><i class="fa-solid fa-print"></i></button>
+                                </div>
+                            </form>
                         </div>
                     </div>
 
@@ -119,6 +172,7 @@ if (isset($_SESSION['student_email'])) {
 
             </div>
         </div>
+        
 
         <!-- Logout Modal-->
         <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -143,11 +197,38 @@ if (isset($_SESSION['student_email'])) {
         <!-- jQuery Core JS -->
         <script src="https://code.jquery.com/jquery.min.js"></script>
         <!-- BootStrap JavaScript -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
         <!-- jQuery Easing JS-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js" integrity="sha512-0QbL0ph8Tc8g5bLhfVzSqxe9GERORsKhIn1IrpxDAgUsbBGz/V7iSav2zzW325XGd1OMLdL4UiqRJj702IeqnQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <!-- Custom Theme JS -->
         <script src="../custom-js/script-all.min.js"></script>
+
+        <script>
+            $(document).ready(function() {
+                $('#coursecode').select2();
+            })
+        </script>
+
+         <!-- Script to print the content of a div -->
+        <script> 
+            function printDiv() { 
+                var divContents = document.getElementById("timetableCard").innerHTML; 
+                var originalContents = document.body.innerHTML;
+                var originalContents = document.body.innerHTML; // Save original body content
+
+                // Replace body content with divContents
+                document.body.innerHTML = '<html><head><title>Print</title></head><body>' + divContents + '</body></html>';
+
+                // Print the page
+                window.print();
+
+                // Restore original body content
+                document.body.innerHTML = originalContents;
+            } 
+        </script> 
 
     </body>
 

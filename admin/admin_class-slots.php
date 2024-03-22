@@ -56,7 +56,7 @@ if (isset($_SESSION['admin_email'])) {
                 <!-- nav 2 -->
                 <li class="nav-item active">
                     <a class="nav-link ml-1" href="../admin/admin_class-slots.php">
-                        <i class="fa fa-fw fa-calendar"></i>
+                        <i class="fa fa-fw fa-clipboard-list"></i>
                         <span>Class slots</span></a>
                 </li>
                 <hr class="sidebar-divider">

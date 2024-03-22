@@ -2,6 +2,8 @@
 <?php
 session_start();
 
+include '../connection.php';
+
 // Check if the session variable is set
 if (isset($_SESSION['admin_email'])) {
     $admin_email = $_SESSION['admin_email'];
@@ -47,7 +49,7 @@ if (isset($_SESSION['admin_email'])) {
                 <!-- nav 2 -->
                 <li class="nav-item">
                     <a class="nav-link ml-1" href="../admin/admin_class-slots.php">
-                        <i class="fa fa-fw fa-calendar"></i>
+                        <i class="fa fa-fw fa-clipboard-list"></i>
                         <span>Class slots</span></a>
                 </li>
                 <hr class="sidebar-divider">
@@ -112,6 +114,114 @@ if (isset($_SESSION['admin_email'])) {
                             </li>
                         </ul>
                     </nav>
+
+                    <!-- begin page content -->
+                    <div class="container-fluid">
+                        <div class="d-sm-flex align-items-center justify-content-between mb-4 ml-4">
+                            <h1 class="h3 mb-0 text-gray-900">Admin Dashboard</h1>
+                        </div>
+
+                        <div class="row">
+                            <!-- Registered Student Account Card  -->
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card border-left-primary shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bolder text-primary text-uppercase mb-1">
+                                                    Student Accounts</div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                    <?php
+                                                        $studCount = "SELECT student_id FROM student_login";
+                                                        $studCount_run = mysqli_query($conn, $studCount);
+                                                        $studCount_row = mysqli_num_rows($studCount_run);
+                                                        echo $studCount_row; 
+                                                    ?>
+                                                </div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fa-solid fa-users fa-3x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Created Student Timetable Card Example -->
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card border-left-success shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                    Student Timetables</div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                    <?php
+                                                        $tableCount = "SELECT timetable_id FROM student_timetable";
+                                                        $tableCount_run = mysqli_query($conn, $tableCount);
+                                                        $tableCount_row = mysqli_num_rows($tableCount_run);
+                                                        echo $tableCount_row; 
+                                                    ?>
+                                                </div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fa-solid fa-calendar fa-3x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Courses Card Example -->
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card border-left-info shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Created Courses </div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                    <?php
+                                                        $courseCount = "SELECT course_code FROM course_mgmt";
+                                                        $courseCount_run = mysqli_query($conn, $courseCount);
+                                                        $courseCount_row = mysqli_num_rows($courseCount_run);
+                                                        echo $courseCount_row; 
+                                                    ?>
+                                                </div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fa fa-book-open fa-3x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Class Slots Card Example -->
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card border-left-warning shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Created Class Slots</div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                    <?php
+                                                        $slotCount = "SELECT slot_id FROM timetable_mgmt";
+                                                        $slotCount_run = mysqli_query($conn, $slotCount);
+                                                        $slotCount_row = mysqli_num_rows($slotCount_run);
+                                                        echo $slotCount_row; 
+                                                    ?>
+                                                </div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-clipboard-list fa-3x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
 
                 </div>
 

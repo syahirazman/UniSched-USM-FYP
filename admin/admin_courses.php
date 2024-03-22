@@ -52,7 +52,7 @@ if (isset($_SESSION['admin_email'])) {
                 <!-- nav 2 -->
                 <li class="nav-item">
                     <a class="nav-link ml-1" href="../admin/admin_class-slots.php">
-                        <i class="fa fa-fw fa-calendar"></i>
+                        <i class="fa fa-fw fa-clipboard-list"></i>
                         <span>Class slots</span></a>
                 </li>
                 <hr class="sidebar-divider">
@@ -418,7 +418,7 @@ if (isset($_SESSION['admin_email'])) {
         
         <!-- BootStrap JavaScript -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-        
+       
         
         <!-- jQuery Easing JS-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js" integrity="sha512-0QbL0ph8Tc8g5bLhfVzSqxe9GERORsKhIn1IrpxDAgUsbBGz/V7iSav2zzW325XGd1OMLdL4UiqRJj702IeqnQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

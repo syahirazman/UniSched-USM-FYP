@@ -117,24 +117,48 @@ if (isset($_SESSION['student_email'])) {
                         <div class="d-sm-flex align-items-center justify-content-between mb-4 ml-4">
                             <h1 class="h3 mb-0 text-gray-900">Courses Information</h1>
                         </div>
-                        <div class="d-sm-flex align-items-center justify-content-between mb-4 ml-4">
+                        <div class="d-sm-flex align-items-center justify-content-between mb-5 ml-4">
                             <form>
-                                <p class="text-gray-900">Filter by:</p>
                                 <div class="form-inline text-gray-700">
                                     <label for="school">School</label>
-                                    <select class="form-control ml-sm-2 mr-sm-4" name="school" id="school">
+                                    <select class="form-control ml-sm-1 mr-sm-3" name="school" id="school">
                                         <option></option>
-                                        <option value="CS">School of CS</option>
-                                        <option value="Bio">School of Bio</option>
-                                        <option value="Etc">School of etc</option>
+                                        <?php
+                                        // Retrieve course codes from the database and populate the dropdown
+                                        // check connection
+                                        if ($conn->connect_error) {
+                                            die("Connection failed: " . $conn->connect_error);
+                                        }
+
+                                        $filterSchool = "SELECT DISTINCT school FROM course_mgmt";
+                                        $resultSchool = $conn->query($filterSchool);
+                                        if (!$resultSchool) {
+                                            die("Invalid query: " . $conn->connect_error); 
+                                        }
+                                        while ($rowSchool = $resultSchool->fetch_assoc()): ?>
+                                        <option><?= $rowSchool["school"] ?></option>
+                                    <?php endwhile; ?>
                                     </select>
                                     <label for="semester">Semester</label>
-                                    <select class="form-control ml-sm-2" name="semester" id="semester">
+                                    <select class="form-control ml-sm-1" name="semester" id="semester">
                                         <option></option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="1 & 2">1 & 2</option>
+                                        <?php
+                                        // Retrieve course codes from the database and populate the dropdown
+                                        // check connection
+                                        if ($conn->connect_error) {
+                                            die("Connection failed: " . $conn->connect_error);
+                                        }
+
+                                        $filterSem = "SELECT DISTINCT semester FROM course_mgmt";
+                                        $resultSem = $conn->query($filterSem);
+                                        if (!$resultSem) {
+                                            die("Invalid query: " . $conn->connect_error); 
+                                        }
+                                        while ($rowSem = $resultSem->fetch_assoc()): ?>
+                                        <option><?= $rowSem["semester"] ?></option>
+                                    <?php endwhile; ?>
                                     </select>
+                                    <input type="submit" class="btn btn-success  ml-sm-4" name="filter" value="Filter">
                                 </div>
                             </form>
                         </div>

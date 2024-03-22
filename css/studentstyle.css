@@ -1,5 +1,12 @@
-.card-body {
-    position: absolute;
-    z-index: 100;
-    display: block;
+@media print {
+    #timetable {
+        margin-top: 10px !important;
+        -webkit-print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+
+    thead {
+        background-color: #FFD580 !important;
+        -webkit-print-color-adjust: exact !important;
+    }
 }
