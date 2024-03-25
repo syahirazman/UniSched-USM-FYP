@@ -166,8 +166,35 @@ if (isset($_SESSION['student_email'])) {
                                 </div>
                             </form>
                         </div>
-                    </div>
 
+                        <!-- Display list of added courses -->
+                        <div class="col-xl-4 col-md-7 mb-4 d-print-none">
+                            <div class="card border-left-info shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-sm font-weight-bold text-info mb-3"> Courses added in timetable: </div>
+                                            <div class="course-list">
+                                                <?php
+                                                    require_once '../student/process_timetable.php'; 
+                                                    if (isset($_POST['addClass'])) {
+                                                        $selectedCourses = $_POST['coursecode'];
+                                                        // Loop through the selected courses
+                                                        foreach ($selectedCourses as $selectedCourse) {
+                                                            
+                                                            echo '<div class="course-box btn btn-secondary btn-icon-split btn-sm mb-1">';
+                                                            echo '<span class="course-code text">' . $selectedCourse . '</span>';
+                                                            echo '<span class="remove-course icon text-white-50" data-course="' . $selectedCourse . '"><i class="fas fa-times"></i></span>';
+                                                            echo '</div><br>';
+                                                        }
+                                                    }
+                                                ?>
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -228,7 +255,7 @@ if (isset($_SESSION['student_email'])) {
                 // Restore original body content
                 document.body.innerHTML = originalContents;
             } 
-        </script> 
+        </script>
 
     </body>
 

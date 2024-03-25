@@ -104,13 +104,13 @@ if (isset($_SESSION['admin_email'])) {
                                     <img class="img-profile rounded-circle" src="../images/profile_icon.png">
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                                    <a class="dropdown-item" href="" data-bs-toggle="modal" data-bs-target="#logoutModal">
-                                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Logout
-                                    </a>
                                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#">
                                         <i class="fas fa-solid fa-plus fa-sm fa-fw mr-2 text-gray-400"></i>
                                         Add new admin
+                                    </a>
+                                    <a class="dropdown-item" href="" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Logout
                                     </a>
                                 </div>
                             </li>
@@ -129,7 +129,7 @@ if (isset($_SESSION['admin_email'])) {
                         if (isset($_GET['msg'])){
                             $msg = $_GET['msg'];
 
-                            if ($msg == 'Cannot perform your query, please try again.') {
+                            if ($msg == 'Cannot perform your query, please try again.' || $msg == 'Cannot delete course. Associated records found in timetable_mgmt.') {
                                 // display fail alert if GET parameter is not present (fails to add/update/delete course)
                                 echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
                                         '.$msg.'
@@ -203,8 +203,10 @@ if (isset($_SESSION['admin_email'])) {
                                                     <td><?= $row["course_overview"] ?></td>
                                                     <td><?= $row["semester"] ?></td>
                                                     <td><?= $row["school"] ?></td>
-                                                    <td><?= $row["lecturername"]?> <br> <?= $row["lectureremail"] ?> <br> <?= $row["lecturerroom"] ?> <br><br>
-                                                    <?= $row["lecturername_1"] ?> <br> <?= $row["lectureremail_1"] ?><br> <?= $row["lecturerroom_1"] ?></td>
+                                                    <td><?= $row["lecturername"]?> <br> <?= $row["lectureremail"] ?> <br>Room <?= $row["lecturerroom"] ?> <br><br>
+                                                    <?php if (!empty($row["lecturername_1"]) && !empty($row["lectureremail_1"]) && !empty($row["lecturerroom_1"])): ?>
+                                                        <?= $row["lecturername_1"] ?> <br> <?= $row["lectureremail_1"] ?><br>Room <?= $row["lecturerroom_1"] ?>
+                                                    <?php endif; ?></td>
                                                     <td class='action text-center'>
                                                         <a href='' data-bs-toggle='modal' data-bs-target='#updateCourseModal<?= $no ?>'><i class='fa fa-pencil text-primary' aria-hidden='true'></i></a>
                                                         <a href='' data-bs-toggle='modal' data-bs-target='#deleteCourseModal<?= $no ?>' class='ml-3'><i class='fa fa-trash text-danger' aria-hidden='true'></i></a>
@@ -295,7 +297,7 @@ if (isset($_SESSION['admin_email'])) {
                                                                         <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
                                                                     </div>
                                                                     <div class="modal-body text-gray-900">
-                                                                        <!--<input type="hidden" name="course_id" value="">	-->				
+                                                                        <input type="hidden" name="coursecode" value="<?= $row["course_code"] ?>">		
                                                                         <p>Are you sure you want to delete this course? <br>
                                                                             <span class="text-danger font-weight-bold"><?= $row["course_code"]?> - <?= $row["course_name"]?></span>
                                                                         </p>

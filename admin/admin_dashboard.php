@@ -27,6 +27,7 @@ if (isset($_SESSION['admin_email'])) {
         <link rel="icon" type="image/x-icon" href="../images/UniSched USM text logo.ico">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
 
         <title>UniSched USM: Admin Dashboard</title>
     </head>
@@ -101,13 +102,13 @@ if (isset($_SESSION['admin_email'])) {
                                     <img class="img-profile rounded-circle" src="../images/profile_icon.png">
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Logout
-                                    </a>
                                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#">
                                         <i class="fas fa-solid fa-plus fa-sm fa-fw mr-2 text-gray-400"></i>
                                         Add new admin
+                                    </a>
+                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Logout
                                     </a>
                                     
                                 </div>
@@ -221,6 +222,75 @@ if (isset($_SESSION['admin_email'])) {
                             </div>
                         </div>
 
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="card border-left-secondary shadow py-2 w-45">
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered hover text-gray-900 mt-3 mb-3" id="courseCountTable" width="100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>School</th>
+                                                        <th>Courses in system</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php
+                                                    if ($conn->connect_error) {
+                                                        die("Connection failed: " . $conn->connect_error);
+                                                    }
+                                                    $querySql = "SELECT school, COUNT(course_code) AS course_count FROM course_mgmt GROUP BY school";
+                                                    $queryResult = $conn->query($querySql);
+                                                    if (!$queryResult) {
+                                                        die("Invalid query: " . $conn->connect_error); 
+                                                    }
+                                                    while ($queryRow = $queryResult->fetch_assoc()): ?>
+                                                    <tr>
+                                                        <td><?= $queryRow["school"] ?></td>
+                                                        <td class="text-center"><?= $queryRow["course_count"] ?></td>
+                                                    </tr>
+                                                    <?php endwhile; ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="card border-left-secondary shadow py-2 w-45">
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered hover text-gray-900 mt-3 mb-3" id="slotCountTable" width="100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Course code</th>
+                                                        <th>Class slots in system</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php
+                                                    if ($conn->connect_error) {
+                                                        die("Connection failed: " . $conn->connect_error);
+                                                    }
+                                                    $querysql = "SELECT course_code, COUNT(slot_id) AS slot_count FROM timetable_mgmt GROUP BY course_code";
+                                                    $queryresult = $conn->query($querysql);
+                                                    if (!$queryresult) {
+                                                        die("Invalid query: " . $conn->connect_error); 
+                                                    }
+                                                    while ($queryrow = $queryresult->fetch_assoc()): ?>
+                                                    <tr>
+                                                        <td><?= $queryrow["course_code"] ?></td>
+                                                        <td class="text-center"><?= $queryrow["slot_count"] ?></td>
+                                                    </tr>
+                                                    <?php endwhile; ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
 
                 </div>
@@ -256,6 +326,15 @@ if (isset($_SESSION['admin_email'])) {
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js" integrity="sha512-0QbL0ph8Tc8g5bLhfVzSqxe9GERORsKhIn1IrpxDAgUsbBGz/V7iSav2zzW325XGd1OMLdL4UiqRJj702IeqnQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <!-- Custom Theme JS -->
         <script src="../custom-js/script-all.min.js"></script>
+
+        <!-- Script to generate table using DataTable-->
+        <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+        <script>
+            new DataTable('#courseCountTable');
+        </script>
+        <script>
+            new DataTable('#slotCountTable');
+        </script>
 
     </body>
 

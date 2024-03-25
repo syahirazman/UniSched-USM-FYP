@@ -118,8 +118,8 @@ if (isset($_SESSION['student_email'])) {
                             <h1 class="h3 mb-0 text-gray-900">Courses Information</h1>
                         </div>
                         <div class="d-sm-flex align-items-center justify-content-between mb-5 ml-4">
-                            <form>
-                                <div class="form-inline text-gray-700">
+                            <form method="GET">
+                                <div class="form-inline text-gray-800">
                                     <label for="school">School</label>
                                     <select class="form-control ml-sm-1 mr-sm-3" name="school" id="school">
                                         <option></option>
@@ -158,7 +158,8 @@ if (isset($_SESSION['student_email'])) {
                                         <option><?= $rowSem["semester"] ?></option>
                                     <?php endwhile; ?>
                                     </select>
-                                    <input type="submit" class="btn btn-success  ml-sm-4" name="filter" value="Filter">
+                                    <input type="submit" class="btn btn-success  ml-sm-3" name="filter" value="Filter">
+                                    <input type="submit" class="btn btn-danger  ml-sm-1" name="clearfilter" value="Clear">
                                 </div>
                             </form>
                         </div>
@@ -166,6 +167,7 @@ if (isset($_SESSION['student_email'])) {
                         <!--rows of cards-->
                         <div class="row">
                             <?php
+
                                 // check connection
                                 if ($conn->connect_error) {
                                     die("Connection failed: " . $conn->connect_error);
@@ -174,15 +176,39 @@ if (isset($_SESSION['student_email'])) {
                                 // read all row from database table
                                 $count = 0;
                                 $sql = "SELECT * FROM course_mgmt";
+
+                                if (isset($_GET['filter'])) {
+                                    // Initialize variables to hold selected options
+                                    $selectedSchool = isset($_GET['school']) ? $_GET['school'] : "";
+                                    $selectedSemester = isset($_GET['semester']) ? $_GET['semester'] : "";
+
+                                    $sql .= " WHERE 1";
+
+                                    if (!empty($selectedSchool)) {
+                                        $sql .= " AND school = '$selectedSchool'";
+                                    }
+
+                                    if (!empty($selectedSemester)) {
+                                        $sql .= " AND semester = '$selectedSemester'";
+                                    }
+                                }
+
+                                 // Check if Clear Filter is requested
+                                 if (isset($_GET['clearfilter'])) {
+                                    $sql;
+                                }
+
                                 $result = $conn->query($sql);
                                 if (!$result) {
                                     die("Invalid query: " . $conn->connect_error); 
                                 }
-                                
+
+
                                 while ($row = $result->fetch_assoc()):
                                     if ($count % 3 == 0 && $count != 0) {
                                         echo '</div><div class="row">'; // Start a new row every third course
-                                    } 
+                                    }
+                                
                             ?>
                             <div class="col-xl-4 col-md-6 mb-3">
                                 <div class="card shadow mb-3">
@@ -192,12 +218,15 @@ if (isset($_SESSION['student_email'])) {
                                         <h6 class="m-0 pt-3 font-weight-bold text-primary"><?= $row["course_name"] ?></h6>
                                     </a>
                                     <div class="collapse" id="collapseCard<?= $row["course_code"] ?>">
-                                        <div class="card-body">
+                                        <div class="card-body text-justify">
                                             <?= $row["course_overview"] ?><br><br>
-                                            <p>Offered by: <?= $row["school"] ?></p>
-                                            <p>Offered in Semester: <?= $row["semester"] ?></p>
-                                            <p>Lecturers:</p>
-
+                                            <p class="my-1">Offered by: <?= $row["school"] ?></p>
+                                            <p class="my-1">Offered in Semester: <?= $row["semester"] ?></p>
+                                            <p class="my-0">Lecturers:</p>
+                                            <span><?= $row["lecturername"]?>, <?= $row["lectureremail"] ?>, Room <?= $row["lecturerroom"] ?></span><br>
+                                            <?php if (!empty($row["lecturername_1"]) && !empty($row["lectureremail_1"]) && !empty($row["lecturerroom_1"])): ?>
+                                                <span><?= $row["lecturername_1"] ?>, <?= $row["lectureremail_1"] ?>, Room <?= $row["lecturerroom_1"] ?></span>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </div>

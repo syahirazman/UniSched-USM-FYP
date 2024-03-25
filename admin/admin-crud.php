@@ -58,7 +58,6 @@ if (isset($_POST['edit'])) {
                                 WHERE course_code = '$course_code'";
 
     if ($conn->query($sql)) {
-        // echo "<script>alert('Successfully updated course information!');window.location.href = 'admin_courses.php';</script>";
         header("Location: admin_courses.php?msg=Course information is updated successfully!");
     } else {
         header("Location: admin_courses.php?msg=Cannot perform your query, please try again.");
@@ -67,17 +66,28 @@ if (isset($_POST['edit'])) {
 
 // delete course information
 if (isset($_POST['delete'])) {
-    //$course_id = $_POST['course_id'];
     $course_code = $_POST['coursecode'];
 
-    // SQL INSERT query to course_mgmt table
-    $sql = "DELETE FROM course_mgmt WHERE course_code = '$course_code'";
+    // Check if there are associated records in timetable_mgmt
+    $check_query = "SELECT * FROM timetable_mgmt WHERE course_code = '$course_code'";
+    $check_result = $conn->query($check_query);
 
-    if ($conn->query($sql)) {
-        // echo "<script>alert('Successfully deleted course information!');window.location.href = 'admin_courses.php';</script>";
-        header("Location: admin_courses.php?msg=Course information is deleted successfully!");
+    if ($check_result && $check_result->num_rows == 0) {
+        // No associated records found, proceed with deletion
+        $delete_query = "DELETE FROM course_mgmt WHERE course_code = '$course_code'";
+        if ($conn->query($delete_query)) {
+            // Deletion successful
+            header("Location: admin_courses.php?msg=Course information is deleted successfully!");
+            exit(); // Add exit() to stop script execution after redirect
+        } else {
+            // Deletion failed
+            header("Location: admin_courses.php?msg=Cannot perform your query, please try again.");
+            exit(); // Add exit() to stop script execution after redirect
+        }
     } else {
-        header("Location: admin_courses.php?msg=Cannot perform your query, please try again.");
+        // Associated records found, do not proceed with deletion
+        header("Location: admin_courses.php?msg=Cannot delete course. Associated records found in timetable_mgmt.");
+        exit(); // Add exit() to stop script execution after redirect
     }
 }
 
