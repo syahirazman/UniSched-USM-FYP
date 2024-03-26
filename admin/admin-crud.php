@@ -103,7 +103,7 @@ if (isset($_POST['add_class'])) {
 
     // SQL INSERT query to timetable_mgmt table
     $sql = "INSERT INTO timetable_mgmt (course_code, slot_type, start_time, end_time, class_day, class_location) 
-    VALUES ('$course_code','$slot_type','$$start_time','$$end_time','$classday','$classlocation')";
+    VALUES ('$course_code','$slot_type','$start_time','$end_time','$classday','$classlocation')";
 
     if ($conn->query($sql)) {
         //echo '<script> alert("Course information is inserted successfully");document.location="admin_courses.php";</script>';

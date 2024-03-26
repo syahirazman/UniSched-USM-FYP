@@ -23,18 +23,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // If there is no result / row not exists in table
         if ($resultStudent->num_rows == 0) {
             $sqlStudent = "INSERT INTO student_login (student_email, student_pw) VALUES ('$email', '$password')";
-                $resultStudent = $conn->query($sqlStudent);
-                if ($resultStudent) {
-                    header('Location:./student/student_dashboard.php');
-                } else {
-                    echo '<script type="application/javascript">alert:("Register failed. Please check your credentials and register again");"</script>';
-                }
+            $resultStudent = $conn->query($sqlStudent);
+            if ($resultStudent) {
+                $_SESSION['student_email'] = $_POST['inputEmail'];
+                header('Location:./student/student_dashboard.php');
+                exit();
+            }
         } else {
             $exist = true;
-            echo '<script type="application/javascript">alert:("Account is already registered. Please login again."); window.location.href="login.php";</script>';
+            echo '<script type="application/javascript">alert("Account is already registered. Please login again."); window.location.href="login.php";</script>';
+            exit();
         }
     } else {
         echo '<script type="application/javascript">alert("Invalid email domain.");</script>';
+        exit();
     }
 }
 ?>

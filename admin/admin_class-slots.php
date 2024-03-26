@@ -30,10 +30,6 @@ if (isset($_SESSION['admin_email'])) {
         <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" >
         
-        
-
-        
-
 
         <title>UniSched USM: Class Slots Management</title>
     </head>
