@@ -1,19 +1,21 @@
 <?php
 
+
 if (isset($_POST['addClass'])) {
     // Get the selected courses from the form
     $selectedCourses = $_POST['coursecode'];
+
     // Time slots and days
     $time_slots = array("08:00:00", "09:00:00", "10:00:00", "11:00:00", "12:00:00", "13:00:00", "14:00:00", "15:00:00", "16:00:00", "17:00:00", "18:00:00");
     $days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 
-     // Fetch class slots for all selected courses outside the loop
+    // Fetch class slots for all selected courses outside the loop
     $classSlots = [];
-    if (empty($classSlots)) {
-        foreach ($selectedCourses as $selectedCourse) {
-            $classSlots[$selectedCourse] = getClassSlotsForCourse($selectedCourse); // array contains selected data
-        }
+    // Fetch class slots for selected courses only if $classSlots is empty or doesn't contain data for the selected courses
+    foreach ($selectedCourses as $selectedCourse) {
+            $classSlots[$selectedCourse] = getClassSlotsForCourse($selectedCourse); // array contains selected data    
     }
+    
 
     echo "<thead style='background-color: #FFD580 !important; font-weight:600;'>";
     echo "<tr>";
@@ -46,11 +48,11 @@ if (isset($_POST['addClass'])) {
                 foreach ($class_slots as $slot) {
                     if ($slot["start_time"] == $time && $slot["class_day"] == $day) {
                         echo $slot['course_code'] . "<br> (" . $slot['slot_type'] . ") <br>" . $slot['class_location'];
+                        $classSlotFound = true;
                         break; // Exit all loops
                     }
                 }
             }
-            $classSlotFound = true;
         }
         // If no class slot is found for this time and day, display an empty cell
         if (!$classSlotFound) {
@@ -75,5 +77,6 @@ function getClassSlotsForCourse($course) {
 
     return $classSlots;
 }
+
 
 ?>

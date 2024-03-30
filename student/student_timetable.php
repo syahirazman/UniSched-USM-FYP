@@ -63,6 +63,22 @@ if (isset($_SESSION['student_email'])) {
                         <span>Courses Information</span></a>
                 </li>
                 <hr class="sidebar-divider">
+                <!-- nav 4 -->
+                <li class="nav-item">
+                    <a class="nav-link ml-1 collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseMap"
+                    aria-expanded="true" aria-controls="collapseMap">
+                        <i class="fas fa-fw fa-map-marker-alt"></i>
+                        <span>Campus Map</span>
+                    </a>
+                    <div id="collapseMap" class="collapse" aria-labelledby="headingMap" data-bs-parent="#accordionSidebar">
+                    <div class="bg-primary py-2 collapse-inner rounded">
+                        <a class="collapse-item text-white" href="../student/map_main-campus.php">Main Campus</a>
+                        <a class="collapse-item text-white" href="../student/map_eng-campus.php">Engineering Campus</a>
+                        <a class="collapse-item text-white" href="../student/map_health-campus.php">Health Campus</a>
+                    </div>
+                </div>
+                </li>
+                <hr class="sidebar-divider">
                 <!-- Sidebar Toggler (Sidebar) -->
                 <div class="text-center d-none d-md-inline">
                     <button class="rounded-circle border-0" id="sidebarToggle"></button>
@@ -99,13 +115,13 @@ if (isset($_SESSION['student_email'])) {
                         <ul class="navbar-nav ml-auto">
                             <li class="nav-item dropdown no-arrow">
                                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="mr-2 d-none d-lg-inline text-gray-600 medium">Welcome, <?php echo $student_email; ?>!</span>
                                     <img class="img-profile rounded-circle" src="../images/profile_icon.png">
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
                                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                         Logout
                                     </a>
@@ -120,7 +136,8 @@ if (isset($_SESSION['student_email'])) {
                         </div>
 
                         <div class="card shadow mb-4">
-                            <form action="" method="POST">
+                            <form action="" method="POST" id="timetableForm">
+                                <!-- select course code -->
                                 <div class="card-header py-3">
                                     <div class="form-row align-items-center d-print-none">
                                         <div class="form-group col-md-4 mt-1">
@@ -144,11 +161,12 @@ if (isset($_SESSION['student_email'])) {
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <input type="submit" class="btn btn-primary form-control" name="addClass" value="Add">
+                                            <input type="submit" class="btn btn-primary form-control" name="addClass" id="addClassBtn" value="Add">
                                         </div>			
                                     </div>
                                 </div>
                             </form>
+                            <!-- timetable -->
                             <form>
                                 <div class="card-body">
                                     <div class="table-responsive">
@@ -161,19 +179,19 @@ if (isset($_SESSION['student_email'])) {
                                 </div>
                                 <div class="card-footer">
                                     <button type="submit" class="btn btn-success" name="saveTable"><i class="fas fa-save pr-2"></i>Save Timetable</button>
-                                    <button class="btn btn-danger" name="clear"><i class="fa fa-trash fa-sm pr-2"></i>Clear Timetable</button>
+                                    <button class="btn btn-danger" name="clear" id="clearTable"><i class="fa fa-trash fa-sm pr-2"></i>Clear Timetable</button>
                                     <button class="btn btn-secondary" onClick="printDiv()"><i class="fa-solid fa-print"></i></button>
                                 </div>
                             </form>
                         </div>
 
                         <!-- Display list of added courses -->
-                        <div class="col-xl-4 col-md-7 mb-4 d-print-none">
+                        <div class="col-xl-4 col-md-7 mb-4">
                             <div class="card border-left-info shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-sm font-weight-bold text-info mb-3"> Courses added in timetable: </div>
+                                            <div class="text-sm font-weight-bold text-info mb-2"> Courses added in timetable: </div>
                                             <div class="course-list">
                                                 <?php
                                                     require_once '../student/process_timetable.php'; 
@@ -184,13 +202,13 @@ if (isset($_SESSION['student_email'])) {
                                                             
                                                             echo '<div class="course-box btn btn-secondary btn-icon-split btn-sm mb-1">';
                                                             echo '<span class="course-code text">' . $selectedCourse . '</span>';
-                                                            echo '<span class="remove-course icon text-white-50" data-course="' . $selectedCourse . '"><i class="fas fa-times"></i></span>';
                                                             echo '</div><br>';
                                                         }
                                                     }
                                                 ?>
                                             </div>
                                         </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -208,13 +226,13 @@ if (isset($_SESSION['student_email'])) {
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Ready to Log Out?</h5>
-                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <button class="close" type="button" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
                     <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                     <div class="modal-footer">
-                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
                         <a class="btn btn-primary" href="../logout.php">Logout</a>
                     </div>
                 </div>
@@ -224,18 +242,19 @@ if (isset($_SESSION['student_email'])) {
         <!-- jQuery Core JS -->
         <script src="https://code.jquery.com/jquery.min.js"></script>
         <!-- BootStrap JavaScript -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script> 
         <!-- jQuery Easing JS-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js" integrity="sha512-0QbL0ph8Tc8g5bLhfVzSqxe9GERORsKhIn1IrpxDAgUsbBGz/V7iSav2zzW325XGd1OMLdL4UiqRJj702IeqnQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <!-- Custom Theme JS -->
         <script src="../custom-js/script-all.min.js"></script>
 
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
         <script>
-            $(document).ready(function() {
-                $('#coursecode').select2();
+            var select = $.noConflict();
+            select(document).ready(function() {
+                select('#coursecode').select2();
             })
         </script>
 
@@ -256,6 +275,9 @@ if (isset($_SESSION['student_email'])) {
                 document.body.innerHTML = originalContents;
             } 
         </script>
+
+        
+
 
     </body>
 

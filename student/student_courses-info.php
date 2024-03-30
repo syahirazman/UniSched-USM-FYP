@@ -24,6 +24,7 @@ if (isset($_SESSION['student_email'])) {
         <link href="../css/fontawesome.min.css" rel="stylesheet">
         <link href="../css/adminstyle.min.css" rel="stylesheet">
         <link href="../css/adminstyle.css" rel="stylesheet">
+        <link href="../css/studentstyle.css" rel="stylesheet">
         
         <link rel="icon" type="image/x-icon" href="../images/UniSched USM text logo.ico">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -59,6 +60,21 @@ if (isset($_SESSION['student_email'])) {
                     <a class="nav-link ml-1" href="../student/student_courses-info.php">
                         <i class="fa fa-fw fa-book-open"></i>
                         <span>Courses Information</span></a>
+                </li>
+                <hr class="sidebar-divider">
+                <!-- nav 4 -->
+                <li class="nav-item">
+                    <a class="nav-link ml-1 collapsed" href="#" data-toggle="collapse" data-target="#collapseMap"
+                    aria-expanded="true" aria-controls="collapseMap">
+                        <i class="fas fa-fw fa-map-marker-alt"></i>
+                        <span>Campus Map</span></a>
+                    <div id="collapseMap" class="collapse" aria-labelledby="headingMap" data-parent="#accordionSidebar">
+                    <div class="bg-primary py-2 collapse-inner rounded">
+                        <a class="collapse-item text-white" href="../student/map_main-campus.php">Main Campus</a>
+                        <a class="collapse-item text-white" href="../student/map_eng-campus.php">Engineering Campus</a>
+                        <a class="collapse-item text-white" href="../student/map_health-campus.php">Health Campus</a>
+                    </div>
+                </div>
                 </li>
                 <hr class="sidebar-divider">
                 <!-- Sidebar Toggler (Sidebar) -->

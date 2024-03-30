@@ -1,3 +1,20 @@
+body {
+    animation: transitionIn 1.2s;
+}
+
+@keyframes transitionIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
+}
+
 @media print {
     #timetable {
         margin-top: 10px !important;
@@ -9,4 +26,28 @@
         background-color: #FFD580 !important;
         -webkit-print-color-adjust: exact !important;
     }
+}
+
+.nav-item .collapse-item:hover {
+    color:#4e73df !important;
+}
+
+.nav-item .nav-link[data-bs-toggle=collapse]::after{
+    width: 1rem !important;
+    text-align:center !important;
+    float:right !important;
+    vertical-align:0 !important;
+    border:0 !important;
+    float: right !important;
+    content:'\f107' !important;
+    font-family: FontAwesome !important;
+}
+
+.nav-item .nav-link[data-bs-toggle=collapse].collapsed::after {
+    content:'\f105' !important;
+    font-family: FontAwesome !important;
+}
+
+.sidebar.toggled .nav-item .nav-link[data-bs-toggle=collapse]::after {
+    display:none !important;
 }
