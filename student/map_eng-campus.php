@@ -125,6 +125,21 @@ if (isset($_SESSION['student_email'])) {
                         </ul>
                     </nav>
 
+                    <div class="container-fluid">
+                        <div class="d-sm-flex align-items-center justify-content-between mb-4 ml-4">
+                            <h1 class="h3 mb-0 text-gray-900">Map: Engineering Campus</h1>
+                        </div>
+                        <div class="ml-4 d-sm-inline-block">
+                            <a href="" class="btn btn-info" target="_blank">
+                                <i class="fa-solid fa-download mr-1"></i>
+                                <span>Download map PDF</span>
+                            </a>
+                        </div>
+                        <div class="mt-4 mb-5">
+                            <iframe src="https://www.google.com/maps/d/embed?mid=1ImjMLmOYcQXnQdvljRJR0969z_HIn44&hl=en&ehbc=2E312F&z=17" width="100%" height="600" frameborder="0" loading="lazy" allowfullscreen></iframe>
+                        </div>
+                    </div>
+
                 </div>
 
             </div>

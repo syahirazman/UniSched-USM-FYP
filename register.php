@@ -49,6 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- styles -->
         <link rel="stylesheet" href="./css/mainstyle.css">
+        <link rel="icon" type="image/x-icon" href="./images/UniSched USM text logo.ico">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -90,7 +91,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             <input id="inputPassword" name="inputPassword" type="password" placeholder="Password" required="" class="form-control border-dark px-4">
                                         </div>   
                                         <button type="submit" onclick="validateEmail()" class="btn btn-block mt-4 shadow-sm fw-bolder text-center">Register</button>
-                                        <p class="pt-4 text-center fs-6">Already have an account? <a href="login.php">Login</a></p>
+                                        <p class="pt-4 text-center fs-6">Already have an account? <a class="text-decoration-none font-weight-bold" href="login.php">Login</a></p>
                                     </form>
                                 </div>
                             </div>

@@ -30,7 +30,7 @@ if (isset($_SESSION['student_email'])) {
 
         <title>UniSched USM: Student Dashboard</title>
     </head>
-    <body id="page-top">
+    <body id="page-top stud-dashboard">
         <div id="wrapper">
             <!-- side bar -->
             <ul class="navbar-nav bg-white sidebar" id="accordionSidebar">
@@ -125,6 +125,12 @@ if (isset($_SESSION['student_email'])) {
                             </li>
                         </ul>
                     </nav>
+
+                    <div class="container-fluid">
+                        <div class="d-sm-flex align-items-center justify-content-between mb-4 ml-4">
+                            <h1 class="h3 mb-0 text-gray-900">Student Dashboard</h1>
+                        </div>
+                    </div>
 
                 </div>
 

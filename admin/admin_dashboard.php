@@ -13,6 +13,38 @@ if (isset($_SESSION['admin_email'])) {
     header('Location: admin-login.php');
     exit();
 }
+
+$exist = false;
+if ($_SERVER['REQUEST_METHOD'] == "POST") {
+    // Retrieve data from the POST request
+    $email = $_POST['inputEmail'];
+    $password = $_POST['inputPassword'];
+
+    $domain = explode('@', $email)[1];
+
+    if ($domain === 'usm.my'){
+        // Check if it's the first time login
+        $sqlAdmin = "SELECT * FROM admin_login WHERE admin_email = '$email'";
+        $resultAdmin = $conn->query($sqlAdmin);
+
+        // If there is no result / row not exists in table
+        if ($resultAdmin->num_rows == 0) {
+            $sqlAdmin = "INSERT INTO admin_login (admin_email, admin_pw) VALUES ('$email', '$password')";
+            $resultAdmin = $conn->query($sqlAdmin);
+            if ($resultAdmin) {
+                header('Location: admin_dashboard.php?msg=Admin is added successfully!');
+                exit();
+            }
+        } else {
+            $exist = true;
+            echo '<script type="application/javascript">alert("Account is already registered.");</script>';
+            exit();
+        }
+    } else {
+        echo '<script type="application/javascript">alert("Invalid email domain.");</script>';
+        exit();
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -102,7 +134,7 @@ if (isset($_SESSION['admin_email'])) {
                                     <img class="img-profile rounded-circle" src="../images/profile_icon.png">
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#">
+                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#addAdminModal">
                                         <i class="fas fa-solid fa-plus fa-sm fa-fw mr-2 text-gray-400"></i>
                                         Add new admin
                                     </a>
@@ -121,6 +153,24 @@ if (isset($_SESSION['admin_email'])) {
                         <div class="d-sm-flex align-items-center justify-content-between mb-4 ml-4">
                             <h1 class="h3 mb-0 text-gray-900">Admin Dashboard</h1>
                         </div>
+                        <!-- display success alert if new admin is added successfully -->
+                        <?php
+                        if (isset($_GET['msg'])) {
+                            $msg = $_GET['msg'];
+                            echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                                       ' .$msg. '
+                                        <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close" onclick="reloadPage()">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>';
+                        }
+                        ?>
+                        <!-- script to reload page back to URL without GET parameter after closing alert -->
+                        <script>
+                            function reloadPage() {
+                                window.location.href = 'admin_dashboard.php';
+                            }
+                        </script>
 
                         <div class="row">
                             <!-- Registered Student Account Card  -->
@@ -298,6 +348,35 @@ if (isset($_SESSION['admin_email'])) {
             </div>
         </div>
 
+        <!-- Add Admin Modal-->
+        <div class="modal fade" id="addAdminModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form action="" method="POST">
+                        <div class="modal-header">						
+                            <h4 class="modal-title font-weight-bold text-gray-900" id="exampleModalLabel">Register New Admin</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        </div>
+                        <div class="modal-body text-gray-900">
+                            <div class="form-group mb-3">
+                                <label for="inputEmail" class="fw-bold">Email address</label>
+                                <input id="inputEmail" name="inputEmail" type="email" placeholder="Email address" required="" autofocus="" class="form-control border-dark px-4">
+                            </div>
+                            <div class="form-group mb-2">
+                                <label for="inputPassword" class="fw-bold">Password</label>
+                                <input id="inputPassword" name="inputPassword" type="password" placeholder="Password" required="" class="form-control border-dark px-4">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" class="btn btn-default" data-bs-dismiss="modal" value="Cancel">
+                            <input type="submit" class="btn btn-success" value="Add admin" name="add_admin">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
         <!-- Logout Modal-->
         <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
@@ -318,6 +397,7 @@ if (isset($_SESSION['admin_email'])) {
             </div>
         </div>
 
+
         <!-- jQuery Core JS -->
         <script src="https://code.jquery.com/jquery.min.js"></script>
         <!-- BootStrap JavaScript -->
@@ -335,6 +415,7 @@ if (isset($_SESSION['admin_email'])) {
         <script>
             new DataTable('#slotCountTable');
         </script>
+
 
     </body>
 

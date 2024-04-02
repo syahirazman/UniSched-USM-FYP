@@ -131,13 +131,13 @@ if (isset($_SESSION['student_email'])) {
                             <h1 class="h3 mb-0 text-gray-900">Map: Main Campus</h1>
                         </div>
                         <div class="ml-4 d-sm-inline-block">
-                            <a href="../map/usm-map-main.pdf" class="btn btn-info" download target="_blank">
+                            <a href="../map/usm-map-main.pdf" class="btn btn-info" target="_blank">
                                 <i class="fa-solid fa-download mr-1"></i>
                                 <span>Download map PDF</span>
                             </a>
                         </div>
                         <div class="mt-4 mb-5">
-                            <iframe src="https://www.google.com/maps/d/embed?mid=1bmnoH_80tu09VkMnwMaPS09wWZrL5ss&ehbc=2E312F&z=16.9&ll=5.357,100.30216" width="100%" height="600" frameborder="0" allowfullscreen></iframe>
+                            <iframe src="https://www.google.com/maps/d/embed?mid=1bmnoH_80tu09VkMnwMaPS09wWZrL5ss&ehbc=2E312F&z=16.9&ll=5.357,100.30216" width="100%" height="600" frameborder="0" loading="lazy" allowfullscreen></iframe>
                         </div>
                     </div>
 

@@ -99,16 +99,12 @@ if (isset($_SESSION['admin_email'])) {
                         <ul class="navbar-nav ml-auto">
                             <li class="nav-item dropdown no-arrow">
                                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="mr-2 d-none d-lg-inline text-gray-600 medium">Welcome, <?php echo $admin_email; ?>!</span>
                                     <img class="img-profile rounded-circle" src="../images/profile_icon.png">
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#">
-                                        <i class="fas fa-solid fa-plus fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Add new admin
-                                    </a>
-                                    <a class="dropdown-item" href="" data-toggle="modal" data-target="#logoutModal">
+                                    <a class="dropdown-item" href="" data-bs-toggle="modal" data-bs-target="#logoutModal">
                                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                         Logout
                                     </a>
@@ -415,13 +411,13 @@ if (isset($_SESSION['admin_email'])) {
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Ready to Log Out?</h5>
-                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <button class="close" type="button" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
                     <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                     <div class="modal-footer">
-                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
                         <a class="btn btn-primary" href="../admin-logout.php">Logout</a>
                     </div>
                 </div>
