@@ -13,6 +13,7 @@ if (isset($_SESSION['student_email'])) {
     header('Location: login.php');
     exit();
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -30,6 +31,7 @@ if (isset($_SESSION['student_email'])) {
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" >
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
         
         <title>UniSched USM: Class Timetable</title>
     </head>
@@ -136,7 +138,7 @@ if (isset($_SESSION['student_email'])) {
                         </div>
 
                         <div class="card shadow mb-4">
-                            <form action="" method="POST" id="timetableForm">
+                            <form action="" method="GET" id="timetableForm">
                                 <!-- select course code -->
                                 <div class="card-header py-3">
                                     <div class="form-row align-items-center d-print-none">
@@ -167,25 +169,55 @@ if (isset($_SESSION['student_email'])) {
                                 </div>
                             </form>
                             <!-- timetable -->
-                            <form>
+                            <form action="process_timetable.php" method="POST">
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table class="table text-gray-900 mt-3 mb-3 text-center table-hover" id="timetable">
-                                            <?php 
-                                                require_once '../student/process_timetable.php';
-                                            ?> 
+                                        <table class="table table-bordered hover text-gray-900 mt-3 mb-3" id="slotTable" width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>No.</th>
+                                                    <th>Course Code</th>
+                                                    <th>Slot type</th>
+                                                    <th>Time from</th>
+                                                    <th>Time until</th>
+                                                    <th>Day</th>
+                                                    <th>Location</th>      
+                                                </tr>
+                                            </thead>
+                                            <tbody id="selectedSlotList">
+                                                <?php
+                                                require_once "process_timetable.php";
+                                                $no = 1;
+                                                foreach ($slots as $slotInfo):
+                                                ?>
+                                                 <tr class="text-center">
+                                                    <td><?= $no++ ?></td>
+                                                    <td><?= $slotInfo["course_code"] ?></td>
+                                                    <td><?= $slotInfo["slot_type"] ?></td>
+                                                    <td><?= $slotInfo["start_time"] ?></td>
+                                                    <td><?= $slotInfo["end_time"] ?></td>
+                                                    <td><?= $slotInfo["class_day"] ?></td>
+                                                    <td><?= $slotInfo["class_location"] ?></td>
+                                                    <input type="hidden" name="slot_id[]" value="<?= $slotInfo['slot_id'] ?>">
+                                                </tr>
+                                                <?php
+                                                endforeach; // Close the outer foreach loop
+                                                ?>
+                                            </tbody>
+                                            
                                         </table>
-                                    </div>		
+                                    </div>	
                                 </div>
                                 <div class="card-footer">
-                                    <button type="submit" class="btn btn-success" name="saveTable"><i class="fas fa-save pr-2"></i>Save Timetable</button>
+                                    <input type="hidden" name="student_email" value="<?= $_SESSION['student_email'] ?>">
+                                    <button type="submit" class="btn btn-success" name="saveSelectedSlot"><i class="fas fa-save pr-2"></i>Save Timetable</button>
                                     <button class="btn btn-danger" name="clear" id="clearTable"><i class="fa fa-trash fa-sm pr-2"></i>Clear Timetable</button>
                                     <button class="btn btn-secondary" onClick="printDiv()"><i class="fa-solid fa-print"></i></button>
                                 </div>
                             </form>
                         </div>
 
-                        <!-- Display list of added courses -->
+                        Display list of added courses 
                         <div class="col-xl-4 col-md-7 mb-4">
                             <div class="card border-left-info shadow h-100 py-2">
                                 <div class="card-body">
@@ -193,19 +225,6 @@ if (isset($_SESSION['student_email'])) {
                                         <div class="col mr-2">
                                             <div class="text-sm font-weight-bold text-info mb-2"> Courses added in timetable: </div>
                                             <div class="course-list">
-                                                <?php
-                                                    require_once '../student/process_timetable.php'; 
-                                                    if (isset($_POST['addClass'])) {
-                                                        $selectedCourses = $_POST['coursecode'];
-                                                        // Loop through the selected courses
-                                                        foreach ($selectedCourses as $selectedCourse) {
-                                                            
-                                                            echo '<div class="course-box btn btn-secondary btn-icon-split btn-sm mb-1">';
-                                                            echo '<span class="course-code text">' . $selectedCourse . '</span>';
-                                                            echo '</div><br>';
-                                                        }
-                                                    }
-                                                ?>
                                             </div>
                                         </div>
                                     </div>
@@ -249,6 +268,7 @@ if (isset($_SESSION['student_email'])) {
         <script src="../custom-js/script-all.min.js"></script>
 
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 
 
         <script>
@@ -256,6 +276,10 @@ if (isset($_SESSION['student_email'])) {
             select(document).ready(function() {
                 select('#coursecode').select2();
             })
+        </script>
+
+        <script>
+            new DataTable('#slotTable');
         </script>
 
          <!-- Script to print the content of a div -->
@@ -277,7 +301,6 @@ if (isset($_SESSION['student_email'])) {
         </script>
 
         
-
 
     </body>
 

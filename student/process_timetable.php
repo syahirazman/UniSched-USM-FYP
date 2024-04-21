@@ -1,7 +1,51 @@
 <?php
 
+require_once "../connection.php";
 
-if (isset($_POST['addClass'])) {
+// display class slots of selected courses
+$slots = [];
+if (isset($_GET['coursecode'])) {
+    $courseCode = $_GET['coursecode'];
+    $courseCodesStr = implode("','", $courseCode); 
+
+    $no = 1;
+    // Fetch class slots for the selected course code
+    $sql = "SELECT * FROM timetable_mgmt WHERE course_code IN ('$courseCodesStr')";
+    $result = $conn->query($sql);
+
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $slots[] = $row;
+        }
+    } 
+}
+
+// save selected class slots to database
+if (isset($_POST['saveSelectedSlot'])) {
+    if (isset($_POST['student_email'])) {
+        $student_email = $_POST['student_email'];
+        $emailsql = "SELECT student_id FROM student_login WHERE student_email = '$student_email'";
+        $result = $conn->query($emailsql);
+        if ($result && $result->num_rows > 0) {
+            $rowStudent = $result->fetch_assoc();
+            $student_id = $rowStudent['student_id'];
+        }
+        if (isset($_POST['slot_id'])) {
+            $savedSlots = $_POST['slot_id'];
+            foreach ($savedSlots as $slot_id) {
+                $insertSql = "INSERT INTO student_timetable (student_id, slot_id) VALUES ('$student_id', '$slot_id')";
+                if (!$conn->query($insertSql)) {
+                    echo "Error: " . $insertSql . "<br>" . $conn->error;
+                } 
+            }
+            header("Location: student_timetable.php");
+            exit();
+        }
+    }
+}
+
+
+/*if (isset($_POST['addClass'])) {
     // Get the selected courses from the form
     $selectedCourses = $_POST['coursecode'];
 
@@ -28,10 +72,12 @@ if (isset($_POST['addClass'])) {
     echo "</thead>";
 
     echo "<tbody>";
+
     // Loop through the time slots
     foreach ($time_slots as $time) {
+        $formatted_time = date('H:i', strtotime($time));
         echo "<tr>";
-        echo "<td>$time</td>";
+        echo "<td>$formatted_time</td>";
         
         // Loop through the days of the week
         foreach ($days as $day) {
@@ -46,7 +92,8 @@ if (isset($_POST['addClass'])) {
                 $class_slots = $classSlots[$selectedCourse];
 
                 foreach ($class_slots as $slot) {
-                    if ($slot["start_time"] == $time && $slot["class_day"] == $day) {
+                    $slot_formatted_time = date('H:i', strtotime($slot["start_time"]));
+                    if ($slot_formatted_time == $formatted_time && $slot["class_day"] == $day) {
                         echo $slot['course_code'] . "<br> (" . $slot['slot_type'] . ") <br>" . $slot['class_location'];
                         $classSlotFound = true;
                         break; // Exit all loops
@@ -63,6 +110,7 @@ if (isset($_POST['addClass'])) {
         echo "</tr>";
     }
     echo "</tbody>";
+
 }
 function getClassSlotsForCourse($course) {
     
@@ -76,7 +124,7 @@ function getClassSlotsForCourse($course) {
     }
 
     return $classSlots;
-}
+}*/
 
 
 ?>

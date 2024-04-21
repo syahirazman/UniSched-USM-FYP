@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-// Unset all of the session variables
-$_SESSION = array();
+// Unset specific session variable for student
+unset($_SESSION['student_email']);
 
 // Destroy the session
 session_destroy();

@@ -117,7 +117,7 @@ if (isset($_SESSION['student_email'])) {
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
                                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                         Logout
                                     </a>
@@ -130,6 +130,58 @@ if (isset($_SESSION['student_email'])) {
                         <div class="d-sm-flex align-items-center justify-content-between mb-4 ml-4">
                             <h1 class="h3 mb-0 text-gray-900">Student Dashboard</h1>
                         </div>
+
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <a href="#" class="btn btn-success float-right" data-bs-toggle="modal">
+                                    <i class="fa-solid fa-plus"></i>
+                                    <span>Add Your Class Slot</span>
+                                </a>						
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table text-gray-900 mt-3 mb-3 text-center table-hover">
+                                        <thead style='background-color: #FFD580 !important; font-weight:600;'>
+                                            <tr>
+                                                <td>Time</td>
+                                                <td>Monday</td>
+                                                <td>Tuesday</td>
+                                                <td>Wednesday</td>
+                                                <td>Thursday</td>
+                                                <td>Friday</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>08:00</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td>09:00</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td>10:00</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        
                     </div>
 
                 </div>
@@ -144,13 +196,13 @@ if (isset($_SESSION['student_email'])) {
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Ready to Log Out?</h5>
-                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <button class="close" type="button" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
                     <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                     <div class="modal-footer">
-                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
                         <a class="btn btn-primary" href="../logout.php">Logout</a>
                     </div>
                 </div>
@@ -160,7 +212,7 @@ if (isset($_SESSION['student_email'])) {
         <!-- jQuery Core JS -->
         <script src="https://code.jquery.com/jquery.min.js"></script>
         <!-- BootStrap JavaScript -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script> 
         <!-- jQuery Easing JS-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js" integrity="sha512-0QbL0ph8Tc8g5bLhfVzSqxe9GERORsKhIn1IrpxDAgUsbBGz/V7iSav2zzW325XGd1OMLdL4UiqRJj702IeqnQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <!-- Custom Theme JS -->

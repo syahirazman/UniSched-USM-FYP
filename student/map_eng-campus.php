@@ -136,7 +136,7 @@ if (isset($_SESSION['student_email'])) {
                             </a>
                         </div>
                         <div class="mt-4 mb-5">
-                            <iframe src="https://www.google.com/maps/d/embed?mid=1ImjMLmOYcQXnQdvljRJR0969z_HIn44&hl=en&ehbc=2E312F&z=17" width="100%" height="600" frameborder="0" loading="lazy" allowfullscreen></iframe>
+                            <iframe src="https://www.google.com/maps/d/embed?mid=1ImjMLmOYcQXnQdvljRJR0969z_HIn44&hl=en&ehbc=2E312F&z=17.5" width="100%" height="600" frameborder="0" loading="lazy" allowfullscreen></iframe>
                         </div>
                     </div>
 

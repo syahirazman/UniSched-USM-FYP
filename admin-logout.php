@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-// Unset all of the session variables
-$_SESSION = array();
+// Unset specific session variable for admin
+unset($_SESSION['admin_email']);
 
 // Destroy the session
 session_destroy();

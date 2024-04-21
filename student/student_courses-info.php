@@ -234,7 +234,7 @@ if (isset($_SESSION['student_email'])) {
                                         <h6 class="m-0 pt-3 font-weight-bold text-primary"><?= $row["course_name"] ?></h6>
                                     </a>
                                     <div class="collapse" id="collapseCard<?= $row["course_code"] ?>">
-                                        <div class="card-body text-justify">
+                                        <div class="card-body">
                                             <?= $row["course_overview"] ?><br><br>
                                             <p class="my-1">Offered by: <?= $row["school"] ?></p>
                                             <p class="my-1">Offered in Semester: <?= $row["semester"] ?></p>
