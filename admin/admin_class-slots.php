@@ -192,6 +192,7 @@ if (isset($_SESSION['admin_email'])) {
                                                 
                                                 while ($row = $result->fetch_assoc()):  
                                             ?>
+                                            
                                                 <tr class="text-center">
                                                     <td><?= $no++ ?></td>
                                                     <td><?= $row["course_code"]?></td>

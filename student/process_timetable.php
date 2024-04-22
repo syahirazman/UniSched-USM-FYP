@@ -44,6 +44,24 @@ if (isset($_POST['saveSelectedSlot'])) {
     }
 }
 
+if (isset($_POST['clearSelectedSlot'])) {
+    $slots = [];
+    header("Location: student_timetable.php");
+    exit();
+}
+
+if (isset($_POST['deleteSavedSlot'])) {
+    $slot_id = $_POST['slot_id'];
+
+    // SQL INSERT query to course_mgmt table
+    $sql = "DELETE FROM student_timetable WHERE slot_id = '$slot_id'";
+
+    if ($conn->query($sql)) {
+        // echo "<script>alert('Successfully deleted course information!');window.location.href = 'admin_courses.php';</script>";
+        header("Location: student_timetable.php");
+    }
+}
+
 
 /*if (isset($_POST['addClass'])) {
     // Get the selected courses from the form

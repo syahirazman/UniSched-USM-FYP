@@ -172,7 +172,7 @@ if (isset($_SESSION['student_email'])) {
                             <form action="process_timetable.php" method="POST">
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table class="table table-bordered hover text-gray-900 mt-3 mb-3" id="slotTable" width="100%">
+                                        <table class="table table-bordered text-gray-900 mt-3 mb-3" id="slotTable" width="100%">
                                             <thead>
                                                 <tr>
                                                     <th>No.</th>
@@ -194,8 +194,8 @@ if (isset($_SESSION['student_email'])) {
                                                     <td><?= $no++ ?></td>
                                                     <td><?= $slotInfo["course_code"] ?></td>
                                                     <td><?= $slotInfo["slot_type"] ?></td>
-                                                    <td><?= $slotInfo["start_time"] ?></td>
-                                                    <td><?= $slotInfo["end_time"] ?></td>
+                                                    <td><?= date('H:i', strtotime($slotInfo['start_time'])) ?></td>
+                                                    <td><?= date('H:i', strtotime($slotInfo['end_time'])) ?></td>
                                                     <td><?= $slotInfo["class_day"] ?></td>
                                                     <td><?= $slotInfo["class_location"] ?></td>
                                                     <input type="hidden" name="slot_id[]" value="<?= $slotInfo['slot_id'] ?>">
@@ -210,14 +210,101 @@ if (isset($_SESSION['student_email'])) {
                                 </div>
                                 <div class="card-footer">
                                     <input type="hidden" name="student_email" value="<?= $_SESSION['student_email'] ?>">
-                                    <button type="submit" class="btn btn-success" name="saveSelectedSlot"><i class="fas fa-save pr-2"></i>Save Timetable</button>
-                                    <button class="btn btn-danger" name="clear" id="clearTable"><i class="fa fa-trash fa-sm pr-2"></i>Clear Timetable</button>
-                                    <button class="btn btn-secondary" onClick="printDiv()"><i class="fa-solid fa-print"></i></button>
+                                    <button type="submit" class="btn btn-success" name="saveSelectedSlot"><i class="fas fa-save pr-2"></i>Save Selections</button>
+                                    <button type="submit" class="btn btn-danger" name="clearSelectedSlot" id="clearSelectedSlot"><i class="fa fa-trash fa-sm pr-2"></i>Clear Selections</button>
                                 </div>
                             </form>
                         </div>
 
-                        Display list of added courses 
+                        <div class="card border-left-info shadow mb-4" id="savedCourseTable">
+                            <div class="card-body">
+                                <div class="d-sm-flex align-items-center justify-content-between mb-2">
+                                    <h5 class="text-gray-900">Added class slots:</h5>
+                                    <button class="btn btn-secondary" onClick="printDiv()"><i class="fa-solid fa-print"></i></button>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-bordered table-hover mb-3" width="100%">
+                                        <thead class="thead-light text-dark">
+                                            <tr>
+                                                <th>No.</th>
+                                                <th>Course Code</th>
+                                                <th>Slot type</th>
+                                                <th>Time from</th>
+                                                <th>Time until</th>
+                                                <th>Day</th>
+                                                <th>Location</th>
+                                                <th>Action</th>      
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            $no=1;
+                                            if (isset($student_email)):
+                                                $emailsql = "SELECT student_id FROM student_login WHERE student_email = '$student_email'";
+                                                $results = $conn->query($emailsql);
+                                                if ($results && $results->num_rows > 0) {
+                                                    $rowStudent = $results->fetch_assoc();
+                                                    $student_id = $rowStudent['student_id'];
+                                                }
+                                                // Prepare the SQL query
+                                                $joinsql = "SELECT st.slot_id, tm.course_code, tm.slot_type, tm.start_time, tm.end_time, tm.class_day, tm.class_location
+                                                FROM student_timetable st
+                                                JOIN timetable_mgmt tm ON st.slot_id = tm.slot_id
+                                                WHERE st.student_id = '$student_id'";
+                                                // Execute the query
+                                                $slotresult = $conn->query($joinsql);
+                                                
+                                                while ($slotrow = $slotresult->fetch_assoc()):
+                                            ?>
+                                                <tr class="text-center">
+                                                    <td><?= $no++ ?></td>
+                                                    <td><?= $slotrow["course_code"]?></td>
+                                                    <td><?= $slotrow["slot_type"]?></td>
+                                                    <td><?= date('H:i', strtotime($slotrow['start_time']))?></td>
+                                                    <td><?= date('H:i', strtotime($slotrow['end_time']))?></td>
+                                                    <td><?= $slotrow["class_day"]?></td>
+                                                    <td><?= $slotrow["class_location"]?></td>
+                                                    <td class="action d-flex text-center justify-content-sm-around">
+                                                        <a href='' data-bs-toggle='modal' data-bs-target='#deleteClassModal<?= $no ?>'><i class='fa fa-trash text-danger' aria-hidden='true'></i></a>
+                                                    </td>
+                                                </tr>
+                                                <!-- Delete Modal HTML -->
+                                                <div id="deleteClassModal<?= $no ?>" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <form action="process_timetable.php" method="POST">
+                                                                <div class="modal-header">						
+                                                                    <h4 class="modal-title font-weight-bold text-gray-900" id="staticBackdropLabel">Delete Class Slot</h4>
+                                                                    <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
+                                                                </div>
+                                                                <div class="modal-body text-gray-900">
+                                                                    <input type="hidden" name="slot_id" value="<?= $slotrow['slot_id'] ?>">			
+                                                                    <p>Are you sure you want to delete the class slot of this course? <br>
+                                                                        <span class="text-danger font-weight-bold"><?= $slotrow["course_code"]?>:</span>
+                                                                        <span class="text-danger font-weight-bold"><?= $slotrow["class_day"]?>, <?=  date('H:i', strtotime($slotrow['start_time']))?> - <?=  date('H:i', strtotime($slotrow['end_time']))?></span>
+                                                                    </p>
+                                                                    <p><small>This action cannot be undone. Make sure to delete all class slots of the same course.</small></p>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <input type="button" class="btn btn-default" data-bs-dismiss="modal" value="Cancel">
+                                                                    <input type="submit" class="btn btn-danger" name="deleteSavedSlot" value="Delete">
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>   
+                                            <?php 
+                                                endwhile;
+                                            endif; 
+                                            ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!--Display list of added courses 
                         <div class="col-xl-4 col-md-7 mb-4">
                             <div class="card border-left-info shadow h-100 py-2">
                                 <div class="card-body">
@@ -230,7 +317,7 @@ if (isset($_SESSION['student_email'])) {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
                     </div>
                 </div>
 
@@ -285,7 +372,7 @@ if (isset($_SESSION['student_email'])) {
          <!-- Script to print the content of a div -->
         <script> 
             function printDiv() { 
-                var divContents = document.getElementById("timetableCard").innerHTML; 
+                var divContents = document.getElementById("savedCourseTable").innerHTML; 
                 var originalContents = document.body.innerHTML;
                 var originalContents = document.body.innerHTML; // Save original body content
 
@@ -299,9 +386,7 @@ if (isset($_SESSION['student_email'])) {
                 document.body.innerHTML = originalContents;
             } 
         </script>
-
         
-
     </body>
 
 </html>
