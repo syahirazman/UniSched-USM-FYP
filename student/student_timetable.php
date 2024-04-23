@@ -137,17 +137,36 @@ if (isset($_SESSION['student_email'])) {
                             <h1 class="h3 mb-0 text-gray-900">Class Timetable</h1>
                         </div>
 
+                        <!-- display conflict alert showing a list of conflicting courses -->
+                        <?php
+                        if (isset($_SESSION['conflicting_courses'])) {
+                            $conflictingCourses = $_SESSION['conflicting_courses'];
+                            echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    There are courses with conflicting classes: <strong>'. implode(', ', $conflictingCourses) .'</strong>.
+                                    Please add new selections without these courses.
+                                    <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close" onclick="reloadPage()">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>';
+                            unset($_SESSION['conflicting_courses']); 
+                        }
+                        ?>
+                        <!-- script to reload page back to URL after closing alert -->
+                        <script>
+                            function reloadPage() {
+                                window.location.href = 'student_timetable.php';
+                            }
+                        </script>
+
                         <div class="card shadow mb-4">
                             <form action="" method="GET" id="timetableForm">
                                 <!-- select course code -->
                                 <div class="card-header py-3">
                                     <div class="form-row align-items-center d-print-none">
                                         <div class="form-group col-md-4 mt-1">
-                                            <select name="coursecode[]" id="coursecode" multiple="multiple" class="form-control" data-placeholder="Choose course code" required>
+                                            <select name="coursecode[]" id="coursecode" multiple="multiple" class="form-control" data-placeholder="Choose courses" required>
                                                 <option></option>
                                                 <?php
-                                                    // Retrieve course codes from the database and populate the dropdown
-                                                    // check connection
                                                     if ($conn->connect_error) {
                                                         die("Connection failed: " . $conn->connect_error);
                                                     }
@@ -168,7 +187,7 @@ if (isset($_SESSION['student_email'])) {
                                     </div>
                                 </div>
                             </form>
-                            <!-- timetable -->
+                            <!-- table to display class slots of selected courses in the array -->
                             <form action="process_timetable.php" method="POST">
                                 <div class="card-body">
                                     <div class="table-responsive">
@@ -210,16 +229,17 @@ if (isset($_SESSION['student_email'])) {
                                 </div>
                                 <div class="card-footer">
                                     <input type="hidden" name="student_email" value="<?= $_SESSION['student_email'] ?>">
-                                    <button type="submit" class="btn btn-success" name="saveSelectedSlot"><i class="fas fa-save pr-2"></i>Save Selections</button>
-                                    <button type="submit" class="btn btn-danger" name="clearSelectedSlot" id="clearSelectedSlot"><i class="fa fa-trash fa-sm pr-2"></i>Clear Selections</button>
+                                    <button type="submit" class="btn btn-success" name="saveSelectedSlot"><i class="fas fa-save pr-2"></i>Save selections</button>
+                                    <button type="submit" class="btn btn-danger" name="clearSelectedSlot" id="clearSelectedSlot"><i class="fa fa-trash fa-sm pr-2"></i>Clear selections</button>
                                 </div>
                             </form>
                         </div>
 
+                        <!-- table to display saved class slots of selected courses from the database -->
                         <div class="card border-left-info shadow mb-4" id="savedCourseTable">
                             <div class="card-body">
                                 <div class="d-sm-flex align-items-center justify-content-between mb-2">
-                                    <h5 class="text-gray-900">Added class slots:</h5>
+                                    <h5 class="text-gray-900">Saved courses/class slots:</h5>
                                     <button class="btn btn-secondary" onClick="printDiv()"><i class="fa-solid fa-print"></i></button>
                                 </div>
                                 <div class="table-responsive">
