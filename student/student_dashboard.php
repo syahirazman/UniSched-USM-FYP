@@ -62,11 +62,11 @@ if (isset($_SESSION['student_email'])) {
                 <hr class="sidebar-divider">
                 <!-- nav 4 -->
                 <li class="nav-item">
-                    <a class="nav-link ml-1 collapsed" href="#" data-toggle="collapse" data-target="#collapseMap"
+                    <a class="nav-link ml-1 collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseMap"
                     aria-expanded="true" aria-controls="collapseMap">
                         <i class="fas fa-fw fa-map-marker-alt"></i>
                         <span>Campus Map</span></a>
-                    <div id="collapseMap" class="collapse" aria-labelledby="headingMap" data-parent="#accordionSidebar">
+                    <div id="collapseMap" class="collapse" aria-labelledby="headingMap" data-bs-parent="#accordionSidebar">
                     <div class="bg-primary py-2 collapse-inner rounded">
                         <a class="collapse-item text-white" href="../student/map_main-campus.php">Main Campus</a>
                         <a class="collapse-item text-white" href="../student/map_eng-campus.php">Engineering Campus</a>
@@ -111,7 +111,7 @@ if (isset($_SESSION['student_email'])) {
                         <ul class="navbar-nav ml-auto">
                             <li class="nav-item dropdown no-arrow">
                                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="mr-2 d-none d-lg-inline text-gray-600 medium">Welcome, <?php echo $student_email; ?>!</span>
                                     <img class="img-profile rounded-circle" src="../images/profile_icon.png">
                                 </a>
@@ -132,11 +132,11 @@ if (isset($_SESSION['student_email'])) {
                         </div>
 
                         <div class="card shadow mb-4">
-                            <div class="card-header py-3">
-                                <a href="#" class="btn btn-success float-right" data-bs-toggle="modal">
-                                    <i class="fa-solid fa-plus"></i>
-                                    <span>Add Your Class Slot</span>
-                                </a>						
+                            <div class="card-header">
+                                <div class="d-sm-flex align-items-center justify-content-between">
+                                    <h5 class="text-gray-900 ml-2">Current Timetable:</h5>
+                                    <button class="btn btn-secondary"><i class="fa-solid fa-print"></i></button>
+                                </div>				
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">

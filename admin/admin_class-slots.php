@@ -262,7 +262,7 @@ if (isset($_SESSION['admin_email'])) {
                                                                     <div class="form-row">
                                                                         <div class="form-group col-md-6">
                                                                             <label for="classDay">Day:</label>
-                                                                            <select class="form-control" name="classDay" id="classDay" required>
+                                                                            <select class="form-control" name="classDay" id="classDay">
                                                                                 <option value="<?=$row["class_day"] ?>"><?=$row["class_day"] ?></option>
                                                                                 <option value="Monday">Monday</option>
                                                                                 <option value="Tuesday">Tuesday</option>

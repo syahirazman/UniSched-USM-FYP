@@ -1,7 +1,5 @@
 <?php
 
-ob_start();
-
 require_once "../connection.php";
 
 // display class slots of selected courses
@@ -129,6 +127,91 @@ if (isset($_POST['deleteSavedSlot'])) {
     }
 }
 
+
+
+// add personal class slots to database
+if (isset($_POST['add_personalSlot'])) {
+    $pslot_title = $_POST['personalSlotTitle'];
+    $pstart_time = $_POST['personalStartTime'];
+    $pend_time = $_POST['personalEndTime'];
+    $pclass_day = $_POST['personalClassDay'];
+    $pclass_location = $_POST['personalClassLocation'];
+
+    if (isset($_POST['student_email'])) {
+        $pstudent_email = $_POST['student_email'];
+        $emailsql = "SELECT student_id FROM student_login WHERE student_email = '$pstudent_email'";
+        $result = $conn->query($emailsql);
+        if ($result && $result->num_rows > 0) {
+            $rowStudent = $result->fetch_assoc();
+            $pstudent_id = $rowStudent['student_id'];
+        }
+
+        $sql = "INSERT INTO student_personalslot (pStudent_id, pSlot_title, pStart_time, pEnd_time, pClass_day, pClass_location)
+        VALUES ('$pstudent_id', '$pslot_title', '$pstart_time', '$pend_time', '$pclass_day', '$pclass_location')";
+
+        if ($conn->query($sql)) {
+            header("Location: student_timetable.php?msg=Personal class slot is added successfully!");
+
+        } else {
+            header("Location: student_timetable.php?msg=Cannot perform your query, please try again.");
+        }
+
+    }
+}
+
+// update personal class slot
+if (isset($_POST['update_personalslot'])) {
+    $pslot_id = $_POST['personalslot_id'];
+    $pslot_title = $_POST['personalSlotTitle'];
+    $pstart_time = $_POST['personalStartTime'];
+    $pend_time = $_POST['personalEndTime'];
+    $pclass_day = $_POST['personalClassDay'];
+    $pclass_location = $_POST['personalClassLocation'];
+
+    if (isset($_POST['student_email'])) {
+        $pstudent_email = $_POST['student_email'];
+        $emailsql = "SELECT student_id FROM student_login WHERE student_email = '$pstudent_email'";
+        $result = $conn->query($emailsql);
+        if ($result && $result->num_rows > 0) {
+            $rowStudent = $result->fetch_assoc();
+            $pstudent_id = $rowStudent['student_id'];
+        }
+
+        $sql = "UPDATE student_personalslot SET pSlot_title = '$pslot_title',
+                                                pStart_time = '$pstart_time',
+                                                pEnd_time = '$pend_time',
+                                                pClass_day ='$pclass_day',
+                                                pClass_location = '$pclass_location'
+                                            WHERE pSlot_id = '$pslot_id' AND pStudent_id = '$pstudent_id'";
+        
+        if ($conn->query($sql)) {
+            header("Location: student_timetable.php?msg=Personal class slot is updated successfully!");
+        } else {
+            header("Location: student_timetable.php?msg=Cannot perform your query, please try again.");
+        }
+    }
+}
+
+// delete personal class slot from database
+if (isset($_POST['delete_personalslot'])) {
+    $pslot_id = $_POST['personalslot_id'];
+    if (isset($_POST['student_email'])) {
+        $pstudent_email = $_POST['student_email'];
+        $emailsql = "SELECT student_id FROM student_login WHERE student_email = '$pstudent_email'";
+        $result = $conn->query($emailsql);
+        if ($result && $result->num_rows > 0) {
+            $rowStudent = $result->fetch_assoc();
+            $pstudent_id = $rowStudent['student_id'];
+        }
+
+        $sql = "DELETE FROM student_personalslot WHERE pSlot_id = '$pslot_id' AND pStudent_id = '$pstudent_id'";
+        if ($conn->query($sql)) {
+            header("Location: student_timetable.php?msg=Personal class slot is deleted successfully!");
+        } else {
+            header("Location: student_timetable.php?msg=Cannot perform your query, please try again.");
+        }
+    }
+}
 
 /*if (isset($_POST['addClass'])) {
     // Get the selected courses from the form
