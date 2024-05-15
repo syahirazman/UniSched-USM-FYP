@@ -95,15 +95,14 @@ if (isset($_POST['delete'])) {
 // add class slot information
 if (isset($_POST['add_class'])) {
     $course_code = $_POST['coursecode'];
-    $slot_type = $_POST['slottype'];
     $start_time = $_POST['starttime'];
     $end_time = $_POST['endtime'];
     $classday = $_POST['classDay'];
     $classlocation = $_POST['classLocation'];
 
     // SQL INSERT query to timetable_mgmt table
-    $sql = "INSERT INTO timetable_mgmt (course_code, slot_type, start_time, end_time, class_day, class_location) 
-    VALUES ('$course_code','$slot_type','$start_time','$end_time','$classday','$classlocation')";
+    $sql = "INSERT INTO timetable_mgmt (course_code, start_time, end_time, class_day, class_location) 
+    VALUES ('$course_code','$start_time','$end_time','$classday','$classlocation')";
 
     if ($conn->query($sql)) {
         //echo '<script> alert("Course information is inserted successfully");document.location="admin_courses.php";</script>';
@@ -118,7 +117,6 @@ if (isset($_POST['add_class'])) {
 // update class slot information
 if (isset($_POST['update_class'])) {
     $course_code = $_POST['coursecode'];
-    $slot_type = $_POST['slottype'];
     $start_time = $_POST['starttime'];
     $end_time = $_POST['endtime'];
     $classday = $_POST['classDay'];
@@ -127,7 +125,6 @@ if (isset($_POST['update_class'])) {
 
     // SQL INSERT query to timetable_mgmt table
     $sql = "UPDATE timetable_mgmt SET course_code = '$course_code', 
-                                    slot_type = '$slot_type', 
                                     start_time = '$start_time',
                                     end_time = '$end_time',
                                     class_day = '$classday',

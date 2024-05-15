@@ -167,7 +167,6 @@ if (isset($_SESSION['admin_email'])) {
                                             <tr>
                                                 <th>No.</th>
                                                 <th>Course Code</th>
-                                                <th>Slot type</th>
                                                 <th>Time from</th>
                                                 <th>Time until</th>
                                                 <th>Day</th>
@@ -196,9 +195,8 @@ if (isset($_SESSION['admin_email'])) {
                                                 <tr class="text-center">
                                                     <td><?= $no++ ?></td>
                                                     <td><?= $row["course_code"]?></td>
-                                                    <td><?= $row["slot_type"]?></td>
-                                                    <td><?= $row["start_time"]?></td>
-                                                    <td><?= $row["end_time"]?></td>
+                                                    <td><?= date('H:i', strtotime($row['start_time']))?></td>
+                                                    <td><?= date('H:i', strtotime($row['end_time']))?></td>
                                                     <td><?= $row["class_day"]?></td>
                                                     <td><?= $row["class_location"]?></td>
                                                     <td class="action d-flex text-center justify-content-sm-around">
@@ -209,7 +207,7 @@ if (isset($_SESSION['admin_email'])) {
 
                                                 <!-- Update Class Modal HTML -->
                                                 <div id="updateClassModal<?= $no ?>" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                                    <div class="modal-dialog modal-lg">
+                                                    <div class="modal-dialog">
                                                         <div class="modal-content">
                                                             <form action="admin-crud.php" method="POST">
                                                                 <div class="modal-header">						
@@ -240,27 +238,6 @@ if (isset($_SESSION['admin_email'])) {
                                                                             </select>
                                                                         </div>
                                                                         <div class="form-group col-md-6">
-                                                                            <label for="slottype">Slot type:</label>
-                                                                            <select class="form-control" name="slottype" id="slottype">
-                                                                                <option value="<?=$row["slot_type"] ?>"><?=$row["slot_type"] ?></option>
-                                                                                <option value="Lecture class">Lecture class</option>
-                                                                                <option value="Tutorial">Tutorial</option>
-                                                                                <option value="Lab">Lab</option>
-                                                                            </select>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-row">
-                                                                        <div class="form-group col-md-6">
-                                                                            <label for="starttime">Start time:</label>
-                                                                            <input type="time" name="starttime" id="starttime" class="form-control" value="<?= $row["start_time"] ?>">
-                                                                        </div>
-                                                                        <div class="form-group col-md-6">
-                                                                            <label for="endtime">End time:</label>
-                                                                            <input type="time" name="endtime" id="endtime" class="form-control" value="<?= $row["end_time"] ?>">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-row">
-                                                                        <div class="form-group col-md-6">
                                                                             <label for="classDay">Day:</label>
                                                                             <select class="form-control" name="classDay" id="classDay">
                                                                                 <option value="<?=$row["class_day"] ?>"><?=$row["class_day"] ?></option>
@@ -270,11 +247,21 @@ if (isset($_SESSION['admin_email'])) {
                                                                                 <option value="Thursday">Thursday</option>
                                                                                 <option value="Friday">Friday</option>
                                                                             </select>
+                                                                        </div>                                                                     
+                                                                    </div>
+                                                                    <div class="form-row">
+                                                                        <div class="form-group col-md-6">
+                                                                            <label for="starttime">Start time:</label>
+                                                                            <input type="time" name="starttime" id="starttime" class="form-control" value="<?= date('H:i', strtotime($row['start_time'])) ?>">
                                                                         </div>
                                                                         <div class="form-group col-md-6">
+                                                                            <label for="endtime">End time:</label>
+                                                                            <input type="time" name="endtime" id="endtime" class="form-control" value="<?= date('H:i', strtotime($row['end_time'])) ?>">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
                                                                             <label for="classLocation">Location:</label>
                                                                             <input type="text" class="form-control" name="classLocation" id="classLocation" placeholder="Enter class location" value="<?= $row["class_location"] ?>">
-                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                                 <div class="modal-footer">
@@ -300,7 +287,7 @@ if (isset($_SESSION['admin_email'])) {
                                                                     <input type="hidden" name="slot_id" value="<?= $row['slot_id'] ?>">			
                                                                     <p>Are you sure you want to delete the class slot of this course? <br>
                                                                         <span class="text-danger font-weight-bold"><?= $row["course_code"]?>:</span>
-                                                                        <span class="text-danger font-weight-bold"><?= $row["class_day"]?>, <?= $row["start_time"]?> - <?= $row["end_time"]?></span>
+                                                                        <span class="text-danger font-weight-bold"><?= $row["class_day"]?>, <?= date('H:i', strtotime($row['start_time']))?> - <?= date('H:i', strtotime($row['end_time']))?></span>
                                                                     </p>
                                                                     <p><small>This action cannot be undone.</small></p>
                                                                 </div>
@@ -327,7 +314,7 @@ if (isset($_SESSION['admin_email'])) {
 
         <!-- Add Class Modal HTML -->
         <div id="addClassModal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
+            <div class="modal-dialog">
                 <div class="modal-content">
                     <form action="admin-crud.php" method="POST">
                         <div class="modal-header">						
@@ -358,12 +345,14 @@ if (isset($_SESSION['admin_email'])) {
                                     </select>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="slottype">Slot type:</label>
-                                    <select class="form-control" name="slottype" id="slottype" required>
+                                    <label for="classDay">Day:</label>
+                                    <select class="form-control" name="classDay" id="classDay" required>
                                         <option></option>
-                                        <option value="Lecture class">Lecture class</option>
-                                        <option value="Tutorial">Tutorial</option>
-                                        <option value="Lab">Lab</option>
+                                        <option value="Monday">Monday</option>
+                                        <option value="Tuesday">Tuesday</option>
+                                        <option value="Wednesday">Wednesday</option>
+                                        <option value="Thursday">Thursday</option>
+                                        <option value="Friday">Friday</option>
                                     </select>
                                 </div>
                             </div>
@@ -377,22 +366,9 @@ if (isset($_SESSION['admin_email'])) {
                                     <input type="time" name="endtime" id="endtime" class="form-control" required>
                                 </div>
                             </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="classDay">Day:</label>
-                                    <select class="form-control" name="classDay" id="classDay" required>
-                                        <option></option>
-                                        <option value="Monday">Monday</option>
-                                        <option value="Tuesday">Tuesday</option>
-                                        <option value="Wednesday">Wednesday</option>
-                                        <option value="Thursday">Thursday</option>
-                                        <option value="Friday">Friday</option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="classLocation">Location:</label>
-                                    <input type="text" class="form-control" name="classLocation" id="classLocation" placeholder="Enter class location" required>
-                                </div>
+                            <div class="form-group">
+                                <label for="classLocation">Location:</label>
+                                <input type="text" class="form-control" name="classLocation" id="classLocation" placeholder="Enter class location" required>
                             </div>
                         </div>
                         <div class="modal-footer">

@@ -61,15 +61,11 @@ thead > tr > th {
     text-align: center !important;
 }
 
-tbody > tr > td.course_overview, tbody > tr > td.course_name, tbody > tr > td.lecturer_overview, tbody > tr > td.lecturer_name {
-    max-width: 300px !important;
+td.course_overview, td.lecturer_info {
+    max-width: 200px !important;
     overflow: hidden !important;
-    white-space: nowrap !important;
     text-overflow: ellipsis !important;
-}
-
-tbody > tr > td {
-    min-width: fit-content !important;
+    white-space: nowrap !important;
 }
 
 .select2-container, .select2-container--default {

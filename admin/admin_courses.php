@@ -154,7 +154,7 @@ if (isset($_SESSION['admin_email'])) {
                         <!-- Table for CRUD -->
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
-                                <a href="#addCourseModal" class="btn btn-success float-right" data-bs-toggle="modal">
+                                <a href="#addCourseModal" class="btn btn-primary float-right" data-bs-toggle="modal">
                                     <i class="fa-solid fa-plus"></i>
                                     <span>Add New Course</span>
                                 </a>						
@@ -196,10 +196,10 @@ if (isset($_SESSION['admin_email'])) {
                                                     <td><?= $no++ ?></td>
                                                     <td><?= $row["course_code"]?></td>
                                                     <td><?= $row["course_name"] ?></td>
-                                                    <td><?= $row["course_overview"] ?></td>
+                                                    <td class="course_overview"><?= $row["course_overview"] ?></td>
                                                     <td><?= $row["semester"] ?></td>
                                                     <td><?= $row["school"] ?></td>
-                                                    <td><?= $row["lecturername"]?> <br> <?= $row["lectureremail"] ?> <br>Room <?= $row["lecturerroom"] ?> <br><br>
+                                                    <td class="lecturer_info"><?= $row["lecturername"]?> <br> <?= $row["lectureremail"] ?> <br>Room <?= $row["lecturerroom"] ?> <br><br>
                                                     <?php if (!empty($row["lecturername_1"]) && !empty($row["lectureremail_1"]) && !empty($row["lecturerroom_1"])): ?>
                                                         <?= $row["lecturername_1"] ?> <br> <?= $row["lectureremail_1"] ?><br>Room <?= $row["lecturerroom_1"] ?>
                                                     <?php endif; ?></td>
@@ -213,7 +213,7 @@ if (isset($_SESSION['admin_email'])) {
                                                     <div id="updateCourseModal<?= $no ?>" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                                         <div class="modal-dialog modal-lg">
                                                             <div class="modal-content">
-                                                                <form class="updateCourseForm" action="admin-crud.php" method="POST">
+                                                                <form class="updateCourseForm was-validated" action="admin-crud.php" method="POST">
                                                                     <div class="modal-header">						
                                                                         <h4 class="modal-title font-weight-bold text-gray-900" id="staticBackdropLabel">Update Course</h4>
                                                                         <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
@@ -225,6 +225,9 @@ if (isset($_SESSION['admin_email'])) {
                                                                             <div class="form-group col-md-6">
                                                                                 <label for="coursecode">Course Code:</label>
                                                                                 <input type="text" name="coursecode" id="coursecode" class="form-control" value="<?= $row["course_code"] ?>">
+                                                                                <div class="invalid-feedback">
+                                                                                    Please provide a course code.
+                                                                                </div>
                                                                             </div>
                                                                             <div class="form-group col-md-6">
                                                                                 <label for="semester">Semester:</label>
@@ -238,7 +241,10 @@ if (isset($_SESSION['admin_email'])) {
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <label for="coursename">Course Name:</label>
-                                                                            <input type="text" name="coursename" id="coursename" class="form-control" value="<?= $row["course_name"] ?>">
+                                                                            <input type="text" name="coursename" id="coursename" class="form-control" value="<?= $row["course_name"] ?>" required>
+                                                                            <div class="invalid-feedback">
+                                                                                    Please provide name for the course.
+                                                                            </div>
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <label for="courseoverview">Course Overview:</label>
@@ -322,7 +328,7 @@ if (isset($_SESSION['admin_email'])) {
         <div id="addCourseModal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                    <form class="addCourseForm" action="admin-crud.php" method="POST">
+                    <form class="addCourseForm needs-validation" action="admin-crud.php" method="POST" novalidate>
                         <div class="modal-header">						
                             <h4 class="modal-title font-weight-bold text-gray-900" id="staticBackdropLabel">Add Course</h4>
                             <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
@@ -332,33 +338,51 @@ if (isset($_SESSION['admin_email'])) {
                                 <div class="form-group col-md-6">
                                     <label for="coursecode">Course Code:</label>
                                     <input type="text" name="coursecode" id="coursecode" class="form-control" required>
+                                    <div class="invalid-feedback">
+                                        Please provide a course code.
+                                    </div>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="semester">Semester:</label>
+                                    <label for="semester">Semester:</label> 
                                     <select class="form-control" name="semester" id="semester" required>
                                         <option></option>
                                         <option value="1">1</option>
                                         <option value="2">2</option>
                                         <option value="1 & 2">1 & 2</option>
                                     </select>
+                                    <div class="invalid-feedback">
+                                        Please select a valid semester.
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="coursename">Course Name:</label>
                                 <input type="text" name="coursename" id="coursename" class="form-control" required>
+                                <div class="invalid-feedback">
+                                    Please provide a course name.
+                                </div>
                             </div>
                             <div class="form-group">
-                                <label for="courseoverview">Course Overview:</label>
+                                <label for="courseoverview">Course Overview:</label> <i class="fas fa-xs fa-question-circle text-info pr-1 opacity-50" data-bs-toggle="tooltip" data-bs-placement="right" title="Provide short course description"></i>
                                 <textarea rows="5" name="courseoverview" id="courseoverview" class="form-control" required></textarea>
+                                <div class="invalid-feedback">
+                                    Please provide a course description.
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="school">School:</label>
                                 <input type="text" name="school" id="school" class="form-control" placeholder="School of..." required>
+                                <div class="invalid-feedback">
+                                    Please provide a school (faculty) name.
+                                </div>
                             </div>
                             <div class="form-row align-items-center">
                                 <div class="col-md-7">
-                                    <label for="lecturername">Lecturers in charge:</label>
+                                    <label for="lecturername">Lecturers in charge:</label> <i class="fas fa-xs fa-question-circle text-info pr-1 opacity-50" data-bs-toggle="tooltip" data-bs-placement="right" title="Provide at least ONE lecturer of the course"></i>
                                     <input type="text" name="lecturername" id="lecturername" class="form-control" required>
+                                    <div class="invalid-feedback">
+                                        Please provide at least ONE lecturer.
+                                    </div>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="lectureremail">Email:</label>
@@ -416,8 +440,7 @@ if (isset($_SESSION['admin_email'])) {
         
         <!-- BootStrap JavaScript -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-       
-        
+               
         <!-- jQuery Easing JS-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js" integrity="sha512-0QbL0ph8Tc8g5bLhfVzSqxe9GERORsKhIn1IrpxDAgUsbBGz/V7iSav2zzW325XGd1OMLdL4UiqRJj702IeqnQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <!-- Custom Theme JS -->
@@ -427,6 +450,35 @@ if (isset($_SESSION['admin_email'])) {
         <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
         <script>
             new DataTable('#courseTable');
+        </script>
+
+        <script>
+            (function () {
+                'use strict'
+
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.querySelectorAll('.needs-validation')
+
+                // Loop over them and prevent submission
+                Array.prototype.slice.call(forms)
+                    .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                        }
+
+                        form.classList.add('was-validated')
+                    }, false)
+                    })
+                })()
+        </script>
+
+        <script>
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            })
         </script>
         
        

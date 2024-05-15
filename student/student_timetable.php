@@ -578,7 +578,7 @@ if (isset($_SESSION['student_email'])) {
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
         <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 
-
+        <!-- JS initialize multiple selection -->
         <script>
             var select = $.noConflict();
             select(document).ready(function() {
@@ -586,6 +586,7 @@ if (isset($_SESSION['student_email'])) {
             })
         </script>
 
+        <!-- JS initialize multiple table -->
         <script>
             new DataTable('#slotTable');
         </script>

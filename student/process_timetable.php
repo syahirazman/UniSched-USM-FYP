@@ -66,20 +66,19 @@ if (isset($_POST['saveSelectedSlot'])) {
 
 // function to detect conflicting classes by checking overlapping timeslots between classes in the array, and also the saved class slots
 function detectConflicts ($conn, $slots, $student_id) {
-    //$conflicts = false;
     $conflictingCourses = [];
 
     // detect conflicts between classes within the array
     foreach ($slots as $slot1) {
         foreach ($slots as $slot2) {
             if ($slot1['slot_id'] != $slot2['slot_id']) {
-                if ($slot1['class_day'] == $slot2['class_day'] && (($slot1['start_time'] == $slot2['start_time'] || $slot1['end_time'] == $slot2['end_time'])) ) {
-                    //$conflicts = true;
+                if ($slot1['class_day'] == $slot2['class_day'] && (($slot1['start_time'] == $slot2['start_time'] 
+                || $slot1['end_time'] == $slot2['end_time'])) ) {
+                    
                     // Store conflicting course codes
                     $conflictingCourses[] = $slot1['course_code'];
                     $conflictingCourses[] = $slot2['course_code'];
-
-                    break; // exit loops when conflict is detected
+                    break; 
                 }
             }
         }
@@ -94,17 +93,16 @@ function detectConflicts ($conn, $slots, $student_id) {
     if ($results && $results->num_rows > 0) {
         while ($savedSlot = $results->fetch_assoc()) {
             foreach ($slots as $slot1) {
-                if ($slot1['class_day'] == $savedSlot['class_day'] && (($slot1['start_time'] == $savedSlot['start_time'] || $slot1['end_time'] == $savedSlot['end_time'])) ) {
-                     //$conflicts = true;
+                if ($slot1['class_day'] == $savedSlot['class_day'] && 
+                (($slot1['start_time'] == $savedSlot['start_time'] || $slot1['end_time'] == $savedSlot['end_time'])) ) {
+                    
                     $conflictingCourses[] = $slot1['course_code'];
                     $conflictingCourses[] = $savedSlot['course_code'];
-    
                     break;
                 }
             }
         }
     }
-
     return $conflictingCourses;
 }
 
