@@ -131,53 +131,47 @@ if (isset($_SESSION['student_email'])) {
                             <h1 class="h3 mb-0 text-gray-900">Student Dashboard</h1>
                         </div>
 
-                        <div class="card shadow mb-4">
-                            <div class="card-header">
-                                <div class="d-sm-flex align-items-center justify-content-between">
-                                    <h5 class="text-gray-900 ml-2">Current Timetable:</h5>
-                                    <button class="btn btn-secondary"><i class="fa-solid fa-print"></i></button>
-                                </div>				
+                        <div id="timetable">
+                            <div class="card shadow mb-4">
+                                <div class="card-header">
+                                    <div class="d-sm-flex align-items-center justify-content-between">
+                                        <h5 class="text-gray-900 ml-2">Current Semester Timetable:</h5>
+                                        <button class="btn btn-secondary d-print-none" onClick="printDiv()"><i class="fa-solid fa-print"></i></button>
+                                    </div>				
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table text-gray-900 mt-3 mb-3 text-center" style="table-layout: fixed; border-bottom: 1px solid #dee2e6 !important; border-right: 1px solid #dee2e6 !important; border-collapse:collapse;">
+                                            <?php
+                                            require_once '../student/display_timetable.php';
+                                            ?>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table text-gray-900 mt-3 mb-3 text-center table-hover">
-                                        <thead style='background-color: #FFD580 !important; font-weight:600;'>
-                                            <tr>
-                                                <td>Time</td>
-                                                <td>Monday</td>
-                                                <td>Tuesday</td>
-                                                <td>Wednesday</td>
-                                                <td>Thursday</td>
-                                                <td>Friday</td>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>08:00</td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <td>09:00</td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <td>10:00</td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                            <div class="card border-left-info shadow mb-4">
+                                <div class="card-body">
+                                    <div class="d-sm-flex align-items-center justify-content-between mb-2">
+                                        <h5 class="text-gray-900">Courses taken this semester:</h5>
+                                    </div>
+                                    <?php
+                                    if (isset($_SESSION['$student_email'])) {
+                                        $sqlStdID = "SELECT student_id FROM student_login WHERE student_email = '$student_email'";
+                                        $resultStdID = $conn->query($sqlStdID);
+                                        if ($resultStdID && $resultStdID->num_rows > 0) {
+                                            $std = $resultStdID->fetch_assoc();
+                                            $student_id = $std['student_id'];
+                                        }
+                                    }
+                                    $sqlCourse = "SELECT DISTINCT tm.course_code
+                                                FROM student_timetable st
+                                                JOIN timetable_mgmt tm ON st.slot_id = tm.slot_id
+                                                WHERE st.student_id = '$student_id'";
+                                    $resultCourse = $conn->query($sqlCourse);
+                                    while ($rowCourse = $resultCourse->fetch_assoc()):
+                                    ?>
+                                    <div class="btn btn-info p-2 m-1 text-white w-auto"><?= $rowCourse['course_code']?></div><br>
+                                    <?php endwhile; ?>
                                 </div>
                             </div>
                         </div>
@@ -217,6 +211,24 @@ if (isset($_SESSION['student_email'])) {
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js" integrity="sha512-0QbL0ph8Tc8g5bLhfVzSqxe9GERORsKhIn1IrpxDAgUsbBGz/V7iSav2zzW325XGd1OMLdL4UiqRJj702IeqnQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <!-- Custom Theme JS -->
         <script src="../custom-js/script-all.min.js"></script>
+
+        <!-- Script to print the content of a div -->
+        <script> 
+            function printDiv() { 
+                var divContents = document.getElementById("timetable").innerHTML; 
+                var originalContents = document.body.innerHTML;
+                var originalContents = document.body.innerHTML; // Save original body content
+
+                // Replace body content with divContents
+                document.body.innerHTML = '<html><head><title>Print</title></head><body><div style="position: fixed; inset: 0; width: fit-content; height: fit-content; margin: auto;">' + divContents + '</div></body></html>';
+
+                // Print the page
+                window.print();
+
+                // Restore original body content
+                document.body.innerHTML = originalContents;
+            } 
+        </script>
 
     </body>
 

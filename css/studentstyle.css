@@ -1,15 +1,15 @@
-
 @media print {
+    * { 
+        -webkit-print-color-adjust: exact !important; 
+    }
     #timetable {
-        margin-top: 10px !important;
-        -webkit-print-color-adjust: exact !important;
-        color-adjust: exact !important;
+        -webkit-print-color-adjust: exact !important; 
     }
-
-    thead {
-        background-color: #FFD580 !important;
-        -webkit-print-color-adjust: exact !important;
+    thead > td {
+        background-color: #4e73df !important;
+        -webkit-print-color-adjust: exact !important;  
     }
+    
 }
 
 .nav-item .collapse-item:hover {
@@ -35,3 +35,4 @@
 .sidebar.toggled .nav-item .nav-link[data-bs-toggle=collapse]::after {
     display:none !important;
 }
+

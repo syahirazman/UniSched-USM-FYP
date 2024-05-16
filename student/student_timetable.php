@@ -188,7 +188,10 @@ if (isset($_SESSION['student_email'])) {
                             <form action="" method="GET" id="timetableForm">
                                 <!-- select course code -->
                                 <div class="card-header py-3">
-                                    <div class="form-row align-items-center d-print-none">
+                                    <div class="d-sm-flex align-items-center justify-content-between mb-2">
+                                        <h5 class="text-gray-900">Draft your timetable: <i class="fas fa-xs fa-question-circle text-info pl-1 pr-1 opacity-50" data-bs-toggle="tooltip" data-bs-placement="right" title="Add course code to check class conflicts and insert to draft table"></i> </h5>
+                                    </div>
+                                    <div class="form-row align-items-center">
                                         <div class="form-group col-md-4 mt-1">
                                             <select name="coursecode[]" id="coursecode" multiple="multiple" class="form-control" data-placeholder="Choose courses" required>
                                                 <option></option>
@@ -209,7 +212,8 @@ if (isset($_SESSION['student_email'])) {
                                         </div>
                                         <div class="form-group">
                                             <input type="submit" class="btn btn-primary form-control" name="addClass" id="addClassBtn" value="Add">
-                                        </div>			
+                                        </div>
+                                        			
                                     </div>
                                 </div>
                             </form>
@@ -222,7 +226,6 @@ if (isset($_SESSION['student_email'])) {
                                                 <tr>
                                                     <th>No.</th>
                                                     <th>Course Code</th>
-                                                    <th>Slot type</th>
                                                     <th>Time from</th>
                                                     <th>Time until</th>
                                                     <th>Day</th>
@@ -237,7 +240,6 @@ if (isset($_SESSION['student_email'])) {
                                                  <tr class="text-center">
                                                     <td><?= $no++ ?></td>
                                                     <td><?= $slotInfo["course_code"] ?></td>
-                                                    <td><?= $slotInfo["slot_type"] ?></td>
                                                     <td><?= date('H:i', strtotime($slotInfo['start_time'])) ?></td>
                                                     <td><?= date('H:i', strtotime($slotInfo['end_time'])) ?></td>
                                                     <td><?= $slotInfo["class_day"] ?></td>
@@ -264,8 +266,7 @@ if (isset($_SESSION['student_email'])) {
                         <div class="card border-left-info shadow mb-5" id="savedCourseTable">
                             <div class="card-body">
                                 <div class="d-sm-flex align-items-center justify-content-between mb-2">
-                                    <h5 class="text-gray-900">Saved courses/class slots:</h5>
-                                    <button class="btn btn-secondary" onClick="printDiv()"><i class="fa-solid fa-print"></i></button>
+                                    <h5 class="text-gray-900">Your courses in current timetable: <i class="fas fa-xs fa-question-circle text-info pl-1 pr-1 opacity-50" data-bs-toggle="tooltip" data-bs-placement="right" title="These courses are confirmed to be displayed in your timetable"></i></h5>
                                 </div>
                                 <div class="table-responsive">
                                     <table class="table table-sm table-bordered table-hover mb-3 text-dark" width="100%">
@@ -273,7 +274,6 @@ if (isset($_SESSION['student_email'])) {
                                             <tr>
                                                 <th>No.</th>
                                                 <th>Course Code</th>
-                                                <th>Slot type</th>
                                                 <th>Time from</th>
                                                 <th>Time until</th>
                                                 <th>Day</th>
@@ -292,7 +292,7 @@ if (isset($_SESSION['student_email'])) {
                                                     $student_id = $rowStudent['student_id'];
                                                 }
                                                 // Prepare the SQL query
-                                                $joinsql = "SELECT st.slot_id, tm.course_code, tm.slot_type, tm.start_time, tm.end_time, tm.class_day, tm.class_location
+                                                $joinsql = "SELECT st.slot_id, tm.course_code, tm.start_time, tm.end_time, tm.class_day, tm.class_location
                                                 FROM student_timetable st
                                                 JOIN timetable_mgmt tm ON st.slot_id = tm.slot_id
                                                 WHERE st.student_id = '$student_id'";
@@ -304,7 +304,6 @@ if (isset($_SESSION['student_email'])) {
                                                 <tr class="text-center">
                                                     <td><?= $no++ ?></td>
                                                     <td><?= $slotrow["course_code"]?></td>
-                                                    <td><?= $slotrow["slot_type"]?></td>
                                                     <td><?= date('H:i', strtotime($slotrow['start_time']))?></td>
                                                     <td><?= date('H:i', strtotime($slotrow['end_time']))?></td>
                                                     <td><?= $slotrow["class_day"]?></td>
@@ -350,10 +349,14 @@ if (isset($_SESSION['student_email'])) {
 
                         <div class="card border-left-secondary shadow mb-4">
                             <div class="card-header py-3">
-                                <a href="#addPersonalSlotModal" class="btn btn-success float-right" data-bs-toggle="modal">
-                                    <i class="fa-solid fa-plus"></i>
-                                    <span>Add Your Class Slot</span>
-                                </a>						
+                                <div class="d-sm-flex align-items-center justify-content-between">
+                                    <h5 class="text-gray-900">Your tutorial/lab/other slots: <i class="fas fa-xs fa-question-circle text-info pl-1 pr-1 opacity-50" data-bs-toggle="tooltip" data-bs-placement="right" title="Click button to add your personal slot or session"></i></h5> 
+                                    <a href="#addPersonalSlotModal" class="btn btn-success float-right" data-bs-toggle="modal">
+                                        <i class="fa-solid fa-plus"></i>
+                                        <span>Add Slot</span>
+                                    </a>	
+                                </div>
+                                					
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -497,7 +500,7 @@ if (isset($_SESSION['student_email'])) {
         <div id="addPersonalSlotModal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                    <form action="process_timetable.php" method="POST">
+                    <form class="needs-validation" action="process_timetable.php" method="POST">
                         <div class="modal-header">						
                             <h4 class="modal-title font-weight-bold text-gray-900" id="staticBackdropLabel">Add Personal Class Slot</h4>
                             <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
@@ -505,16 +508,25 @@ if (isset($_SESSION['student_email'])) {
                         <div class="modal-body text-gray-900">
                             <div class="form-group">
                                 <label for="personalSlotTitle">Slot Title:</label>
-                                <input type="text" class="form-control" name="personalSlotTitle" id="personalSlotTitle" placeholder="Enter your slot title" required>
+                                <input type="text" class="form-control" pattern="^.+$" name="personalSlotTitle" id="personalSlotTitle" placeholder="Enter your slot title" required>
+                                <div class="invalid-feedback">
+                                    Please provide a slot title or name.
+                                </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="personalStartTime">Start time:</label>
                                     <input type="time" name="personalStartTime" id="personalStartTime" class="form-control" required>
+                                    <div class="invalid-feedback">
+                                        Please provide start time of the slot.
+                                    </div>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="personalEndTime">End time:</label>
                                     <input type="time" name="personalEndTime" id="personalEndTime" class="form-control" required>
+                                    <div class="invalid-time invalid-feedback">
+                                        Please provide end time of the slot.
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-row">
@@ -528,10 +540,16 @@ if (isset($_SESSION['student_email'])) {
                                         <option value="Thursday">Thursday</option>
                                         <option value="Friday">Friday</option>
                                     </select>
+                                    <div class="invalid-feedback">
+                                        Please select day of the class.
+                                    </div>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="personalClassLocation">Location:</label>
-                                    <input type="text" class="form-control" name="personalClassLocation" id="personalClassLocation" placeholder="Enter location" required>
+                                    <input type="text" class="form-control" pattern="^.+$" name="personalClassLocation" id="personalClassLocation" placeholder="Enter location" required>
+                                    <div class="invalid-feedback">
+                                        Please provide location of the slot.
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -591,7 +609,7 @@ if (isset($_SESSION['student_email'])) {
             new DataTable('#slotTable');
         </script>
 
-         <!-- Script to print the content of a div -->
+        <!-- Script to print the content of a div -->
         <script> 
             function printDiv() { 
                 var divContents = document.getElementById("savedCourseTable").innerHTML; 
@@ -607,6 +625,55 @@ if (isset($_SESSION['student_email'])) {
                 // Restore original body content
                 document.body.innerHTML = originalContents;
             } 
+        </script>
+
+        <!-- Script to invoke Bootstrap tooltip -->
+        <script>
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            })
+        </script>
+
+        <script>
+            (function () {
+                'use strict'
+
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.querySelectorAll('.needs-validation')
+
+                // Loop over them and prevent submission
+                Array.prototype.slice.call(forms)
+                    .forEach(function (form) {
+                        form.addEventListener('submit', function (event) {
+
+                            // Time validation
+                            var startTimeInput = form.querySelector('#personalStartTime');
+                            var endTimeInput = form.querySelector('#personalEndTime');
+                            var invalidFeedback = document.querySelector('.invalid-time');
+                            var startTime = startTimeInput.value;
+                            var endTime = endTimeInput.value;
+
+                            if (endTime === startTime) {
+                                endTimeInput.classList.remove('is-valid');
+                                endTimeInput.classList.add('is-invalid');
+                                isValid = false;
+                                invalidFeedback.textContent = '';
+                                invalidFeedback.textContent = 'End time cannot be equal to start time.';
+                                invalidFeedback.style.display = 'block';
+                            }
+                            
+                            if (!isValid || !form.checkValidity()) {
+                                event.preventDefault()
+                                event.stopPropagation()
+                            }
+
+                            form.classList.add('was-validated')
+                        }, false);
+
+                        
+                    });
+                })();
         </script>
         
     </body>

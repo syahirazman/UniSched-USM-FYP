@@ -154,7 +154,7 @@ if (isset($_SESSION['admin_email'])) {
                         <!-- Table for CRUD -->
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
-                                <a href="#addClassModal" class="btn btn-success float-right" data-bs-toggle="modal">
+                                <a href="#addClassModal" class="btn btn-primary float-right" data-bs-toggle="modal">
                                     <i class="fa-solid fa-plus"></i>
                                     <span>Add Class Slot</span>
                                 </a>						
@@ -209,7 +209,7 @@ if (isset($_SESSION['admin_email'])) {
                                                 <div id="updateClassModal<?= $no ?>" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
-                                                            <form action="admin-crud.php" method="POST">
+                                                            <form class="needs-validation" action="admin-crud.php" method="POST">
                                                                 <div class="modal-header">						
                                                                     <h4 class="modal-title font-weight-bold text-gray-900" id="staticBackdropLabel">Update Class Slot</h4>
                                                                     <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
@@ -219,7 +219,7 @@ if (isset($_SESSION['admin_email'])) {
                                                                     <div class="form-row">
                                                                         <div class="form-group col-md-6">
                                                                             <label for="coursecode">Course Code:</label>
-                                                                            <select name="coursecode" id="coursecode" class="form-control">
+                                                                            <select name="coursecode" id="coursecode" class="form-control" required>
                                                                                 <?php
                                                                                     // Retrieve course codes from the database and populate the dropdown
                                                                                     // check connection
@@ -239,7 +239,7 @@ if (isset($_SESSION['admin_email'])) {
                                                                         </div>
                                                                         <div class="form-group col-md-6">
                                                                             <label for="classDay">Day:</label>
-                                                                            <select class="form-control" name="classDay" id="classDay">
+                                                                            <select class="form-control" name="classDay" id="classDay" required>
                                                                                 <option value="<?=$row["class_day"] ?>"><?=$row["class_day"] ?></option>
                                                                                 <option value="Monday">Monday</option>
                                                                                 <option value="Tuesday">Tuesday</option>
@@ -252,16 +252,16 @@ if (isset($_SESSION['admin_email'])) {
                                                                     <div class="form-row">
                                                                         <div class="form-group col-md-6">
                                                                             <label for="starttime">Start time:</label>
-                                                                            <input type="time" name="starttime" id="starttime" class="form-control" value="<?= date('H:i', strtotime($row['start_time'])) ?>">
+                                                                            <input type="time" name="starttime" id="starttime" class="form-control" value="<?= date('H:i', strtotime($row['start_time'])) ?>" required>
                                                                         </div>
                                                                         <div class="form-group col-md-6">
-                                                                            <label for="endtime">End time:</label>
-                                                                            <input type="time" name="endtime" id="endtime" class="form-control" value="<?= date('H:i', strtotime($row['end_time'])) ?>">
+                                                                            <label for="endtime">End time:</label> <i class="fas fa-xs fa-question-circle text-info pr-1 opacity-50" data-bs-toggle="tooltip" data-bs-placement="right" title="End time of a class cannot be same as start time"></i>
+                                                                            <input type="time" name="endtime" id="endtime" class="form-control" value="<?= date('H:i', strtotime($row['end_time'])) ?>" required>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group">
                                                                             <label for="classLocation">Location:</label>
-                                                                            <input type="text" class="form-control" name="classLocation" id="classLocation" placeholder="Enter class location" value="<?= $row["class_location"] ?>">
+                                                                            <input type="text" class="form-control" pattern="^.+$" name="classLocation" id="classLocation" placeholder="Enter class location" value="<?= $row["class_location"] ?>" required>
                                                                     </div>
                                                                 </div>
                                                                 <div class="modal-footer">
@@ -316,7 +316,7 @@ if (isset($_SESSION['admin_email'])) {
         <div id="addClassModal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form action="admin-crud.php" method="POST">
+                    <form class="needs-validation" action="admin-crud.php" method="POST" novalidate>
                         <div class="modal-header">						
                             <h4 class="modal-title font-weight-bold text-gray-900" id="staticBackdropLabel">Add Class Slot</h4>
                             <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
@@ -343,6 +343,9 @@ if (isset($_SESSION['admin_email'])) {
                                                 <option><?= $row["course_code"] ?></option>
                                         <?php endwhile; ?>
                                     </select>
+                                    <div class="invalid-feedback">
+                                        Please select a course code.
+                                    </div>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="classDay">Day:</label>
@@ -354,21 +357,33 @@ if (isset($_SESSION['admin_email'])) {
                                         <option value="Thursday">Thursday</option>
                                         <option value="Friday">Friday</option>
                                     </select>
+                                    <div class="invalid-feedback">
+                                        Please select a class day.
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="starttime">Start time:</label>
                                     <input type="time" name="starttime" id="starttime" class="form-control" required>
+                                    <div class="invalid-feedback">
+                                        Please provide start time of the class.
+                                    </div>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="endtime">End time:</label>
+                                    <label for="endtime">End time:</label> <i class="fas fa-xs fa-question-circle text-info pr-1 opacity-50" data-bs-toggle="tooltip" data-bs-placement="right" title="End time of a class cannot be same as start time"></i>
                                     <input type="time" name="endtime" id="endtime" class="form-control" required>
+                                    <div class="invalid-time invalid-feedback">
+                                        Please provide end time of the class.
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="classLocation">Location:</label>
-                                <input type="text" class="form-control" name="classLocation" id="classLocation" placeholder="Enter class location" required>
+                                <input type="text" class="form-control" pattern="^.+$" name="classLocation" id="classLocation" placeholder="Enter class location" required>
+                                <div class="invalid-feedback">
+                                    Please provide the class location.
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -427,10 +442,71 @@ if (isset($_SESSION['admin_email'])) {
                     placeholder: $( this ).data( 'placeholder' ),
                 });
             });
-
-            
         </script>
-                
+
+        <script>
+            (function () {
+                'use strict'
+
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.querySelectorAll('.needs-validation')
+
+                // Loop over them and prevent submission
+                Array.prototype.slice.call(forms)
+                    .forEach(function (form) {
+                        form.addEventListener('submit', function (event) {
+
+                            // Custom validation for empty fields
+                            var inputs = form.querySelectorAll('input[required]');
+                            var isValid = true;
+
+                            inputs.forEach(function (input) {
+                                if (input.value.trim() === '') {
+                                    input.classList.add('is-invalid');
+                                    isValid = false;
+                                    var invalidFeedback = document.getElementById('invalid-msg');
+                                } else {
+                                    input.classList.remove('is-invalid');
+                                    input.classList.add('is-valid');
+                                }
+                            });
+
+                            // Time validation
+                            var startTimeInput = form.querySelector('#starttime');
+                            var endTimeInput = form.querySelector('#endtime');
+                            var invalidFeedback = document.querySelector('.invalid-time');
+                            var startTime = startTimeInput.value;
+                            var endTime = endTimeInput.value;
+
+                            if (endTime === startTime) {
+                                endTimeInput.classList.remove('is-valid');
+                                endTimeInput.classList.add('is-invalid');
+                                isValid = false;
+                                invalidFeedback.textContent = '';
+                                invalidFeedback.textContent = 'End time cannot be equal to start time.';
+                                invalidFeedback.style.display = 'block';
+                            }
+                            
+                            if (!isValid || !form.checkValidity()) {
+                                event.preventDefault()
+                                event.stopPropagation()
+                            }
+
+                            form.classList.add('was-validated')
+                        }, false);
+
+                        
+                    });
+                })();
+        </script>
+
+        <!-- Script to invoke Bootstrap tooltip -->
+        <script>
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            })
+        </script>
 
     </body>
 </html>

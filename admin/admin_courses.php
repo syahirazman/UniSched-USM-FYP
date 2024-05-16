@@ -213,7 +213,7 @@ if (isset($_SESSION['admin_email'])) {
                                                     <div id="updateCourseModal<?= $no ?>" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                                         <div class="modal-dialog modal-lg">
                                                             <div class="modal-content">
-                                                                <form class="updateCourseForm was-validated" action="admin-crud.php" method="POST">
+                                                                <form class="updateCourseForm needs-validation" action="admin-crud.php" method="POST">
                                                                     <div class="modal-header">						
                                                                         <h4 class="modal-title font-weight-bold text-gray-900" id="staticBackdropLabel">Update Course</h4>
                                                                         <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
@@ -224,14 +224,11 @@ if (isset($_SESSION['admin_email'])) {
                                                                         <div class="form-row">
                                                                             <div class="form-group col-md-6">
                                                                                 <label for="coursecode">Course Code:</label>
-                                                                                <input type="text" name="coursecode" id="coursecode" class="form-control" value="<?= $row["course_code"] ?>">
-                                                                                <div class="invalid-feedback">
-                                                                                    Please provide a course code.
-                                                                                </div>
+                                                                                <input type="text" name="coursecode" id="coursecode" class="form-control"  pattern="^.+$" value="<?= $row["course_code"] ?>" required>
                                                                             </div>
                                                                             <div class="form-group col-md-6">
                                                                                 <label for="semester">Semester:</label>
-                                                                                <select class="form-control" name="semester" id="semester">
+                                                                                <select class="form-control" name="semester" id="semester" required>
                                                                                     <option value="<?=$row["semester"] ?>"><?= $row["semester"] ?></option>
                                                                                     <option value="1">1</option>
                                                                                     <option value="2">2</option>
@@ -241,31 +238,28 @@ if (isset($_SESSION['admin_email'])) {
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <label for="coursename">Course Name:</label>
-                                                                            <input type="text" name="coursename" id="coursename" class="form-control" value="<?= $row["course_name"] ?>" required>
-                                                                            <div class="invalid-feedback">
-                                                                                    Please provide name for the course.
-                                                                            </div>
+                                                                            <input type="text" name="coursename" id="coursename" class="form-control" pattern="^.+$" value="<?= $row["course_name"] ?>" required>
                                                                         </div>
                                                                         <div class="form-group">
-                                                                            <label for="courseoverview">Course Overview:</label>
-                                                                            <textarea rows="5" name="courseoverview" id="courseoverview" class="form-control"><?= $row["course_overview"] ?></textarea>
+                                                                            <label for="courseoverview">Course Overview:</label> <i class="fas fa-xs fa-question-circle text-info pr-1 opacity-50" data-bs-toggle="tooltip" data-bs-placement="right" title="Provide short course description"></i>
+                                                                            <textarea rows="5" name="courseoverview" id="courseoverview" pattern="^.+$" class="form-control" required><?= $row["course_overview"] ?></textarea>
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <label for="school">School:</label>
-                                                                            <input type="text" name="school" id="school" class="form-control" placeholder="School of..." value="<?= $row["school"] ?>">
+                                                                            <input type="text" name="school" id="school" pattern="^.+$" class="form-control" placeholder="School of..." value="<?= $row["school"] ?>" required>
                                                                         </div>
-                                                                        <div class="form-row align-items-center">
+                                                                        <div class="form-row align-items-top">
                                                                             <div class="col-md-7">
-                                                                                <label for="lecturername">Lecturers in charge:</label>
-                                                                                <input type="text" name="lecturername" id="lecturername" class="form-control" value="<?= $row["lecturername"] ?>">
+                                                                                <label for="lecturername">Lecturers in charge:</label> <i class="fas fa-xs fa-question-circle text-info pr-1 opacity-50" data-bs-toggle="tooltip" data-bs-placement="right" title="Provide at least ONE lecturer of the course"></i>
+                                                                                <input type="text" name="lecturername" id="lecturername" pattern="^.+$" class="form-control" value="<?= $row["lecturername"] ?>" required>
                                                                             </div>
                                                                             <div class="col-md-4">
                                                                                 <label for="lectureremail">Email:</label>
-                                                                                <input type="email" name="lectureremail" id="lectureremail" class="form-control" value="<?= $row["lectureremail"] ?>">
+                                                                                <input type="email" name="lectureremail" id="lectureremail" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" class="form-control" value="<?= $row["lectureremail"] ?>" required>
                                                                             </div>
                                                                             <div class="col-sm-1">
                                                                                 <label for="lecturerroom">Room:</label>
-                                                                                <input type="text" name="lecturerroom" id="lecturerroom" class="form-control" value="<?= $row["lecturerroom"] ?>">
+                                                                                <input type="text" name="lecturerroom" id="lecturerroom" pattern="^.+$" class="form-control" value="<?= $row["lecturerroom"] ?>" required>
                                                                             </div>
                                                                         </div>
                                                                         <div class="form-row align-items-center mt-2">
@@ -337,7 +331,7 @@ if (isset($_SESSION['admin_email'])) {
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="coursecode">Course Code:</label>
-                                    <input type="text" name="coursecode" id="coursecode" class="form-control" required>
+                                    <input type="text" name="coursecode" id="coursecode" pattern="^.+$" class="form-control" required>
                                     <div class="invalid-feedback">
                                         Please provide a course code.
                                     </div>
@@ -357,14 +351,14 @@ if (isset($_SESSION['admin_email'])) {
                             </div>
                             <div class="form-group">
                                 <label for="coursename">Course Name:</label>
-                                <input type="text" name="coursename" id="coursename" class="form-control" required>
+                                <input type="text" name="coursename" id="coursename" pattern="^.+$" class="form-control" required>
                                 <div class="invalid-feedback">
                                     Please provide a course name.
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="courseoverview">Course Overview:</label> <i class="fas fa-xs fa-question-circle text-info pr-1 opacity-50" data-bs-toggle="tooltip" data-bs-placement="right" title="Provide short course description"></i>
-                                <textarea rows="5" name="courseoverview" id="courseoverview" class="form-control" required></textarea>
+                                <textarea rows="5" name="courseoverview" id="courseoverview" pattern="^.+$" class="form-control" required></textarea>
                                 <div class="invalid-feedback">
                                     Please provide a course description.
                                 </div>
@@ -376,21 +370,21 @@ if (isset($_SESSION['admin_email'])) {
                                     Please provide a school (faculty) name.
                                 </div>
                             </div>
-                            <div class="form-row align-items-center">
+                            <div class="form-row align-items-top">
                                 <div class="col-md-7">
                                     <label for="lecturername">Lecturers in charge:</label> <i class="fas fa-xs fa-question-circle text-info pr-1 opacity-50" data-bs-toggle="tooltip" data-bs-placement="right" title="Provide at least ONE lecturer of the course"></i>
-                                    <input type="text" name="lecturername" id="lecturername" class="form-control" required>
+                                    <input type="text" name="lecturername" id="lecturername" pattern="^.+$" class="form-control" required>
                                     <div class="invalid-feedback">
                                         Please provide at least ONE lecturer.
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="lectureremail">Email:</label>
-                                    <input type="email" name="lectureremail" id="lectureremail" class="form-control" required>
+                                    <input type="email" name="lectureremail" id="lectureremail" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" class="form-control" required>
                                 </div>
                                 <div class="col-sm-1">
                                     <label for="lecturerroom">Room:</label>
-                                    <input type="text" name="lecturerroom" id="lecturerroom" class="form-control" required>
+                                    <input type="text" name="lecturerroom" id="lecturerroom" pattern="^.+$" class="form-control" required>
                                 </div>
                             </div>
                             <div class="form-row align-items-center mt-2">
@@ -452,6 +446,7 @@ if (isset($_SESSION['admin_email'])) {
             new DataTable('#courseTable');
         </script>
 
+        <!-- Script to invoke Bootstrap validation -->
         <script>
             (function () {
                 'use strict'
@@ -462,18 +457,37 @@ if (isset($_SESSION['admin_email'])) {
                 // Loop over them and prevent submission
                 Array.prototype.slice.call(forms)
                     .forEach(function (form) {
-                    form.addEventListener('submit', function (event) {
-                        if (!form.checkValidity()) {
-                        event.preventDefault()
-                        event.stopPropagation()
-                        }
+                        form.addEventListener('submit', function (event) {
 
-                        form.classList.add('was-validated')
-                    }, false)
-                    })
-                })()
+                            // Custom validation for empty fields
+                            var inputs = form.querySelectorAll('input[required]');
+                            var isValid = true;
+
+                            inputs.forEach(function (input) {
+                                if (input.value.trim() === '') {
+                                    input.classList.add('is-invalid');
+                                    isValid = false;
+                                    var invalidFeedback = document.getElementById('invalid-msg');
+                                } else {
+                                    input.classList.remove('is-invalid');
+                                    input.classList.add('is-valid');
+                                }
+                            });
+                            
+                            if (!isValid || !form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                            }
+
+                            form.classList.add('was-validated')
+                        }, false);
+
+                        
+                    });
+                })();
         </script>
 
+        <!-- Script to invoke Bootstrap tooltip -->
         <script>
             var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
             var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
