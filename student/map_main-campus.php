@@ -133,7 +133,7 @@ if (isset($_SESSION['student_email'])) {
                         <div class="ml-4 d-sm-inline-block">
                             <a href="../map/usm-map-main.pdf" class="btn btn-info" target="_blank">
                                 <i class="fa-solid fa-download mr-1"></i>
-                                <span>Download map PDF</span>
+                                <span>Download map</span>
                             </a>
                         </div>
                         <div class="mt-4 mb-5">
