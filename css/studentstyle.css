@@ -12,6 +12,12 @@
     
 }
 
+@media (prefers-reduced-motion: none) {
+    * {
+        scroll-behavior: smooth;
+    }
+}
+
 .nav-item .collapse-item:hover {
     color:#4e73df !important;
 }

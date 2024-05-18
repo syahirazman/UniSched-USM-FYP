@@ -4,7 +4,7 @@
 session_start();
 
 require_once '../connection.php';
-require_once 'process_timetable.php';
+include_once 'process_timetable.php';
 
 // Check if the session variable is set
 if (isset($_SESSION['student_email'])) {
@@ -22,7 +22,8 @@ if (isset($_SESSION['student_email'])) {
 <html lang="en">
     <head>
         
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <meta name="view-transition" content="same-origin"/>
         <!-- styles -->
         <link href="../css/fontawesome.min.css" rel="stylesheet">
         <link href="../css/adminstyle.min.css" rel="stylesheet">
@@ -145,13 +146,17 @@ if (isset($_SESSION['student_email'])) {
                         if (isset($_SESSION['conflicting_courses'])) {
                             $conflictingCourses = $_SESSION['conflicting_courses'];
                             echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    There are courses with conflicting classes: <strong>'. implode(', ', $conflictingCourses) .'</strong>.
-                                    Please add new selections without these courses.
+                                    Scheduling conflict is found! <br>';
+                            foreach ($conflictingCourses as $conflict) {
+                                echo '<strong>' . $conflict['course1'] . ' and ' . $conflict['course2'] . ' on ' . $conflict['day'] . ' at ' . date('H:i', strtotime($conflict['start_time'])) . ' - ' . date('H:i', strtotime($conflict['end_time'])) . '</strong><br>';
+                            }         
+                            echo '  Please add another courses.
                                     <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close" onclick="reloadPage()">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>';
                             unset($_SESSION['conflicting_courses']);
+                            
                         }
                         
                         // display alerts related to personal class slots
@@ -218,7 +223,7 @@ if (isset($_SESSION['student_email'])) {
                                 </div>
                             </form>
                             <!-- table to display class slots of selected courses in the array -->
-                            <form action="process_timetable.php" method="POST">
+                            <form action="student-crud.php" method="POST">
                                 <div class="card-body">
                                     <div class="table-responsive">
                                         <table class="table table-bordered text-gray-900 mt-3 mb-3" id="slotTable" width="100%">
@@ -254,10 +259,10 @@ if (isset($_SESSION['student_email'])) {
                                         </table>
                                     </div>	
                                 </div>
-                                <div class="card-footer">
+                                <div class="card-footer d-flex justify-content-end">
                                     <input type="hidden" name="student_email" value="<?= $_SESSION['student_email'] ?>">
-                                    <button type="submit" class="btn btn-success" name="saveSelectedSlot"><i class="fas fa-save pr-2"></i>Save selections</button>
-                                    <button type="submit" class="btn btn-danger" name="clearSelectedSlot" id="clearSelectedSlot"><i class="fa fa-trash fa-sm pr-2"></i>Clear selections</button>
+                                    <button type="submit" class="btn btn-success mr-2" name="saveSelectedSlot" data-bs-toggle="tooltip" data-bs-placement="left" title="Save and insert all courses to timetable"><i class="fas fa-save pr-2"></i>Save</button>
+                                    <button type="submit" class="btn btn-danger" name="clearSelectedSlot" id="clearSelectedSlot" data-bs-toggle="tooltip" data-bs-placement="left" title="Remove all courses from draft selection."><i class="fa fa-trash fa-sm pr-2"></i>Clear</button>
                                 </div>
                             </form>
                         </div>
@@ -347,11 +352,12 @@ if (isset($_SESSION['student_email'])) {
                             </div>
                         </div>
 
+                        <!-- Add personal slots -->
                         <div class="card border-left-secondary shadow mb-4">
                             <div class="card-header py-3">
                                 <div class="d-sm-flex align-items-center justify-content-between">
                                     <h5 class="text-gray-900">Your tutorial/lab/other slots: <i class="fas fa-xs fa-question-circle text-info pl-1 pr-1 opacity-50" data-bs-toggle="tooltip" data-bs-placement="right" title="Click button to add your personal slot or session"></i></h5> 
-                                    <a href="#addPersonalSlotModal" class="btn btn-success float-right" data-bs-toggle="modal">
+                                    <a href="#addPersonalSlotModal" class="btn btn-primary float-right" data-bs-toggle="modal">
                                         <i class="fa-solid fa-plus"></i>
                                         <span>Add Slot</span>
                                     </a>	
@@ -406,7 +412,7 @@ if (isset($_SESSION['student_email'])) {
                                                 <div id="updatePersonalClassModal<?= $no ?>" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                                     <div class="modal-dialog modal-lg">
                                                         <div class="modal-content">
-                                                            <form action="process_timetable.php" method="POST">
+                                                            <form action="student-crud.php" method="POST">
                                                                 <div class="modal-header">						
                                                                     <h4 class="modal-title font-weight-bold text-gray-900" id="staticBackdropLabel">Update Personal Slot</h4>
                                                                     <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
@@ -415,22 +421,22 @@ if (isset($_SESSION['student_email'])) {
                                                                     <input type="hidden" name="personalslot_id" value="<?= $pslot['pSlot_id'] ?>">	
                                                                     <div class="form-group">
                                                                         <label for="personalSlotTitle">Slot Title:</label>
-                                                                        <input type="text" class="form-control" name="personalSlotTitle" id="personalSlotTitle" placeholder="Enter your slot title" value="<?= $pslot["pSlot_title"] ?>">
+                                                                        <input type="text" class="form-control" name="personalSlotTitle" id="personalSlotTitle" placeholder="Enter your slot title" value="<?= $pslot["pSlot_title"] ?>" required>
                                                                     </div>
                                                                     <div class="form-row">
                                                                         <div class="form-group col-md-6">
                                                                             <label for="personalStartTime">Start time:</label>
-                                                                            <input type="time" name="personalStartTime" id="personalStartTime" class="form-control" value="<?= $pslot["pStart_time"] ?>">
+                                                                            <input type="time" name="personalStartTime" id="personalStartTime" min="08:00" max="18:00" class="form-control" value="<?= $pslot["pStart_time"] ?>" required>
                                                                         </div>
                                                                         <div class="form-group col-md-6">
                                                                             <label for="personalEndTime">End time:</label>
-                                                                            <input type="time" name="personalEndTime" id="personalEndTime" class="form-control" value="<?= $pslot["pEnd_time"] ?>">
+                                                                            <input type="time" name="personalEndTime" id="personalEndTime" min="08:00" max="18:00" class="form-control" value="<?= $pslot["pEnd_time"] ?>" required>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-row">
                                                                         <div class="form-group col-md-6">
                                                                             <label for="personalClassDay">Day:</label>
-                                                                            <select class="form-control" name="personalClassDay" id="personalClassDay">
+                                                                            <select class="form-control" name="personalClassDay" id="personalClassDay" required>
                                                                                 <option value="<?= $pslot["pClass_day"] ?>"><?= $pslot["pClass_day"] ?></option>
                                                                                 <option value="Monday">Monday</option>
                                                                                 <option value="Tuesday">Tuesday</option>
@@ -441,7 +447,7 @@ if (isset($_SESSION['student_email'])) {
                                                                         </div>
                                                                         <div class="form-group col-md-6">
                                                                             <label for="personalClassLocation">Location:</label>
-                                                                            <input type="text" class="form-control" name="personalClassLocation" id="personalClassLocation" placeholder="Enter location" value="<?= $pslot["pClass_location"] ?>">
+                                                                            <input type="text" class="form-control" name="personalClassLocation" id="personalClassLocation" placeholder="Enter location" value="<?= $pslot["pClass_location"] ?>" required>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -459,7 +465,7 @@ if (isset($_SESSION['student_email'])) {
                                                 <div id="deletePersonalClassModal<?= $no ?>" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
-                                                            <form action="process_timetable.php" method="POST">
+                                                            <form action="student-crud.php" method="POST">
                                                                 <div class="modal-header">						
                                                                     <h4 class="modal-title font-weight-bold text-gray-900" id="staticBackdropLabel">Delete Personal Slot</h4>
                                                                     <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
@@ -500,7 +506,7 @@ if (isset($_SESSION['student_email'])) {
         <div id="addPersonalSlotModal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                    <form class="needs-validation" action="process_timetable.php" method="POST">
+                    <form class="needs-validation" action="student-crud.php" method="POST">
                         <div class="modal-header">						
                             <h4 class="modal-title font-weight-bold text-gray-900" id="staticBackdropLabel">Add Personal Class Slot</h4>
                             <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
@@ -509,21 +515,19 @@ if (isset($_SESSION['student_email'])) {
                             <div class="form-group">
                                 <label for="personalSlotTitle">Slot Title:</label>
                                 <input type="text" class="form-control" pattern="^.+$" name="personalSlotTitle" id="personalSlotTitle" placeholder="Enter your slot title" required>
-                                <div class="invalid-feedback">
-                                    Please provide a slot title or name.
-                                </div>
+                                <div class="invalid-feedback"></div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="personalStartTime">Start time:</label>
-                                    <input type="time" name="personalStartTime" id="personalStartTime" class="form-control" required>
+                                    <input type="time" name="personalStartTime" id="personalStartTime" min="08:00" max="18:00" class="form-control" required>
                                     <div class="invalid-feedback">
                                         Please provide start time of the slot.
                                     </div>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="personalEndTime">End time:</label>
-                                    <input type="time" name="personalEndTime" id="personalEndTime" class="form-control" required>
+                                    <label for="personalEndTime">End time:</label> <i class="fas fa-xs fa-question-circle text-info pr-1 opacity-50" data-bs-toggle="tooltip" data-bs-placement="right" title="End time of a slot cannot be same as start time"></i>
+                                    <input type="time" name="personalEndTime" id="personalEndTime" min="08:00" max="18:00" class="form-control" required>
                                     <div class="invalid-time invalid-feedback">
                                         Please provide end time of the slot.
                                     </div>
@@ -635,46 +639,6 @@ if (isset($_SESSION['student_email'])) {
             })
         </script>
 
-        <script>
-            (function () {
-                'use strict'
-
-                // Fetch all the forms we want to apply custom Bootstrap validation styles to
-                var forms = document.querySelectorAll('.needs-validation')
-
-                // Loop over them and prevent submission
-                Array.prototype.slice.call(forms)
-                    .forEach(function (form) {
-                        form.addEventListener('submit', function (event) {
-
-                            // Time validation
-                            var startTimeInput = form.querySelector('#personalStartTime');
-                            var endTimeInput = form.querySelector('#personalEndTime');
-                            var invalidFeedback = document.querySelector('.invalid-time');
-                            var startTime = startTimeInput.value;
-                            var endTime = endTimeInput.value;
-
-                            if (endTime === startTime) {
-                                endTimeInput.classList.remove('is-valid');
-                                endTimeInput.classList.add('is-invalid');
-                                isValid = false;
-                                invalidFeedback.textContent = '';
-                                invalidFeedback.textContent = 'End time cannot be equal to start time.';
-                                invalidFeedback.style.display = 'block';
-                            }
-                            
-                            if (!isValid || !form.checkValidity()) {
-                                event.preventDefault()
-                                event.stopPropagation()
-                            }
-
-                            form.classList.add('was-validated')
-                        }, false);
-
-                        
-                    });
-                })();
-        </script>
         
     </body>
 

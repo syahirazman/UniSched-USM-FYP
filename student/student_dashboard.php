@@ -17,7 +17,8 @@ if (isset($_SESSION['student_email'])) {
 <html lang="en">
     <head>
         
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <meta name="view-transition" content="same-origin"/>
         <!-- styles -->
         <link href="../css/fontawesome.min.css" rel="stylesheet">
         <link href="../css/adminstyle.min.css" rel="stylesheet">
@@ -135,7 +136,7 @@ if (isset($_SESSION['student_email'])) {
                             <div class="card shadow mb-4">
                                 <div class="card-header">
                                     <div class="d-sm-flex align-items-center justify-content-between">
-                                        <h5 class="text-gray-900 ml-2">Current Semester Timetable:</h5>
+                                        <h5 class="text-gray-900 ml-2">Current Semester Timetable</h5>
                                         <button class="btn btn-secondary d-print-none" onClick="printDiv()"><i class="fa-solid fa-print"></i></button>
                                     </div>				
                                 </div>
@@ -149,7 +150,7 @@ if (isset($_SESSION['student_email'])) {
                                     </div>
                                 </div>
                             </div>
-                            <div class="card border-left-info shadow mb-4">
+                            <div class="card border-left-info shadow mb-4 w-50">
                                 <div class="card-body">
                                     <div class="d-sm-flex align-items-center justify-content-between mb-2">
                                         <h5 class="text-gray-900">Courses taken this semester:</h5>
@@ -163,14 +164,15 @@ if (isset($_SESSION['student_email'])) {
                                             $student_id = $std['student_id'];
                                         }
                                     }
-                                    $sqlCourse = "SELECT DISTINCT tm.course_code
+                                    $sqlCourse = "SELECT DISTINCT cm.course_code, cm.course_name
                                                 FROM student_timetable st
                                                 JOIN timetable_mgmt tm ON st.slot_id = tm.slot_id
+                                                JOIN course_mgmt cm ON tm.course_code = cm.course_code
                                                 WHERE st.student_id = '$student_id'";
                                     $resultCourse = $conn->query($sqlCourse);
                                     while ($rowCourse = $resultCourse->fetch_assoc()):
                                     ?>
-                                    <div class="btn btn-info p-2 m-1 text-white w-auto"><?= $rowCourse['course_code']?></div><br>
+                                    <div class="btn btn-info p-2 m-1 text-white w-auto"><?= $rowCourse['course_code']?> - <?= $rowCourse['course_name']?></div><br>
                                     <?php endwhile; ?>
                                 </div>
                             </div>
@@ -220,7 +222,7 @@ if (isset($_SESSION['student_email'])) {
                 var originalContents = document.body.innerHTML; // Save original body content
 
                 // Replace body content with divContents
-                document.body.innerHTML = '<html><head><title>Print</title></head><body><div style="position: fixed; inset: 0; width: fit-content; height: fit-content; margin: auto;">' + divContents + '</div></body></html>';
+                document.body.innerHTML = '<html><head><title>Print</title><style type="text/css" media="print"> .print-content { width: 100%; height: 100%; overflow: hidden; margin-top: 100px; }</style></head><body><div class="print-content">' + divContents + '</div></body></html>';
 
                 // Print the page
                 window.print();

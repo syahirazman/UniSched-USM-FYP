@@ -17,7 +17,8 @@ if (isset($_SESSION['student_email'])) {
 <html lang="en">
     <head>
         
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <meta name="view-transition" content="same-origin"/>
         <!-- styles -->
         <link href="../css/fontawesome.min.css" rel="stylesheet">
         <link href="../css/adminstyle.min.css" rel="stylesheet">
