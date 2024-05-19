@@ -2,16 +2,21 @@
 <?php
 
     session_start();
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+    ob_start(); // Start output buffering
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['login-student'])) {
 
         include("connection.php");
 
         // Retrieve data from the POST request
         $email = $_POST['inputEmail'];
         $password = $_POST['inputPassword'];
-
+        $emailFound = null;
+        $passwordError = null;
         $domain = explode('@', $email)[1];
+       
 
         if ($domain === 'student.usm.my'){
             // Check if it's the first time login
@@ -20,20 +25,24 @@
 
             if ($resultStudent->num_rows > 0) {
                 // User is an existing student, check password
+                $emailFound = true;
                 $rowStudent = $resultStudent->fetch_assoc();
                 if ($rowStudent['student_pw'] == $password) {
+                    $passwordError = false;
                     // Set session variable for student email
                     $_SESSION['student_email'] = $rowStudent['student_email'];
-                    header('Location:./student/student_dashboard.php');
+                    header('Location: ./student/student_dashboard.php');
+                    exit;
                 } else {
-                    echo '<script>alert:("Login failed. Please check your credentials and login again")</script>';
-                    header('Location: login.php');
+                    $passwordError = true;
                 }
-            }else {
-                echo '<script>alert:("No records found. Please register your email."); window.location.href=register.php</script>';
+            } else {
+                $emailFound = false;
             }
         }
     }
+
+    ob_end_flush();
 
 ?>
 
@@ -43,6 +52,7 @@
     <head>
         
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="view-transition" content="same-origin"/>
         <!-- styles -->
         <link rel="stylesheet" href="./css/mainstyle.css">
         <link rel="icon" type="image/x-icon" href="./images/UniSched USM text logo.ico">
@@ -73,20 +83,22 @@
                                         <img src="./images/login_textlogo.png" class="img-fluid w-75">
                                     </div>
                                     <p class="mb-4 fs-5">Login with USM ID:</p>
-                                    <form class="main-form" action="" method="POST">
+                                    <form class="main-form needs-validation" action="" method="POST" novalidate>
                                         <div class="form-group mb-3">
                                             <label for="inputEmail" class="fw-bold">Email address</label>
-                                            <input id="inputEmail" name="inputEmail" type="email" placeholder="Email address" required="" autofocus="" class="form-control border-dark px-4 invalid">
-                                            <span class="toast-msg invalid" id="invalid-toast">
-                                                <i class="fa-solid fa-circle-exclamation"></i>
-                                                <p>Please enter the correct email format!</p>
-                                            </span>
+                                            <input id="inputEmail" name="inputEmail" type="email" class="form-control px-4" required>
+                                            <div class="invalid-email invalid-feedback">
+                                                Please provide your registered email address.
+                                            </div>
                                         </div>
                                         <div class="form-group mb-2">
                                             <label for="inputPassword" class="fw-bold">Password</label>
-                                            <input id="inputPassword" name="inputPassword" type="password" placeholder="Password" required="" class="form-control border-dark px-4">
+                                            <input id="inputPassword" name="inputPassword" type="password" class="form-control px-4" required>
+                                            <div class="invalid-feedback invalid-pw">
+                                                Please provide your password.
+                                            </div>
                                         </div>   
-                                        <button type="submit" onclick="validateEmail()" class="btn btn-block mt-4 shadow-sm fw-bolder text-center">Log in</button>
+                                        <button type="submit" name="login-student" id="login-student" class="btn btn-block mt-4 shadow-sm fw-bolder text-center">Log in</button>
                                         <p class="pt-4 text-center fs-6">New to UniSched USM? <a class="text-decoration-none font-weight-bold" href="register.php">Register</a></p>
                                     </form>
                                 </div>
@@ -100,21 +112,64 @@
 
         <!--script-->
         <script>
-            function validateEmail() {
-                var emailInput = document.getElementById("inputEmail");
-                var invalidMsg = document.getElementById("invalid-toast");
+            (function () {
+                'use strict'
 
-                // Regular expression for validating email with specified domains
-                var emailRegex = /^[a-zA-Z0-9._-]+@(student\.usm\.my|usm\.my)$/;
-                
-                if(emailRegex.test(emailInput.value)) {
-                    inputValue.setCustomValidity(" ");
-                    invalidMsg.classList.add("active")
-                    this.classList.add("invalid")
-                }
-            }
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.querySelectorAll('.needs-validation')
+
+                // Loop over them and prevent submission
+                Array.prototype.slice.call(forms)
+                    .forEach(function (form) {
+                        form.addEventListener('submit', function (event) {
+                            var isValid = true;
+                            var passwordInput = form.querySelector('#inputPassword');
+                            var passwordError =document.querySelector('.invalid-pw');
+                            var emailInput = form.querySelector('#inputEmail');
+                            var invalidFeedback = document.querySelector('.invalid-email');
+                            var emailPattern = /^[a-zA-Z0-9._%+-]+@student\.usm\.my$/;
+
+                            
+                            if (!emailPattern.test(emailInput.value)) {
+                                emailInput.classList.remove('is-valid');
+                                emailInput.classList.add('is-invalid');
+                                isValid = false;
+                                invalidFeedback.textContent = '';
+                                invalidFeedback.textContent = 'Invalid email address. Please provide USM student email address.';
+                                invalidFeedback.style.display = 'block';
+                            }
+
+                            <?php if (isset($emailFound) && $emailFound === false): ?>
+                                emailInput.classList.remove('is-valid');
+                                emailInput.classList.add('is-invalid');
+                                isValid = false;
+                                invalidFeedback.textContent = '';
+                                invalidFeedback.textContent = 'No user found for this email address. Please try again.';
+                                invalidFeedback.style.display = 'block';
+                            <?php endif; ?>
+                            
+                            <?php if ($passwordError === true): ?>
+                                passwordInput.classList.remove('is-valid');
+                                passwordInput.classList.add('is-invalid');
+                                isValid = false;
+                                passwordError.textContent = '';
+                                passwordError.textContent = 'Incorrect password. Please try again.';
+                                passwordError.style.display = 'block';
+                            <?php endif; ?>
+
+                            if (isValid === false || !form.checkValidity()) {
+                                event.preventDefault()
+                                event.stopPropagation()
+                            }
+
+                            form.classList.add('was-validated')
+                        }, false);
+
+                        
+                    });
+                })();
         </script>
-        
+
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
     </body>

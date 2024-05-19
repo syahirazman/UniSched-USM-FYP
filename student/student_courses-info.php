@@ -114,13 +114,13 @@ if (isset($_SESSION['student_email'])) {
                         <ul class="navbar-nav ml-auto">
                             <li class="nav-item dropdown no-arrow">
                                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="mr-2 d-none d-lg-inline text-gray-600 medium">Welcome, <?php echo $student_email; ?>!</span>
                                     <img class="img-profile rounded-circle" src="../images/profile_icon.png">
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
                                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                         Logout
                                     </a>
@@ -131,54 +131,13 @@ if (isset($_SESSION['student_email'])) {
 
                     <!-- Begin page content -->
                     <div class="container-fluid">
-                        <div class="d-sm-flex align-items-center justify-content-between mb-4 ml-4">
+                        <div class="d-sm-flex align-items-center justify-content-between ml-4">
                             <h1 class="h3 mb-0 text-gray-900">Courses Information</h1>
                         </div>
-                        <div class="d-sm-flex align-items-center justify-content-between mb-5 ml-4">
-                            <form method="GET">
-                                <div class="form-inline text-gray-800">
-                                    <label for="school">School</label>
-                                    <select class="form-control ml-sm-1 mr-sm-3" name="school" id="school">
-                                        <option></option>
-                                        <?php
-                                        // Retrieve course codes from the database and populate the dropdown
-                                        // check connection
-                                        if ($conn->connect_error) {
-                                            die("Connection failed: " . $conn->connect_error);
-                                        }
-
-                                        $filterSchool = "SELECT DISTINCT school FROM course_mgmt";
-                                        $resultSchool = $conn->query($filterSchool);
-                                        if (!$resultSchool) {
-                                            die("Invalid query: " . $conn->connect_error); 
-                                        }
-                                        while ($rowSchool = $resultSchool->fetch_assoc()): ?>
-                                        <option><?= $rowSchool["school"] ?></option>
-                                    <?php endwhile; ?>
-                                    </select>
-                                    <label for="semester">Semester</label>
-                                    <select class="form-control ml-sm-1" name="semester" id="semester">
-                                        <option></option>
-                                        <?php
-                                        // Retrieve course codes from the database and populate the dropdown
-                                        // check connection
-                                        if ($conn->connect_error) {
-                                            die("Connection failed: " . $conn->connect_error);
-                                        }
-
-                                        $filterSem = "SELECT DISTINCT semester FROM course_mgmt";
-                                        $resultSem = $conn->query($filterSem);
-                                        if (!$resultSem) {
-                                            die("Invalid query: " . $conn->connect_error); 
-                                        }
-                                        while ($rowSem = $resultSem->fetch_assoc()): ?>
-                                        <option><?= $rowSem["semester"] ?></option>
-                                    <?php endwhile; ?>
-                                    </select>
-                                    <input type="submit" class="btn btn-success  ml-sm-3" name="filter" value="Filter">
-                                    <input type="submit" class="btn btn-danger  ml-sm-1" name="clearfilter" value="Clear">
-                                </div>
-                            </form>
+                        <div class="d-flex flex-row-reverse mb-2">
+                            <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#filter">
+                                <i class="fa-xs fa-solid fa-filter"></i>
+                            </a>
                         </div>
 
                         <!--rows of cards-->
@@ -263,14 +222,76 @@ if (isset($_SESSION['student_email'])) {
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Ready to Log Out?</h5>
-                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <button class="close" type="button" data-bs-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
                     <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                     <div class="modal-footer">
-                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
                         <a class="btn btn-primary" href="../logout.php">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter modal -->
+        <div class="modal fade" id="filter" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Filter by:</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="GET">
+                            <div class="form-group text-gray-800">
+                                <label for="school">School</label>
+                                <select class="form-control" name="school" id="school">
+                                    <option></option>
+                                    <?php
+                                    // Retrieve course codes from the database and populate the dropdown
+                                    // check connection
+                                    if ($conn->connect_error) {
+                                        die("Connection failed: " . $conn->connect_error);
+                                    }
+                                    $filterSchool = "SELECT DISTINCT school FROM course_mgmt";
+                                    $resultSchool = $conn->query($filterSchool);
+                                    if (!$resultSchool) {
+                                        die("Invalid query: " . $conn->connect_error); 
+                                    }
+                                    while ($rowSchool = $resultSchool->fetch_assoc()): ?>
+                                    <option><?= $rowSchool["school"] ?></option>
+                                    <?php endwhile; ?>
+                                </select>
+                                <br>
+                                <label for="semester">Semester</label>
+                                <select class="form-control" name="semester" id="semester">
+                                    <option></option>
+                                    <?php
+                                    // Retrieve course codes from the database and populate the dropdown
+                                    // check connection
+                                    if ($conn->connect_error) {
+                                        die("Connection failed: " . $conn->connect_error);
+                                    }
+
+                                    $filterSem = "SELECT DISTINCT semester FROM course_mgmt";
+                                    $resultSem = $conn->query($filterSem);
+                                    if (!$resultSem) {
+                                        die("Invalid query: " . $conn->connect_error); 
+                                    }
+                                    while ($rowSem = $resultSem->fetch_assoc()): ?>
+                                    <option><?= $rowSem["semester"] ?></option>
+                                    <?php endwhile; ?>
+                                </select>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-secondary" name="clearfilter" value="Clear">Clear</button>
+                                <button type="submit" class="btn btn-primary" name="filter" value="Filter">Apply</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -279,7 +300,7 @@ if (isset($_SESSION['student_email'])) {
         <!-- jQuery Core JS -->
         <script src="https://code.jquery.com/jquery.min.js"></script>
         <!-- BootStrap JavaScript -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script> 
         <!-- jQuery Easing JS-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js" integrity="sha512-0QbL0ph8Tc8g5bLhfVzSqxe9GERORsKhIn1IrpxDAgUsbBGz/V7iSav2zzW325XGd1OMLdL4UiqRJj702IeqnQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <!-- Custom Theme JS -->
