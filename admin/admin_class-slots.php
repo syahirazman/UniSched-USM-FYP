@@ -19,6 +19,7 @@ if (isset($_SESSION['admin_email'])) {
 <html lang="en">
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="view-transition" content="same-origin"/>
         <!-- styles -->
         <link href="../css/fontawesome.min.css" rel="stylesheet">
         <link href="../css/adminstyle.min.css" rel="stylesheet">
@@ -365,15 +366,15 @@ if (isset($_SESSION['admin_email'])) {
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="starttime">Start time:</label>
-                                    <input type="time" name="starttime" id="starttime" class="form-control" required>
-                                    <div class="invalid-feedback">
+                                    <input type="time" name="starttime" id="starttime" min="8:00" max="19:00" class="form-control" required>
+                                    <div class="invalid-start invalid-feedback">
                                         Please provide start time of the class.
                                     </div>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="endtime">End time:</label> <i class="fas fa-xs fa-question-circle text-info pr-1 opacity-50" data-bs-toggle="tooltip" data-bs-placement="right" title="End time of a class cannot be same as start time"></i>
-                                    <input type="time" name="endtime" id="endtime" class="form-control" required>
-                                    <div class="invalid-time invalid-feedback">
+                                    <input type="time" name="endtime" id="endtime" min="8:00" max="19:00" class="form-control" required>
+                                    <div class="invalid-end invalid-feedback">
                                         Please provide end time of the class.
                                     </div>
                                 </div>
@@ -455,38 +456,52 @@ if (isset($_SESSION['admin_email'])) {
                 Array.prototype.slice.call(forms)
                     .forEach(function (form) {
                         form.addEventListener('submit', function (event) {
-
-                            // Custom validation for empty fields
-                            var inputs = form.querySelectorAll('input[required]');
                             var isValid = true;
-
-                            inputs.forEach(function (input) {
-                                if (input.value.trim() === '') {
-                                    input.classList.add('is-invalid');
-                                    isValid = false;
-                                    var invalidFeedback = document.getElementById('invalid-msg');
-                                } else {
-                                    input.classList.remove('is-invalid');
-                                    input.classList.add('is-valid');
-                                }
-                            });
 
                             // Time validation
                             var startTimeInput = form.querySelector('#starttime');
                             var endTimeInput = form.querySelector('#endtime');
-                            var invalidFeedback = document.querySelector('.invalid-time');
+                            var invalidStart = document.querySelector('.invalid-start');
+                            var invalidEnd = document.querySelector('.invalid-end');
                             var startTime = startTimeInput.value;
                             var endTime = endTimeInput.value;
 
-                            if (endTime === startTime) {
+                            var startDateTime = new Date('1970-01-01T' + startTime + ':00');
+                            var endDateTime = new Date('1970-01-01T' + endTime + ':00');
+                            var timeDiff = (endDateTime - startDateTime) / (1000 * 60);
+                            var timePattern = /^[0-9]{2}:[0-9]{2}$/;
+                            var validStartTimeFormat = timePattern.test(startTime) && startTime.endsWith(':00');
+
+                            if (endDateTime <= startDateTime) {
                                 endTimeInput.classList.remove('is-valid');
                                 endTimeInput.classList.add('is-invalid');
                                 isValid = false;
-                                invalidFeedback.textContent = '';
-                                invalidFeedback.textContent = 'End time cannot be equal to start time.';
-                                invalidFeedback.style.display = 'block';
+                                invalidStart.textContent = '';
+                                invalidEnd.textContent = '';
+                                invalidEnd.textContent = 'End time must be later than start time.';
+                                invalidEnd.style.display = 'block';
+                            } else if (timeDiff < 50) {
+                                endTimeInput.classList.remove('is-valid');
+                                endTimeInput.classList.add('is-invalid');
+                                isValid = false;
+                                invalidStart.textContent = '';
+                                invalidEnd.textContent = '';
+                                invalidEnd.textContent = 'End time must be at least 50 minutes after start time.';
+                                invalidEnd.style.display = 'block';
+                            } else if (!validStartTimeFormat) {
+                                startTimeInput.classList.remove('is-valid');
+                                startTimeInput.classList.add('is-invalid');
+                                isValid = false;
+                                invalidStart.textContent = '';
+                                invalidStart.textContent = 'Start time must be on the hour (e.g., 08:00, 09:00).';
+                                invalidStart.style.display = 'block';
+                            } else {
+                                startTimeInput.classList.remove('is-invalid');
+                                startTimeInput.classList.add('is-valid');
+                                endTimeInput.classList.remove('is-invalid');
+                                endTimeInput.classList.add('is-valid');
                             }
-                            
+
                             if (!isValid || !form.checkValidity()) {
                                 event.preventDefault()
                                 event.stopPropagation()
@@ -494,8 +509,6 @@ if (isset($_SESSION['admin_email'])) {
 
                             form.classList.add('was-validated')
                         }, false);
-
-                        
                     });
                 })();
         </script>

@@ -1,7 +1,9 @@
 <!-- PHP -->
 <?php
 session_start();
-
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ob_start();
 include '../connection.php';
 
 // Check if the session variable is set
@@ -14,12 +16,12 @@ if (isset($_SESSION['admin_email'])) {
     exit();
 }
 
-$exist = false;
-if ($_SERVER['REQUEST_METHOD'] == "POST") {
+
+if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['add_admin'])) {
     // Retrieve data from the POST request
     $email = $_POST['inputEmail'];
     $password = $_POST['inputPassword'];
-
+    $emailFound = null;
     $domain = explode('@', $email)[1];
 
     if ($domain === 'usm.my'){
@@ -29,6 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
         // If there is no result / row not exists in table
         if ($resultAdmin->num_rows == 0) {
+            $emailFound = false;
             $sqlAdmin = "INSERT INTO admin_login (admin_email, admin_pw) VALUES ('$email', '$password')";
             $resultAdmin = $conn->query($sqlAdmin);
             if ($resultAdmin) {
@@ -36,14 +39,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 exit();
             }
         } else {
-            $exist = true;
-            echo '<script type="application/javascript">alert("Account is already registered.");</script>';
-            exit();
+            $emailFound = true;
         }
-    } else {
-        echo '<script type="application/javascript">alert("Invalid email domain.");</script>';
-        exit();
     }
+    ob_flush();
 }
 ?>
 
@@ -209,7 +208,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                                     Student Timetables</div>
                                                 <div class="h5 mb-0 font-weight-bold text-gray-800">
                                                     <?php
-                                                        $tableCount = "SELECT timetable_id FROM student_timetable";
+                                                        $tableCount = "SELECT DISTINCT student_id FROM student_timetable";
                                                         $tableCount_run = mysqli_query($conn, $tableCount);
                                                         $tableCount_row = mysqli_num_rows($tableCount_run);
                                                         echo $tableCount_row; 
@@ -330,7 +329,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                                     }
                                                     while ($queryrow = $queryresult->fetch_assoc()): ?>
                                                     <tr>
-                                                        <td><?= $queryrow["course_code"] ?></td>
+                                                        <td class="text-center"><?= $queryrow["course_code"] ?></td>
                                                         <td class="text-center"><?= $queryrow["slot_count"] ?></td>
                                                     </tr>
                                                     <?php endwhile; ?>
@@ -354,7 +353,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <form action="" method="POST">
+                    <form class="needs-validation" action="" method="POST" novalidate>
                         <div class="modal-header">						
                             <h4 class="modal-title font-weight-bold text-gray-900" id="exampleModalLabel">Register New Admin</h4>
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -362,11 +361,17 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                         <div class="modal-body text-gray-900">
                             <div class="form-group mb-3">
                                 <label for="inputEmail" class="fw-bold">Email address</label>
-                                <input id="inputEmail" name="inputEmail" type="email" placeholder="Email address" required="" autofocus="" class="form-control border-dark px-4">
+                                <input id="inputEmail" name="inputEmail" type="email" class="form-control px-4" required>
+                                <div class="invalid-email invalid-feedback">
+                                    Please provide a valid email address.
+                                </div>
                             </div>
                             <div class="form-group mb-2">
                                 <label for="inputPassword" class="fw-bold">Password</label>
-                                <input id="inputPassword" name="inputPassword" type="password" placeholder="Password" required="" class="form-control border-dark px-4">
+                                <input id="inputPassword" name="inputPassword" type="password" class="form-control px-4" required>
+                                <div class="invalid-feedback invalid-pw">
+                                    Please provide a valid password.
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -417,6 +422,67 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             new DataTable('#slotCountTable');
         </script>
 
+        <script>
+            (function () {
+                'use strict'
+
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.querySelectorAll('.needs-validation')
+
+                // Loop over them and prevent submission
+                Array.prototype.slice.call(forms)
+                    .forEach(function (form) {
+                        form.addEventListener('submit', function (event) {
+                            var isValid = true;
+                            var passwordInput = form.querySelector('#inputPassword');
+                            var passwordError =document.querySelector('.invalid-pw');
+                            var emailInput = form.querySelector('#inputEmail');
+                            var invalidFeedback = document.querySelector('.invalid-email');
+                            var emailPattern = /^[a-zA-Z0-9._%+-]+@usm\.my$/;
+
+                            if (!emailPattern.test(emailInput.value)) {
+                                emailInput.classList.remove('is-valid');
+                                emailInput.classList.add('is-invalid');
+                                isValid = false;
+                                invalidFeedback.textContent = '';
+                                invalidFeedback.textContent = 'Invalid email address. Please provide USM email address.';
+                                invalidFeedback.style.display = 'block';
+                            } else if (passwordInput.value.length > 15) {
+                                passwordInput.classList.remove('is-valid');
+                                passwordInput.classList.add('is-invalid');
+                                isValid = false;
+                                passwordError.textContent = '';
+                                passwordError.textContent = 'Password must be less than 15 characters.';
+                                passwordError.style.display = 'block';
+                            } else {
+                                emailInput.classList.remove('is-invalid');
+                                emailInput.classList.add('is-valid');
+                                passwordInput.classList.remove('is-invalid');
+                                passwordInput.classList.add('is-valid');
+                            }
+
+                            <?php if (isset($emailFound) && $emailFound === true): ?>
+                                emailInput.classList.remove('is-valid');
+                                emailInput.classList.add('is-invalid');
+                                isValid = false;
+                                invalidFeedback.textContent = '';
+                                invalidFeedback.textContent = 'Email address already exists. Please use another email address.';
+                                invalidFeedback.style.display = 'block';
+                            <?php endif;?>
+                            
+                            
+                            if (isValid === false || !form.checkValidity()) {
+                                event.preventDefault()
+                                event.stopPropagation()
+                            }
+
+                            form.classList.add('was-validated')
+                        }, false);
+
+                        
+                    });
+                })();
+        </script>
 
     </body>
 

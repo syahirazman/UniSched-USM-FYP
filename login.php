@@ -27,7 +27,7 @@
                 // User is an existing student, check password
                 $emailFound = true;
                 $rowStudent = $resultStudent->fetch_assoc();
-                if ($rowStudent['student_pw'] == $password) {
+                if ($rowStudent['student_pw'] === $password) {
                     $passwordError = false;
                     // Set session variable for student email
                     $_SESSION['student_email'] = $rowStudent['student_email'];

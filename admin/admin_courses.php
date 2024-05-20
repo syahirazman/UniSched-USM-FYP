@@ -11,7 +11,7 @@ if (isset($_SESSION['admin_email'])) {
 } else {
     // Redirect to the login page if the session variable is not set
     header('Location: admin-login.php');
-    exit();
+    exit;
 }
 
 ?>
@@ -20,6 +20,7 @@ if (isset($_SESSION['admin_email'])) {
 <html lang="en">
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="view-transition" content="same-origin"/>
         <!-- styles -->
         <link href="../css/fontawesome.min.css" rel="stylesheet">
         <link href="../css/adminstyle.min.css" rel="stylesheet">
@@ -332,7 +333,7 @@ if (isset($_SESSION['admin_email'])) {
                                 <div class="form-group col-md-6">
                                     <label for="coursecode">Course Code:</label>
                                     <input type="text" name="coursecode" id="coursecode" pattern="^.+$" class="form-control" required>
-                                    <div class="invalid-feedback">
+                                    <div class="course-exist invalid-feedback">
                                         Please provide a course code.
                                     </div>
                                 </div>
@@ -380,7 +381,8 @@ if (isset($_SESSION['admin_email'])) {
                                 </div>
                                 <div class="col-md-4">
                                     <label for="lectureremail">Email:</label>
-                                    <input type="email" name="lectureremail" id="lectureremail" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" class="form-control" required>
+                                    <input type="email" name="lectureremail" id="lectureremail" pattern="^[a-zA-Z0-9._%+-]+@usm\.my$" class="form-control" required>
+                                    <div class="invalid-email invalid-feedback"></div>
                                 </div>
                                 <div class="col-sm-1">
                                     <label for="lecturerroom">Room:</label>
@@ -459,30 +461,32 @@ if (isset($_SESSION['admin_email'])) {
                     .forEach(function (form) {
                         form.addEventListener('submit', function (event) {
 
-                            // Custom validation for empty fields
-                            var inputs = form.querySelectorAll('input[required]');
                             var isValid = true;
+                            var emailLect = form.querySelector('#lectureremail');
+                            var invalidEmail = document.querySelector('.invalid-email');
+                            var emailPattern = /^[a-zA-Z0-9._%+-]+@usm\.my$/;
 
-                            inputs.forEach(function (input) {
-                                if (input.value.trim() === '') {
-                                    input.classList.add('is-invalid');
-                                    isValid = false;
-                                    var invalidFeedback = document.getElementById('invalid-msg');
-                                } else {
-                                    input.classList.remove('is-invalid');
-                                    input.classList.add('is-valid');
-                                }
-                            });
+                            var courseCodeInput = form.querySelector('#coursecode');
+                            var invalidCourseCode = document.querySelector('.course-exist');
+                            var courseCode = courseCodeInput.value.trim();
+
+
+                            if (!emailPattern.test(emailLect.value)) {
+                                emailLect.classList.remove('is-valid');
+                                emailLect.classList.add('is-invalid');
+                                isValid = false;
+                                invalidEmail.textContent = '';
+                                invalidEmail.textContent = 'Invalid email address. Please provide USM email address.';
+                                invalidEmail.style.display = 'block';
+                            } 
                             
                             if (!isValid || !form.checkValidity()) {
-                            event.preventDefault()
-                            event.stopPropagation()
+                                event.preventDefault()
+                                event.stopPropagation()
                             }
 
                             form.classList.add('was-validated')
                         }, false);
-
-                        
                     });
                 })();
         </script>

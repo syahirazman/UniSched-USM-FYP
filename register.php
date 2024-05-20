@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             if ($resultStudent) {
                 $_SESSION['student_email'] = $_POST['inputEmail'];
                 header('Location:./student/student_dashboard.php');
-                exit();
+                exit;
             }
         } else {
             $emailFound = true;
@@ -128,7 +128,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                 invalidFeedback.style.display = 'block';
                             }
 
-                            <?php if (isset($emailFound) && $emailFound === false): ?>
+                            <?php if (isset($emailFound) && $emailFound === true): ?>
                                 emailInput.classList.remove('is-valid');
                                 emailInput.classList.add('is-invalid');
                                 isValid = false;

@@ -24,12 +24,11 @@
                 // User is an existing admin, check password
                 $emailFound = true;
                 $row = $resultAdmin->fetch_assoc();
-                if ($row['admin_pw'] == $password) {
+                if ($row['admin_pw'] === $password) {
                     $passwordError = false;
                     // Set session variable for admin email
                     $_SESSION['admin_email'] = $row['admin_email'];
                     header('Location: ./admin/admin_dashboard.php');
-                    exit;
                 } else {
                     $passwordError = true;
                     
@@ -39,8 +38,6 @@
             }
         }
     }
-    ob_end_flush();
-
 ?>
 
 <!--html-->
