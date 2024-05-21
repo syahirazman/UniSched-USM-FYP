@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="view-transition" content="same-origin"/>
+        <!-- styles -->
+        <link rel="stylesheet" href="./css/mainstyle.css">
+        <link href="./css/adminstyle.min.css" rel="stylesheet">
+        <link href="./css/adminstyle.css" rel="stylesheet">
+        <link href="./css/studentstyle.css" rel="stylesheet">
+        <link rel="icon" type="image/x-icon" href="./images/UniSched USM text logo.ico">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+    
+        <title>UniSched USM: Timetable Management System</title>
+    </head>
+    <body id="page-top">
+        <div id="wrapper">
+            <div id="content-wrapper">
+                <nav class="navbar navbar-expand navbar-light bg-primary topbar static-top shadow">
+
+                    <div class="d-none d-sm-inline-block mr-auto ml-md-3 my-2 my-md-0 mw-100">
+                        <a class="navbar-brand" href="#page-top"><img src="./images/login_textlogo.png" alt="..." /></a>
+                    </div>
+                    
+                    <!-- Topbar Profile-->
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle text-white medium" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" 
+                            aria-haspopup="true" aria-expanded="false" style="font-size: 19px !important; font-weight: 600 !important;">
+                                <i class="fa fa-user fa-sm fa-fw mr-2" aria-hidden="true"></i>
+                                Login
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                                <a class="dropdown-item text-gray-800 py-2" href="./login.php">
+                                    <i class="fa fa-graduation-cap fa-sm fa-fw mr-2" aria-hidden="true"></i>
+                                    Login as student
+                                </a>
+                                <a class="dropdown-item text-gray-800 py-2" href="./admin-login.php">
+                                    <i class="fa-solid fa-user-tie fa-sm fa-fw mr-2" aria-hidden="true"></i>
+                                    Login as admin
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="container-fluid">
+                    <div id="landing-header" class="row mb-5 ml-2">
+                        <div class="my-auto ml-5 col">
+                            <h2 class="text-gray-900 lh-base">Welcome to</h2>
+                            <h1 class="display-3 lh-base" style="color:#3F125B !important; font-weight: 700 !important;">UniSched USM</h1>
+                            <h2 class="lh-base" style="color:#FF8617 !important; font-weight: 600 !important;">Class Timetable Management System</h2>
+                        </div>
+                        <div class="header-img img-fluid col"></div>
+                    </div>
+
+                    <div id="about-me">
+                        <div class="card p-4 mb-5">
+                            <div class="card-body">
+                                <div class="text-center mb-4">
+                                    <h3 class="text-primary mb-4" style="font-weight: 700 !important;">About Us</h3>
+                                    <p class="text-gray-700" style="font-size: 19px !important;">UniSched USM is the ultimate scheduling solution designed to meet the unique needs of all USM students.
+                                        We aim to make your <br>academic planning simple and efficient, so you can focus on your studies and make the most of your university experience.</p><br>
+                                    <p class="text-gray-700" style="font-size: 19px !important;">Our platform offers a comprehensive suite of features to streamline your academic journey:</p>
+                                </div>
+                                <div class="d-flex justify-content-center">
+                                    <div class="card border-light bg-primary rounded-0 pt-3 mx-3" style="width: 280px; height: 180px;">
+                                        <div class="card-body text-center text-white">
+                                            <h5 class="h5" style="font-weight: 500 !important;">Personalized Timetables</h5>
+                                            <p style="font-size: 14px !important;">Effortlessly create class timetables <br>with class slots for multiple courses as <br>shown in the school's master schedule.</p>
+                                        </div>
+                                    </div>
+                                    <div class="card border-light bg-primary rounded-0 pt-4 mx-3" style="width: 280px; height: 180px;">
+                                        <div class="card-body text-center text-white">
+                                            <h5 class="h5" style="font-weight: 500 !important;">Flexible Adjustments</h5>
+                                            <p style="font-size: 14px !important;">Add, edit, or remove slots for tutorials <br>and lab sessions to suit your schedule.</p>
+                                        </div>
+                                    </div>
+                                    <div class="card border-light bg-primary rounded-0 pt-3 mx-3" style="width: 280px; height: 180px;">
+                                        <div class="card-body text-center text-white">
+                                            <h5 class="h5" style="font-weight: 500 !important;">Conflict Alerts</h5>
+                                            <p style="font-size: 14px !important;">Receive real-time alerts to avoid <br>scheduling conflicts and ensure a <br>smooth timetable coordination.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-center mt-3 mb-3">
+                                    <div class="card border-light bg-primary rounded-0 pt-4 mx-3" style="width: 280px; height: 180px;">
+                                        <div class="card-body text-center text-white">
+                                            <h5 class="h5" style="font-weight: 500 !important;">Downloadable Timetables</h5>
+                                            <p style="font-size: 14px !important;">Save and print your finalized <br>timetables in convenient <br>PDF formats.</p>
+                                        </div>
+                                    </div>
+                                    <div class="card border-light bg-primary rounded-0 pt-4 mx-3" style="width: 280px; height: 180px;">
+                                        <div class="card-body text-center text-white">
+                                            <h5 class="h5" style="font-weight: 500 !important;">Course and Lecturer Information</h5>
+                                            <p style="font-size: 14px !important;">Access essential information about <br>courses in USM and the <br>lecturers in charge.</p>
+                                        </div>
+                                    </div>
+                                    <div class="card border-light bg-primary rounded-0 pt-4 mx-3" style="width: 280px; height: 180px;">
+                                        <div class="card-body text-center text-white">
+                                            <h5 class="h5" style="font-weight: 500 !important;">Campus Map</h5>
+                                            <p style="font-size: 14px !important;">Easily navigate the USM campus <br>with our static map feature.</p>
+                                        </div>
+                                    </div>
+                                </div>
+    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="bg-body-tertiary text-lg-start" style="background-color: #C2C8EE;">
+            <div id="contact" class="py-5">
+                <div class="text-center">
+                    <h3 class="text-white mb-4" style="font-weight: 700 !important;">Contact Us</h3>
+                </div>
+                <div class="text-center text-white" style="font-size: 20px;">
+                    <i class="fa fa-lg fa-envelope mr-3"></i>
+                    <i class="fa fa fa-phone-alt"></i>
+                </div>
+            </div>
+        </footer>
+
+        <!-- jQuery Core JS -->
+        <script src="https://code.jquery.com/jquery.min.js"></script>
+        <!-- BootStrap JavaScript -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script> 
+        <!-- jQuery Easing JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js" integrity="sha512-0QbL0ph8Tc8g5bLhfVzSqxe9GERORsKhIn1IrpxDAgUsbBGz/V7iSav2zzW325XGd1OMLdL4UiqRJj702IeqnQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <!-- Custom Theme JS -->
+        <script src="../custom-js/script-all.min.js"></script>
+    </body>
+</html>

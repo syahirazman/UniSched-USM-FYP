@@ -32,7 +32,7 @@ if (isset($_SESSION['admin_email'])) {
         <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
 
 
-        <title>UniSched USM: Courses Management</title>
+        <title>UniSched USM: Course Information Management</title>
     </head>
     <body id="page-top">
         <div id="wrapper">

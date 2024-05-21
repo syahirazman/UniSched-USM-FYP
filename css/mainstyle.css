@@ -1,3 +1,7 @@
+html {
+    scrollbar-width: thin;
+}
+
 .login,
 .image {
   min-height: 100vh;
@@ -42,3 +46,18 @@ input[required].is-invalid {
     opacity: 0.8;
 }
 
+#landing-header {
+    height: 450px;
+}
+
+.header-img {
+    background-image: url(../images/3d-header.png);
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    background-position: center center;
+    background-size: cover;
+}
+
+.navbar-brand img {
+    height: 2rem;
+}

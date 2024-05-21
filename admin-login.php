@@ -55,7 +55,7 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
     
-        <title>UniSched USM: USM Student Timetable Management</title>
+        <title>UniSched USM: Admin Login</title>
     </head>
     <body>
         <div class="container-fluid">

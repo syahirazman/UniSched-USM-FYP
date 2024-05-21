@@ -31,7 +31,7 @@ if (isset($_SESSION['student_email'])) {
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
 
-        <title>UniSched USM: Student Information</title>
+        <title>UniSched USM: Course Information</title>
     </head>
     <body id="page-top">
         <div id="wrapper">
