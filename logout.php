@@ -8,6 +8,6 @@ unset($_SESSION['student_email']);
 session_destroy();
 
 // Redirect to the login page (change the URL as needed)
-header('Location: login.php');
+header('Location: index.html');
 exit();
 ?>

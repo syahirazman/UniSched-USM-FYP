@@ -8,6 +8,6 @@ unset($_SESSION['admin_email']);
 session_destroy();
 
 // Redirect to the login page (change the URL as needed)
-header('Location: admin-login.php');
+header('Location: index.html');
 exit();
 ?>
