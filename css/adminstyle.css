@@ -1,3 +1,7 @@
+html {
+    scrollbar-width: thin;
+}
+
 #wrapper #content-wrapper{
     background-color: #EAECF9;
 }
