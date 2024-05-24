@@ -61,6 +61,17 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['add_admin'])) {
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
         <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
 
+        <!-- jQuery Core JS -->
+        <script src="https://code.jquery.com/jquery.min.js"></script>
+        <!-- BootStrap JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+        <!-- jQuery Easing JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js" integrity="sha512-0QbL0ph8Tc8g5bLhfVzSqxe9GERORsKhIn1IrpxDAgUsbBGz/V7iSav2zzW325XGd1OMLdL4UiqRJj702IeqnQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <!-- Custom Theme JS -->
+        <script src="../custom-js/script-all.min.js"></script>
+        <!-- Script to generate table using DataTable-->
+        <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+
         <title>UniSched USM: Admin Dashboard</title>
     </head>
     <body id="page-top">
@@ -404,20 +415,10 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['add_admin'])) {
         </div>
 
 
-        <!-- jQuery Core JS -->
-        <script src="https://code.jquery.com/jquery.min.js"></script>
-        <!-- BootStrap JavaScript -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
-        <!-- jQuery Easing JS-->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js" integrity="sha512-0QbL0ph8Tc8g5bLhfVzSqxe9GERORsKhIn1IrpxDAgUsbBGz/V7iSav2zzW325XGd1OMLdL4UiqRJj702IeqnQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <!-- Custom Theme JS -->
-        <script src="../custom-js/script-all.min.js"></script>
-
-        <!-- Script to generate table using DataTable-->
-        <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
         <script>
             new DataTable('#courseCountTable');
         </script>
+
         <script>
             new DataTable('#slotCountTable');
         </script>
