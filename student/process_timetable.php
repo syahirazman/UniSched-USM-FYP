@@ -40,18 +40,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['coursecode']) && isset(
 }
 
 
-// function to detect conflicting classes by checking overlapping timeslots between classes in the array, and also the saved class slots
+
 function detectConflicts ($conn, $slots, $student_id) {
     $conflictingCourses = [];
 
-    // detect conflicts between classes within the array
     foreach ($slots as $slot1) {
         foreach ($slots as $slot2) {
             if ($slot1['slot_id'] != $slot2['slot_id']) {
-                if ($slot1['class_day'] == $slot2['class_day'] && (($slot1['start_time'] == $slot2['start_time'] 
-                || $slot1['end_time'] == $slot2['end_time'])) ) {
+                if ($slot1['class_day'] == $slot2['class_day'] && 
+                (($slot1['start_time'] == $slot2['start_time'] || $slot1['end_time'] == $slot2['end_time'])) ) {
                     
-                    // Store conflicting course codes
                     $conflictingCourses[] = [
                         'course1' => $slot1['course_code'],
                         'course2' => $slot2['course_code'],
@@ -65,7 +63,6 @@ function detectConflicts ($conn, $slots, $student_id) {
         }
     }
 
-    // detect conflicts between class in array and saved class in student_timetable table
     $sql = "SELECT tm.course_code, tm.class_day, tm.start_time, tm.end_time
             FROM student_timetable st
             JOIN timetable_mgmt tm ON st.slot_id = tm.slot_id
