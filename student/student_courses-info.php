@@ -183,10 +183,13 @@ if (isset($_SESSION['student_email'])) {
                             ?>
                             <div class="col-xl-4 col-md-6 mb-3">
                                 <div class="card shadow mb-3">
-                                    <a href="#" class="d-block card-header link-underline-opacity-0" data-bs-toggle="collapse" data-bs-target="#collapseCard<?= $row["course_code"] ?>"
+                                    <a href="#" class="card-header text-decoration-none d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#collapseCard<?= $row["course_code"] ?>"
                                         role="button" aria-expanded="true" aria-controls="collapseCard<?= $row["course_code"] ?>">
-                                        <h5 class="m-0 font-weight-bold text-primary"><?= $row["course_code"] ?></h5>
-                                        <h6 class="m-0 pt-3 font-weight-bold text-primary"><?= $row["course_name"] ?></h6>
+                                        <div>
+                                            <h5 class="m-0 font-weight-bold text-primary"><?= $row["course_code"] ?></h5>
+                                            <h6 class="m-0 pt-3 font-weight-bold text-primary"><?= $row["course_name"] ?></h6>
+                                        </div>
+                                        <i class="fa fa-solid fa-chevron-left float-right"></i>
                                     </a>
                                     <div class="collapse" id="collapseCard<?= $row["course_code"] ?>">
                                         <div class="card-body">

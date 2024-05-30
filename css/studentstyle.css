@@ -46,3 +46,10 @@ html {
     display:none !important;
 }
 
+.card .card-header .fa {
+    transition: .3s transform ease-in-out !important;
+}
+
+.card .card-header .collapsed .fa {
+    transform: rotate(90deg) !important;
+}
