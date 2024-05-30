@@ -74,11 +74,11 @@ if (isset($_SESSION['student_email'])) {
                 <hr class="sidebar-divider">
                 <!-- nav 4 -->
                 <li class="nav-item">
-                    <a class="nav-link ml-1 collapsed" href="#" data-toggle="collapse" data-target="#collapseMap"
+                    <a class="nav-link ml-1 collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseMap"
                     aria-expanded="true" aria-controls="collapseMap">
                         <i class="fas fa-fw fa-map-marker-alt"></i>
                         <span>Campus Map</span></a>
-                    <div id="collapseMap" class="collapse" aria-labelledby="headingMap" data-parent="#accordionSidebar">
+                    <div id="collapseMap" class="collapse" aria-labelledby="headingMap" data-bs-parent="#accordionSidebar">
                     <div class="bg-primary py-2 collapse-inner rounded">
                         <a class="collapse-item text-white" href="../student/map_main-campus.php">Main Campus</a>
                         <a class="collapse-item text-white" href="../student/map_eng-campus.php">Engineering Campus</a>
@@ -104,20 +104,6 @@ if (isset($_SESSION['student_email'])) {
                         <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                             <i class="fa fa-bars"></i>
                         </button>
-
-                        <!-- Topbar Search -->
-                        <form
-                            class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                            <div class="input-group">
-                                <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                    aria-label="Search" aria-describedby="basic-addon2">
-                                <div class="input-group-append">
-                                    <button class="btn btn-primary" type="button">
-                                        <i class="fas fa-search fa-sm"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
 
                         <!-- Topbar Profile-->
                         <ul class="navbar-nav ml-auto">
@@ -197,7 +183,7 @@ if (isset($_SESSION['student_email'])) {
                             ?>
                             <div class="col-xl-4 col-md-6 mb-3">
                                 <div class="card shadow mb-3">
-                                    <a href="#collapseCard<?= $row["course_code"] ?>" class="d-block card-header" data-toggle="collapse"
+                                    <a href="#" class="d-block card-header link-underline-opacity-0" data-bs-toggle="collapse" data-bs-target="#collapseCard<?= $row["course_code"] ?>"
                                         role="button" aria-expanded="true" aria-controls="collapseCard<?= $row["course_code"] ?>">
                                         <h5 class="m-0 font-weight-bold text-primary"><?= $row["course_code"] ?></h5>
                                         <h6 class="m-0 pt-3 font-weight-bold text-primary"><?= $row["course_name"] ?></h6>
