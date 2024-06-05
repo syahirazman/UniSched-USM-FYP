@@ -189,7 +189,6 @@ if (isset($_SESSION['student_email'])) {
                                             <h5 class="m-0 font-weight-bold text-primary"><?= $row["course_code"] ?></h5>
                                             <h6 class="m-0 pt-3 font-weight-bold text-primary"><?= $row["course_name"] ?></h6>
                                         </div>
-                                        <i class="fa fa-solid fa-chevron-left float-right"></i>
                                     </a>
                                     <div class="collapse" id="collapseCard<?= $row["course_code"] ?>">
                                         <div class="card-body">
