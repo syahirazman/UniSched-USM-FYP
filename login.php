@@ -10,8 +10,8 @@
         // Retrieve data from the POST request
         $email = $_POST['inputEmail'];
         $password = $_POST['inputPassword'];
-        $emailFound = null;
-        $passwordError = null;
+        $emailFound = false;
+        $passwordError = true;
         $domain = explode('@', $email)[1];
        
 
@@ -38,6 +38,66 @@
             }
         }
     }
+
+    echo "<script>
+            document.addEventListener('DOMContentLoaded', function () {
+                'use strict'
+
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.querySelectorAll('.needs-validation')
+
+                // Loop over them and prevent submission
+                Array.prototype.slice.call(forms)
+                    .forEach(function (form) {
+                        form.addEventListener('submit', function (event) {
+                            var isValid = true;
+                            var emailFound = " . $emailFound . ";
+                            var pwError = " . $passwordError . ";
+                            var passwordInput = form.querySelector('#inputPassword');
+                            var passwordError = document.querySelector('.invalid-pw');
+                            var emailInput = form.querySelector('#inputEmail');
+                            var invalidFeedback = document.querySelector('.invalid-email');
+                            var emailPattern = /^[a-zA-Z0-9._%+-]+@student\.usm\.my$/;
+
+                            if (!emailPattern.test(emailInput.value)) {
+                                emailInput.classList.remove('is-valid');
+                                emailInput.classList.add('is-invalid');
+                                isValid = false;
+                                invalidFeedback.textContent = '';
+                                invalidFeedback.textContent = 'Invalid email address. Please provide USM email address.';
+                                invalidFeedback.style.display = 'block';
+                            }
+
+                            if (emailFound === false) {
+                                emailInput.classList.remove('is-valid');
+                                emailInput.classList.add('is-invalid');
+                                isValid = false;
+                                invalidFeedback.textContent = '';
+                                invalidFeedback.textContent = 'No user found for this email address. Please try again.';
+                                invalidFeedback.style.display = 'block';
+                            }
+
+                            if (pwError === true) {
+                                passwordInput.classList.remove('is-valid');
+                                passwordInput.classList.add('is-invalid');
+                                isValid = false;
+                                passwordError.textContent = '';
+                                passwordError.textContent = 'Incorrect password. Please try again.';
+                                passwordError.style.display = 'block';
+                            }                            
+
+                            if (isValid === false || !form.checkValidity()) {
+                                event.preventDefault()
+                                event.stopPropagation()
+                            }
+
+                            form.classList.add('was-validated')
+                        }, false);
+
+                        
+                    });
+                });
+        </script>";
 
 ?>
 
@@ -116,7 +176,7 @@
 
         <!--script-->
         
-        <script>
+        <!--<script>
             (function () {
                 'use strict'
 
@@ -144,23 +204,6 @@
                                 invalidFeedback.style.display = 'block';
                             }
 
-                            <?php if (isset($emailFound) && $emailFound === false): ?>
-                                emailInput.classList.remove('is-valid');
-                                emailInput.classList.add('is-invalid');
-                                isValid = false;
-                                invalidFeedback.textContent = '';
-                                invalidFeedback.textContent = 'No user found for this email address. Please try again.';
-                                invalidFeedback.style.display = 'block';
-                            <?php endif; ?>
-                            
-                            <?php if ($passwordError === true): ?>
-                                passwordInput.classList.remove('is-valid');
-                                passwordInput.classList.add('is-invalid');
-                                isValid = false;
-                                passwordError.textContent = '';
-                                passwordError.textContent = 'Incorrect password. Please try again.';
-                                passwordError.style.display = 'block';
-                            <?php endif; ?>
 
                             if (isValid === false || !form.checkValidity()) {
                                 event.preventDefault()
@@ -173,6 +216,6 @@
                         
                     });
                 })();
-        </script>
+        </script>-->
     </body>
 </html>

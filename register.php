@@ -11,6 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Retrieve data from the POST request
     $email = $_POST['inputEmail'];
     $password = $_POST['inputPassword'];
+    $emailFound = true;
 
     $domain = explode('@', $email)[1];
 
@@ -27,13 +28,71 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             if ($resultStudent) {
                 $_SESSION['student_email'] = $_POST['inputEmail'];
                 header('Location:./student/student_dashboard.php');
-                exit;
             }
         } else {
             $emailFound = true;
         }
     } 
 }
+
+        echo "<script>
+            document.addEventListener('DOMContentLoaded', function () {
+                'use strict'
+
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.querySelectorAll('.needs-validation')
+
+                // Loop over them and prevent submission
+                Array.prototype.slice.call(forms)
+                    .forEach(function (form) {
+                        form.addEventListener('submit', function (event) {
+                            var isValid = true;
+                            var emailFound = " . $emailFound . ";
+                            var passwordInput = form.querySelector('#inputPassword');
+                            var passwordError = document.querySelector('.invalid-pw');
+                            var emailInput = form.querySelector('#inputEmail');
+                            var invalidFeedback = document.querySelector('.invalid-email');
+                            var emailPattern = /^[a-zA-Z0-9._%+-]+@student\.usm\.my$/;
+
+                            if (!emailPattern.test(emailInput.value)) {
+                                emailInput.classList.remove('is-valid');
+                                emailInput.classList.add('is-invalid');
+                                isValid = false;
+                                invalidFeedback.textContent = '';
+                                invalidFeedback.textContent = 'Invalid email address. Please provide USM email address.';
+                                invalidFeedback.style.display = 'block';
+                            }
+
+                            if (emailFound === true) {
+                                emailInput.classList.remove('is-valid');
+                                emailInput.classList.add('is-invalid');
+                                isValid = false;
+                                invalidFeedback.textContent = '';
+                                invalidFeedback.textContent = 'Email address already exists. Please use another email address.';
+                                invalidFeedback.style.display = 'block';
+                            }
+
+                           if (passwordInput.value.length > 15) {
+                                passwordInput.classList.remove('is-valid');
+                                passwordInput.classList.add('is-invalid');
+                                isValid = false;
+                                passwordError.textContent = '';
+                                passwordError.textContent = 'Password must be less than 15 characters.';
+                                passwordError.style.display = 'block';
+                            }                            
+
+                            if (isValid === false || !form.checkValidity()) {
+                                event.preventDefault()
+                                event.stopPropagation()
+                            }
+
+                            form.classList.add('was-validated')
+                        }, false);
+
+                        
+                    });
+                });
+        </script>";
 ?>
 
 <!--html-->
@@ -110,7 +169,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         </div>
 
         <!--script-->
-        <script>
+        <!--<script>
             (function () {
                 'use strict'
 
@@ -137,15 +196,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                 invalidFeedback.style.display = 'block';
                             }
 
-                            <?php if (isset($emailFound) && $emailFound === true): ?>
-                                emailInput.classList.remove('is-valid');
-                                emailInput.classList.add('is-invalid');
-                                isValid = false;
-                                invalidFeedback.textContent = '';
-                                invalidFeedback.textContent = 'Email address already exists. Please use another email address.';
-                                invalidFeedback.style.display = 'block';
-                            <?php endif;?>
-
                             if (passwordInput.value.length > 15) {
                                 passwordInput.classList.remove('is-valid');
                                 passwordInput.classList.add('is-invalid');
@@ -166,6 +216,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         
                     });
                 })();
-        </script>
+        </script>-->
     </body>
 </html>
