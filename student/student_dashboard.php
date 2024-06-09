@@ -206,17 +206,19 @@ if (isset($_SESSION['student_email'])) {
         <script> 
             function printDiv() { 
                 var divContents = document.getElementById("timetable").innerHTML; 
-                var originalContents = document.body.innerHTML;
                 var originalContents = document.body.innerHTML; // Save original body content
+                var oriTitle = document.title;
 
                 // Replace body content with divContents
                 document.body.innerHTML = '<html><head><title>Print</title><style type="text/css" media="print"> .print-content { width: 100%; height: 100%; overflow: hidden; margin-top: 100px; }</style></head><body><div class="print-content">' + divContents + '</div></body></html>';
+                document.title = 'My Semester Timetable';
 
                 // Print the page
                 window.print();
 
                 // Restore original body content
                 document.body.innerHTML = originalContents;
+                document.title =oriTitle;
             } 
         </script>
 
