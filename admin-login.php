@@ -6,10 +6,11 @@
     if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['login-admin'])) {
         include("connection.php");
         // Retrieve data from the POST request
+        $emailFound = false;
+        $passwordError = true;
         $email = $_POST['inputEmail'];
         $password = $_POST['inputPassword'];
-        $emailFound = null;
-        $passwordError = null;
+        
         $domain = explode('@', $email)[1];
         
         if ($domain === 'usm.my'){
@@ -35,6 +36,66 @@
             }
         }
     }
+
+    echo "<script>
+            document.addEventListener('DOMContentLoaded', function () {
+                'use strict'
+
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.querySelectorAll('.needs-validation')
+
+                // Loop over them and prevent submission
+                Array.prototype.slice.call(forms)
+                    .forEach(function (form) {
+                        form.addEventListener('submit', function (event) {
+                            var isValid = true;
+                            var emailFound = " . $emailFound . ";
+                            var pwError = " . $passwordError . ";
+                            var passwordInput = form.querySelector('#inputPassword');
+                            var passwordError = document.querySelector('.invalid-pw');
+                            var emailInput = form.querySelector('#inputEmail');
+                            var invalidFeedback = document.querySelector('.invalid-email');
+                            var emailPattern = /^[a-zA-Z0-9._%+-]+@usm\.my$/;
+
+                            if (!emailPattern.test(emailInput.value)) {
+                                emailInput.classList.remove('is-valid');
+                                emailInput.classList.add('is-invalid');
+                                isValid = false;
+                                invalidFeedback.textContent = '';
+                                invalidFeedback.textContent = 'Invalid email address. Please provide USM email address.';
+                                invalidFeedback.style.display = 'block';
+                            }
+
+                            if (emailFound === false) {
+                                emailInput.classList.remove('is-valid');
+                                emailInput.classList.add('is-invalid');
+                                isValid = false;
+                                invalidFeedback.textContent = '';
+                                invalidFeedback.textContent = 'No user found for this email address. Please try again.';
+                                invalidFeedback.style.display = 'block';
+                            }
+
+                            if (pwError === true) {
+                                passwordInput.classList.remove('is-valid');
+                                passwordInput.classList.add('is-invalid');
+                                isValid = false;
+                                passwordError.textContent = '';
+                                passwordError.textContent = 'Incorrect password. Please try again.';
+                                passwordError.style.display = 'block';
+                            }                            
+
+                            if (isValid === false || !form.checkValidity()) {
+                                event.preventDefault()
+                                event.stopPropagation()
+                            }
+
+                            form.classList.add('was-validated')
+                        }, false);
+
+                        
+                    });
+                });
+        </script>";
 ?>
 
 <!--html-->
@@ -110,8 +171,8 @@
         </div>
 
         <!--script-->
-        <script>
-            (function () {
+        <!-- <script>
+            document.addEventListener('DOMContentLoaded', function () {
                 'use strict'
 
                 // Fetch all the forms we want to apply custom Bootstrap validation styles to
@@ -122,6 +183,8 @@
                     .forEach(function (form) {
                         form.addEventListener('submit', function (event) {
                             var isValid = true;
+                            var emailFound = <?php //echo json_encode($emailFound); ?>;
+                            var pwError = <?php //echo json_encode($passwordError); ?>;
                             var passwordInput = form.querySelector('#inputPassword');
                             var passwordError =document.querySelector('.invalid-pw');
                             var emailInput = form.querySelector('#inputEmail');
@@ -137,23 +200,23 @@
                                 invalidFeedback.style.display = 'block';
                             }
 
-                            <?php if (isset($emailFound) && $emailFound === false): ?>
+                            if (emailFound === false) {
                                 emailInput.classList.remove('is-valid');
                                 emailInput.classList.add('is-invalid');
                                 isValid = false;
                                 invalidFeedback.textContent = '';
                                 invalidFeedback.textContent = 'No user found for this email address. Please try again.';
                                 invalidFeedback.style.display = 'block';
-                            <?php endif; ?>
-                            
-                            <?php if ($passwordError === true): ?>
+                            }
+
+                            if (pwError === true) {
                                 passwordInput.classList.remove('is-valid');
                                 passwordInput.classList.add('is-invalid');
                                 isValid = false;
                                 passwordError.textContent = '';
                                 passwordError.textContent = 'Incorrect password. Please try again.';
                                 passwordError.style.display = 'block';
-                            <?php endif; ?>
+                            }                            
 
                             if (isValid === false || !form.checkValidity()) {
                                 event.preventDefault()
@@ -165,8 +228,8 @@
 
                         
                     });
-                })();
-        </script>
+                });
+        </script> -->
         
     </body>
 </html>
