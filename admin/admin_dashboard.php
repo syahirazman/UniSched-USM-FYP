@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['add_admin'])) {
 
     if ($domain === 'usm.my'){
         // Check if it's the first time login
-        $sqlAdmin = "SELECT * FROM admin_login WHERE admin_email = '$email'";
+        $sqlAdmin = "SELECT admin_email FROM admin_login WHERE admin_email = '$email'";
         $resultAdmin = $conn->query($sqlAdmin);
 
         // If there is no result / row not exists in table
@@ -34,9 +34,9 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['add_admin'])) {
             $resultAdmin = $conn->query($sqlAdmin);
             if ($resultAdmin) {
                 header('Location: admin_dashboard.php?msg=Admin is added successfully!');
-                exit();
             }
         } else {
+            $adminemail = $resultAdmin->fetch_assoc();
             $emailFound = true;
         }
     }
@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['add_admin'])) {
                     .forEach(function (form) {
                         form.addEventListener('submit', function (event) {
                             var isValid = true;
-                            var emailFound = " . $emailFound . ";
+                            var emailFound = " . json_encode($emailFound) . ";
                             var passwordInput = form.querySelector('#inputPassword');
                             var passwordError = document.querySelector('.invalid-pw');
                             var emailInput = form.querySelector('#inputEmail');
@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['add_admin'])) {
                                 invalidFeedback.style.display = 'block';
                             }
 
-                            if (emailFound === true) {
+                            if (emailFound == true) {
                                 emailInput.classList.remove('is-valid');
                                 emailInput.classList.add('is-invalid');
                                 isValid = false;
@@ -113,7 +113,6 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['add_admin'])) {
         <link href="../css/adminstyle.css" rel="stylesheet">
         <link rel="icon" type="image/x-icon" href="../images/UniSched USM text logo.ico">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
         <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
 
