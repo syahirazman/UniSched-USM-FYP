@@ -20,82 +20,24 @@
 
             if ($resultAdmin->num_rows > 0) {
                 // User is an existing admin, check password
-                $emailFound = true;
                 $row = $resultAdmin->fetch_assoc();
                 if ($row['admin_pw'] === $password) {
                     $passwordError = false;
                     // Set session variable for admin email
                     $_SESSION['admin_email'] = $row['admin_email'];
-                    header('Location: ./admin/admin_dashboard.php');
+                    $errorMessage = "Login successful!"; //this should be shown on login.php for a while before going to admin dashboard
                 } else {
-                    $passwordError = true;
-                    
+                    $errorMessage = "Incorrect password. Please enter the correct password.";
                 }
             } else {
-                $emailFound = false;
+                $errorMessage = "Incorrect email. Please enter the correct email again.";
             }
+        } else {
+            $errorMessage = "Invalid email address. Please provide USM student email address.";
         }
+        header("Location: admin-login.php?msg=" . urlencode($errorMessage));
+        exit;
     }
-
-    echo "<script>
-            document.addEventListener('DOMContentLoaded', function () {
-                'use strict'
-
-                // Fetch all the forms we want to apply custom Bootstrap validation styles to
-                var forms = document.querySelectorAll('.needs-validation')
-
-                // Loop over them and prevent submission
-                Array.prototype.slice.call(forms)
-                    .forEach(function (form) {
-                        form.addEventListener('submit', function (event) {
-                            var isValid = true;
-                            var emailFound = " . $emailFound . ";
-                            var pwError = " . $passwordError . ";
-                            var passwordInput = form.querySelector('#inputPassword');
-                            var passwordError = document.querySelector('.invalid-pw');
-                            var emailInput = form.querySelector('#inputEmail');
-                            var invalidFeedback = document.querySelector('.invalid-email');
-                            var emailPattern = /^[a-zA-Z0-9._%+-]+@usm\.my$/;
-
-                            if (!emailPattern.test(emailInput.value)) {
-                                emailInput.classList.remove('is-valid');
-                                emailInput.classList.add('is-invalid');
-                                isValid = false;
-                                invalidFeedback.textContent = '';
-                                invalidFeedback.textContent = 'Invalid email address. Please provide USM email address.';
-                                invalidFeedback.style.display = 'block';
-                            }
-
-                            if (emailFound === false) {
-                                emailInput.classList.remove('is-valid');
-                                emailInput.classList.add('is-invalid');
-                                isValid = false;
-                                invalidFeedback.textContent = '';
-                                invalidFeedback.textContent = 'No user found for this email address. Please try again.';
-                                invalidFeedback.style.display = 'block';
-                            }
-
-                            if (pwError === true) {
-                                passwordInput.classList.remove('is-valid');
-                                passwordInput.classList.add('is-invalid');
-                                isValid = false;
-                                passwordError.textContent = '';
-                                passwordError.textContent = 'Incorrect password. Please try again.';
-                                passwordError.style.display = 'block';
-                            }                            
-
-                            if (isValid === false || !form.checkValidity()) {
-                                event.preventDefault()
-                                event.stopPropagation()
-                            }
-
-                            form.classList.add('was-validated')
-                        }, false);
-
-                        
-                    });
-                });
-        </script>";
 ?>
 
 <!--html-->
@@ -144,20 +86,37 @@
                                         <img src="./images/login_textlogo.png" class="img-fluid w-75">
                                     </div>
                                     <p class="mb-4 fs-5">Admin Login:</p>
-                                    <form class="main-form needs-validation" action="" method="POST" novalidate>
+                                    <?php
+                                    if (isset($_GET['msg'])){
+                                        $msg = $_GET['msg'];
+                                        if ($msg != '') {
+                                            if ($msg == 'Login successful!') {
+                                                echo '<div class="alert alert-success fade show d-flex align-items-center" role="alert" style="font-size: 14px !important;">
+                                                    '.$msg.'
+                                                    <div class="spinner-border ml-auto" role="status" aria-hidden="true"></div>
+                                                </div>';
+                                                echo "<script>
+                                                        setTimeout(function() {
+                                                            window.location.href = './admin/admin_dashboard.php';
+                                                        }, 2000); // 3000 milliseconds = 3 seconds
+                                                    </script>";
+                                                exit;
+                                            } else {
+                                                echo '<div class="alert alert-danger fade show" role="alert" style="font-size: 12px !important;">
+                                                    '.$msg.'
+                                                </div>';
+                                            }
+                                        }
+                                    }
+                                    ?>
+                                    <form class="main-form" action="" method="POST">
                                         <div class="form-group mb-3">
                                             <label for="inputEmail" class="fw-bold">Email address</label>
                                             <input id="inputEmail" name="inputEmail" type="email" class="form-control px-4" required>
-                                            <div class="invalid-email invalid-feedback">
-                                                Please provide your registered email address.
-                                            </div>
                                         </div>
                                         <div class="form-group mb-2">
                                             <label for="inputPassword" class="fw-bold">Password</label>
                                             <input id="inputPassword" name="inputPassword" type="password" class="form-control px-4" required>
-                                            <div class="invalid-feedback invalid-pw">
-                                                Please provide your password.
-                                            </div>
                                         </div>   
                                         <button type="submit" name="login-admin" id="login-admin" class="btn btn-block mt-4 shadow-sm fw-bolder text-center">Log in</button>
                                     </form>
@@ -170,66 +129,5 @@
             </div>
         </div>
 
-        <!--script-->
-        <!-- <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                'use strict'
-
-                // Fetch all the forms we want to apply custom Bootstrap validation styles to
-                var forms = document.querySelectorAll('.needs-validation')
-
-                // Loop over them and prevent submission
-                Array.prototype.slice.call(forms)
-                    .forEach(function (form) {
-                        form.addEventListener('submit', function (event) {
-                            var isValid = true;
-                            var emailFound = <?php //echo json_encode($emailFound); ?>;
-                            var pwError = <?php //echo json_encode($passwordError); ?>;
-                            var passwordInput = form.querySelector('#inputPassword');
-                            var passwordError =document.querySelector('.invalid-pw');
-                            var emailInput = form.querySelector('#inputEmail');
-                            var invalidFeedback = document.querySelector('.invalid-email');
-                            var emailPattern = /^[a-zA-Z0-9._%+-]+@usm\.my$/;
-
-                            if (!emailPattern.test(emailInput.value)) {
-                                emailInput.classList.remove('is-valid');
-                                emailInput.classList.add('is-invalid');
-                                isValid = false;
-                                invalidFeedback.textContent = '';
-                                invalidFeedback.textContent = 'Invalid email address. Please provide USM email address.';
-                                invalidFeedback.style.display = 'block';
-                            }
-
-                            if (emailFound === false) {
-                                emailInput.classList.remove('is-valid');
-                                emailInput.classList.add('is-invalid');
-                                isValid = false;
-                                invalidFeedback.textContent = '';
-                                invalidFeedback.textContent = 'No user found for this email address. Please try again.';
-                                invalidFeedback.style.display = 'block';
-                            }
-
-                            if (pwError === true) {
-                                passwordInput.classList.remove('is-valid');
-                                passwordInput.classList.add('is-invalid');
-                                isValid = false;
-                                passwordError.textContent = '';
-                                passwordError.textContent = 'Incorrect password. Please try again.';
-                                passwordError.style.display = 'block';
-                            }                            
-
-                            if (isValid === false || !form.checkValidity()) {
-                                event.preventDefault()
-                                event.stopPropagation()
-                            }
-
-                            form.classList.add('was-validated')
-                        }, false);
-
-                        
-                    });
-                });
-        </script> -->
-        
     </body>
 </html>
