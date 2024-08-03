@@ -13,4 +13,4 @@ Features for students:
 
 The frontend is developed using HTML, CSS, Bootstrap, and JavaScript, while the backend is developed using PHP to support integration with MySQL database.
 
-The website can be accessed through URL: https://unischedusm.online/
+You may watch the demo video on URL: https://youtu.be/Y4AKSUgokg0
